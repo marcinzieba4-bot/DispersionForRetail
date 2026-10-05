@@ -558,6 +558,33 @@ drawdown (-33% fixed, -45% compounding) comes from the quiet years (2010,
 2014, 2016, 2023-25) when the long single-name puts bleed and the index
 premium does not cover five turns of it.
 
+### Short SPY 25-delta put vs long single-name puts: delta ladder (`results/pwd_35d_VOLVUE.csv`)
+
+Same book, single-name put delta varied (IV multiplier per delta from the
+live chain: 25d 1.05, 35d 1.03, 45d 1.02, ATM 1.00), both sides hedged
+separately, fixed notional, cash yield included unless noted.
+
+| single-name put delta | CAGR | Sharpe | maxDD | worst month | single put premium / yr | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|
+| 25d (x1.05) | +2.3% | 0.96 | -9.6% | -3.1% | 15% | +10% | +4% | +3% |
+| 35d (x1.03) | +1.6% | 0.60 | -14.3% | -4.6% | 23% | +8% | +4% | +2% |
+| 35d (x1.05) | +0.9% | 0.35 | -18.3% | -4.8% | 24% | +7% | | |
+| 45d (x1.02) | +0.4% | 0.13 | -24.0% | -6.5% | 33% | +5% | | |
+| ATM (x1.00) | +0.3% | 0.12 | -25.3% | -7.2% | 38% | +4% | | |
+| 35d, no cash yield | -0.5% | -0.14 | -18.4% | -5.0% | | +6% | | |
+| long single 35d puts alone, hedged, no cash | -3.2% | -0.62 | -52.8% | -5.2% | 23% | +8% | +5% | -2% |
+| 35d, exclude event names | +1.8% | 0.77 | -11.6% | -2.7% | 19% | +9% | +3% | +2% |
+| 35d, vega-matched index | +2.2% | 0.63 | -15.7% | -5.4% | | +9% | +2% | +3% |
+| 35d, 2x | +1.7% | 0.35 | -25.6% | -8.4% | | +15% | +5% | +3% |
+| 35d, 5x | +2.0% | 0.24 | -48.9% | -16.8% | | +37% | +11% | +5% |
+
+Moving the single-name puts toward the money makes the book worse at every
+step: the premium paid rises from 15% to 38% of notional per year while the
+crash payoff falls (2008 +10% at 25d, +4% at ATM), because the single-name
+skew is flat so a nearer strike buys more theta per unit of tail. The index
+skew premium is relatively largest against the far wing; the right pairing
+is the index 25d put against the single-name 25d (or further) put, not 35d.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
