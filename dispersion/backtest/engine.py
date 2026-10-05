@@ -123,14 +123,14 @@ class Backtest:
                 continue
             n_contr = units * S0 / (100.0 * self.uni.raw_price(n, t0))   # real contract count
             K_l = bs.strike_for_delta(S0, iv, T, cfg.long_delta, r)
-            C_l = float(bs.call_price(S0, K_l, T, iv, r))
-            rec.legs.append(Leg(n, units, K_l, iv, S0, cfg.long_delta, False, C_l))
+            C_l = float(bs.call_price(S0, K_l, T, iv * cfg.iv_mult_long, r))
+            rec.legs.append(Leg(n, units, K_l, iv * cfg.iv_mult_long, S0, cfg.long_delta, False, C_l))
             prem_paid += units * C_l
             costs += units * C_l * cm.single(cfg.long_delta) + config.commission(n_contr, cm)
             if cfg.short_wing_delta:
                 K_s = bs.strike_for_delta(S0, iv, T, cfg.short_wing_delta, r)
-                C_s = float(bs.call_price(S0, K_s, T, iv, r))
-                rec.legs.append(Leg(n, -units, K_s, iv, S0, cfg.short_wing_delta, False, C_s))
+                C_s = float(bs.call_price(S0, K_s, T, iv * cfg.iv_mult_wing, r))
+                rec.legs.append(Leg(n, -units, K_s, iv * cfg.iv_mult_wing, S0, cfg.short_wing_delta, False, C_s))
                 prem_paid -= units * C_s
                 costs += units * C_s * cm.single(cfg.short_wing_delta) + config.commission(n_contr, cm)
 
@@ -143,14 +143,14 @@ class Backtest:
             lot = 100.0 if cfg.index_instrument == "SPY" else (MES_MULT if deployed < config.MES_MAX_SHORT_NOTIONAL else ES_MULT) * SPX_PER_SPY
             n_idx = units * S0 / (lot * self.uni.raw_price("SPY", t0))
             K_i = bs.strike_for_delta(S0, iv_s, T, cfg.index_delta, r)
-            C_i = float(bs.call_price(S0, K_i, T, iv_s, r))
-            rec.legs.append(Leg("SPY", -units, K_i, iv_s, S0, cfg.index_delta, True, C_i))
+            C_i = float(bs.call_price(S0, K_i, T, iv_s * cfg.iv_mult_index, r))
+            rec.legs.append(Leg("SPY", -units, K_i, iv_s * cfg.iv_mult_index, S0, cfg.index_delta, True, C_i))
             prem_paid -= units * C_i
             costs += units * C_i * cm.index() + config.commission(n_idx, cm, index=cfg.index_instrument == "ES")
             if cfg.index_wing_delta:
                 K_w = bs.strike_for_delta(S0, iv_s, T, cfg.index_wing_delta, r)
-                C_w = float(bs.call_price(S0, K_w, T, iv_s, r))
-                rec.legs.append(Leg("SPY", units, K_w, iv_s, S0, cfg.index_wing_delta, True, C_w))
+                C_w = float(bs.call_price(S0, K_w, T, iv_s * cfg.iv_mult_index_wing, r))
+                rec.legs.append(Leg("SPY", units, K_w, iv_s * cfg.iv_mult_index_wing, S0, cfg.index_wing_delta, True, C_w))
                 prem_paid += units * C_w
                 costs += units * C_w * cm.index() + config.commission(n_idx, cm, index=cfg.index_instrument == "ES")
         if cm.name.startswith("spec_headline"):

@@ -91,6 +91,11 @@ class StrategyConfig:
     iv_source: str = "auto"         # "auto" | "proxy" | "orats" | "volvue" | "ivydb"
     contract_granularity: bool = False  # round to whole contracts given equity (needs equity)
     equity: float | None = None     # starting equity $ (only matters with granularity)
+    # skew sensitivity: multiply the flat IV30 per leg when PRICING (strikes still from IV30)
+    iv_mult_long: float = 1.0       # single-name 30d call bought
+    iv_mult_wing: float = 1.0       # single-name 10d call sold
+    iv_mult_index: float = 1.0      # index 30d call sold
+    iv_mult_index_wing: float = 1.0 # index 1d call bought (Reg-T)
 
 
 REFERENCE = {
