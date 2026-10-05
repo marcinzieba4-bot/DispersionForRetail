@@ -54,7 +54,9 @@ def test_engine_runs_and_accounts(monkeypatch):
 def test_leverage_scales_pnl(monkeypatch):
     u, iv = make_universe()
     monkeypatch.setattr("dispersion.backtest.engine.R.fedfunds_daily", lambda idx: pd.Series(0.0, index=idx))
-    kw = dict(start="2020-03-31", end="2020-12-31", cash_yield=False, n_names=16, hedge_freq=None)
+    # commissions are capped per leg (not linear in L), so test with spread-only costs
+    nocomm = config.CostModel("nocomm", commission_open=0.0)
+    kw = dict(start="2020-03-31", end="2020-12-31", cash_yield=False, n_names=16, hedge_freq=None, costs=nocomm)
     r1 = Backtest(config.StrategyConfig(leverage=1, **kw), u, iv).run()
     r3 = Backtest(config.StrategyConfig(leverage=3, **kw), u, iv).run()
     m1 = metrics.monthly_returns(r1.equity)
