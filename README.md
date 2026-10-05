@@ -364,6 +364,35 @@ than crisis-positive. Daily checks matter: the weekly-checked stop loses the
 variance premium at Sharpe 0.6 and a 2022-shaped tail (-8% at 1x, -44% at
 5x); daily hedging only adds gamma cost.
 
+### 50/50 combo: stop-hedged put-write + delta-hedged straddle (`results/combo_put_straddle_VOLVUE.csv`)
+
+Each cycle half the book is a short ATM put with the one-sided 2% stop
+(unwind at the start) and half a short ATM straddle with a weekly delta
+hedge, both resized from total equity. Sleeve correlation 0.44 per cycle.
+
+| book | CAGR | Sharpe | maxDD | worst month | 2008 | 2018 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|
+| 1x combo 50/50 | +3.8% | 0.75 | -15% | -6.0% | +4% | -12% | +8% | -2% |
+| 1x put-stop alone | +3.8% | 0.61 | -21% | -9.1% | +7% | -17% | +8% | +4% |
+| 1x straddle alone | +3.8% | 0.62 | -14% | -9.9% | +1% | -8% | +8% | -8% |
+| 1x combo, put stop unwind at -1% | +4.2% | 0.82 | -13% | -6.0% | +3% | -11% | +9% | -4% |
+| 1x combo, put stop 3% | +4.5% | 0.79 | -15% | -5.7% | +4% | -9% | +13% | -4% |
+| 1x combo 70/30 put/straddle | +3.8% | 0.71 | -17% | -6.6% | +6% | -14% | +8% | 0% |
+| 2x combo 50/50 | +5.8% | 0.59 | -31% | -12% | +6% | -25% | +16% | -6% |
+| 2x combo, unwind at -1% | +6.5% | 0.66 | -27% | -12% | +4% | -22% | | -9% |
+| 3x combo 50/50 | +7.5% | 0.54 | -45% | -18% | +7% | -36% | +24% | -10% |
+| 3x combo, unwind at -1% | +8.6% | 0.61 | -40% | -18% | +4% | -33% | | -15% |
+| 5x combo 50/50 | +9.9% | 0.50 | -67% | -30% | +6% | -55% | +40% | -19% |
+
+The combination does what a 0.44 correlation promises: at 1x the same
+return as either sleeve at a third less volatility (Sharpe 0.62 -> 0.75,
+worst month -10% -> -6%), and the put sleeve's 2008 carries the straddle's
+2022. Leverage buys return at a steep price in the 2018 tail: the
+volmageddon spike (both sleeves short gamma) followed by the Q4 V-shape
+(the put stop whipsaws) cost -12% at 1x and -55% at 5x, and that single year
+sets every drawdown figure above 1x. The best version is the combo with the
+put stop unwound at -1% at 1x-2x: Sharpe 0.82 / 0.66, maxDD -13% / -27%.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
