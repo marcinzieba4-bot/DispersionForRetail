@@ -615,6 +615,30 @@ because the single-name call wing is fair at every delta while the hedge
 captures more realised vol near the money, but the long single-name calls
 on their own still bleed -1.2%/yr. Not viable above 1x.
 
+### Put-wing dispersion + long single-name 35-delta calls, 50/50 (`results/pwd_plus_calls_VOLVUE.csv`)
+
+Fixed notional, sleeves additive, cash yield on E0, calls stock-hedged
+(or unhedged, which adds beta). Monthly correlation PWD vs hedged calls: 0.01.
+
+| book | 1x CAGR / Sharpe / maxDD / 2008 | 3x | 5x | 10x |
+|---|---|---|---|---|
+| PWD alone | +2.0% / 0.82 / -10% / +10% | +2.5% / 0.41 / -25% / +27% | +3.0% / 0.34 / -37% / +47% | +4.2% / 0.31 / -55% / +114% |
+| long 35d calls alone, hedged | +0.8% / 0.20 / -24% / -5% | -1.4% / 0.06 / -80% / -19% | wiped out | wiped out |
+| 50/50, calls hedged | +1.4% / 0.57 / -14% / +2.5% | +0.9% / 0.15 / -39% / +4% | +0.4% / 0.10 / -60% / +5% | wiped out (-99%) |
+| 50/50, calls unhedged | +2.4% / 0.79 / -16% / -2% (beta 0.10) | +3.7% / 0.42 / -47% / -10% (beta 0.33) | +4.7% / 0.33 / -77% / -19% (beta 0.65) | wiped out |
+| 50/50, calls hedged, event names excluded | +1.5% / 0.72 / -12% / +4% | +1.3% / 0.23 / -33% / +8% | +1.1% / 0.15 / -50% / +12% | +0.4% / 0.15 / -83% / +25% |
+
+The long single-name calls are uncorrelated with the put-wing book but
+carry a negative mean ex cash (-1.2%/yr hedged), so every mix dilutes it:
+Sharpe 0.82 -> 0.57 at 1x with calls hedged. Leaving the calls unhedged
+restores the return through beta (0.10 at 1x, 0.65 at 5x) and gives the
+2008 back. Above 3x the call sleeve's own drawdown (-80% at 3x, -100% at 5x
+on fixed notional) dominates; at 10x every version is wiped out except the
+event-filtered hedged one, which survives at Sharpe 0.15 with an -83%
+drawdown. Hedged, the combined book stays crisis-positive at every leverage
+(Covid +2% to +78%, 2022 +3% to +34%), but that is the PWD half doing all
+the work.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
