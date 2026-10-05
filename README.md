@@ -116,6 +116,74 @@ clearing+exchange per contract uncapped, ES/MES options $3/contract all-in,
 maxDD -23.8% daily / -15.4% month-end, Calmar 0.67 / 1.03, beta 0.21,
 worst month -6.4%, 2008 +28%, all-in cost 4.8%/yr of equity.
 
+### Are the numbers real? A critical check (read this before trading)
+
+Three things were measured rather than assumed (`results/live_*.csv`,
+`results/skew_adjusted_VOLVUE.md`, `results/skew_timevarying_VOLVUE.csv`).
+
+**1. The VolVue IV series is sound.** 3.15M daily rows, 679 tickers, no stale
+runs, zero-day staleness at every month-end entry, call-put IV within +-4 pts
+for 90% of observations. Against the independent CBOE single-name vol indices
+(AAPL, AMZN, GS, IBM) and VIX it correlates 0.96-0.99 in level and sits ~2 pts
+below, which is where an ATM 30-day IV should sit relative to a
+variance-strip index. Its 30-day level matches the live chain's ATM IV on the
+month-end expiry within +-10% name by name (SPY 13.0 vs 13.6). The ATM level
+is not the problem.
+
+**2. The single-name legs price realistically; the index leg does not.**
+On the CBOE closing chain for the Oct-30 month-end expiry, at the engine's own
+strikes, market mid / engine price was: long 30d call 1.00 (median), short 10d
+call 1.10 (the call smile pays us more than modelled, as the spec says),
+vertical debit 0.98. Half-spreads were 3.8% at 30d and 7.3% at 10d against the
+spec's 3% / 8%, and open interest at the 10d strike a median 258 contracts,
+thin but fine for retail size. **The short 30-delta SPY call, however, traded
+at 0.84 of the engine's price**: the real call wing is 1.7 vol points under
+ATM (chain 11.9 vs VolVue 13.0) and a flat-IV engine collects ~16% more index
+premium than the market pays. The spec states the opposite bias for index
+wings; that is true for the 1-delta wing (market 0.87 of model, cheaper to
+buy) but not for the 30-delta leg we sell every month, which is the whole
+short side of the book.
+
+**3. That one bias is first-order.** Re-pricing the index leg at the measured
+ratio, everything else unchanged (realistic costs, 5x, ES/MES):
+
+| index 30d call IV vs ATM | CAGR | Sharpe | maxDD daily / monthly | Calmar daily / monthly | 2008 | 2022 |
+|---|---|---|---|---|---|---|
+| flat (engine as specified) | +15.9% | 1.51 | -23.8% / -15.4% | 0.67 / 1.03 | +28% | -1% |
+| 0.95 (mild) | +12.3% | 1.21 | -26.4% / -18.3% | 0.47 / 0.67 | +23% | -4% |
+| 0.915 (measured today) | +8.7% | 0.89 | -28.8% / -21.2% | 0.30 / 0.41 | +17% | -8% |
+| time-varying, half of today's calibration | +6.5% | 0.68 | -30.8% / -24.6% | 0.21 / 0.26 | +19% | -8% |
+| time-varying, today's calibration (0.39 x VolVue skew) | -1.3% | -0.09 | -59% / -57% | n/a | +8% | -15% |
+
+Today is a low-skew day (VolVue SPY `iv_skew_30` 4.4 vs a 2006-2026 median of
+8.7 and 13.4 in 2008), so the measured 0.915 is probably the mild end of the
+historical bias. The time-varying rows scale the call-wing discount with that
+skew history; the linear extrapolation from one day is itself uncertain (in
+high-skew regimes the put wing steepens more than the call wing flattens), so
+treat them as a range, not a point. The range runs from "half the headline" to
+"no edge at all". The structural conclusions (weekly hedge, 30-10 vertical,
+breadth, crisis-positive 2008) survive in every row; the level does not.
+
+**4. Quoting and execution at tastytrade.** Equity-option spreads and fees are
+realistic as modelled. ES options at 0.3% half-spread are fair for ES; MES
+options are thinner (expect 1-2x that, and partial fills on the walk). The
+month-end cycle lands on weekly expiries, whose 10-delta strikes carry a
+fraction of the monthly's open interest; the 3rd-Friday monthly would fill
+better at the cost of a 3-week instead of month-end cycle. The sandbox
+serves no quotes, so none of the fill assumptions have been validated against
+live tastytrade markets; that is what the L=1-3 live period in the spec is
+for. Margin: SPAN on $4.5M of short ES calls is roughly 25-40% of a $1M
+account in calm markets and will trip the 60% rail in stress; naked SPY calls
+under portfolio margin at 5x are unlikely to fit under the rail at all.
+
+**What would make the numbers real.** A per-delta IV history for SPX/SPY and
+the names (ORATS `dlt30Iv`/`dlt10Iv`, IvyDB surface, or VolVue if it exposes
+delta-bucket fields). The engine already prices every leg at its own IV
+(`iv_mult_*`, `index_skew_coeff`); with a real call-wing series those knobs
+become data instead of a sensitivity. Until then the honest statement is:
+Sharpe 0.7-1.2 and Calmar 0.2-0.5 at 5x on daily marks, with the flat-IV
++15.9% as an upper bound.
+
 ### Reconciliation with the reference numbers
 
 `scripts/reconcile.py` (table in `results/reconcile_VOLVUE.md`) isolates the

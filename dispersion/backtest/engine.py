@@ -143,8 +143,15 @@ class Backtest:
             lot = 100.0 if cfg.index_instrument == "SPY" else (MES_MULT if deployed < config.MES_MAX_SHORT_NOTIONAL else ES_MULT) * SPX_PER_SPY
             n_idx = units * S0 / (lot * self.uni.raw_price("SPY", t0))
             K_i = bs.strike_for_delta(S0, iv_s, T, cfg.index_delta, r)
-            C_i = float(bs.call_price(S0, K_i, T, iv_s * cfg.iv_mult_index, r))
-            rec.legs.append(Leg("SPY", -units, K_i, iv_s * cfg.iv_mult_index, S0, cfg.index_delta, True, C_i))
+            iv_leg = iv_s * cfg.iv_mult_index
+            if cfg.index_skew_coeff and hasattr(self.iv, "field_panel"):
+                if not hasattr(self, "_spy_skew"):
+                    self._spy_skew = self.iv.field_panel("iv_skew_30")["SPY"].dropna()
+                sk = self._spy_skew.loc[:t0]
+                if len(sk):
+                    iv_leg = max(iv_s - cfg.index_skew_coeff * float(sk.iloc[-1]) / 100.0, cfg.index_skew_floor * iv_s)
+            C_i = float(bs.call_price(S0, K_i, T, iv_leg, r))
+            rec.legs.append(Leg("SPY", -units, K_i, iv_leg, S0, cfg.index_delta, True, C_i))
             prem_paid -= units * C_i
             costs += units * C_i * cm.index() + config.commission(n_idx, cm, index=cfg.index_instrument == "ES")
             if cfg.index_wing_delta:

@@ -96,6 +96,9 @@ class StrategyConfig:
     iv_mult_wing: float = 1.0       # single-name 10d call sold
     iv_mult_index: float = 1.0      # index 30d call sold
     iv_mult_index_wing: float = 1.0 # index 1d call bought (Reg-T)
+    # time-varying index call-wing discount: iv_leg = iv30 - coeff * iv_skew_30(SPY,t)/100, floored at floor*iv30
+    index_skew_coeff: float = 0.0   # 0.39 = today's measured 1.7pt discount / VolVue SPY skew 4.4
+    index_skew_floor: float = 0.75
 
 
 REFERENCE = {
