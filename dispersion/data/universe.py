@@ -106,10 +106,11 @@ class Universe:
             date = self.mcap.index[self.mcap.index.searchsorted(date, side="right") - 1]
         mc = self.mcap.loc[date, members].dropna()
         base = mc.sort_values(ascending=False).head(self.top_mcap).index.tolist()
-        if date not in self.liq_known.index:
+        li = self.liq_known.index.searchsorted(date, side="right") - 1   # as-of: last month-end on/before date
+        if li < 0:
             self._cache[date] = []
             return []
-        liq = self.liq_known.loc[date, base].dropna()
+        liq = self.liq_known.iloc[li][base].dropna()
         liq = liq[self.close_adj.loc[date, liq.index].notna()]
         names = liq.sort_values(ascending=False).head(self.top_liq).index.tolist()
         self._cache[date] = names

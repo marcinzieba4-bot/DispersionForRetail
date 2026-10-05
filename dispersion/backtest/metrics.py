@@ -74,12 +74,14 @@ CRISIS_WINDOWS = {"GFC_2008": ("2008-01-01", "2008-12-31"), "Aug2011": ("2011-07
 
 def crisis_table(equity: pd.Series, spy: pd.Series) -> pd.DataFrame:
     rows = {}
+    equity = equity.where(equity > 0).dropna()
     for k, (a, b) in CRISIS_WINDOWS.items():
         e = equity.loc[a:b]
         s = spy.loc[a:b]
         if len(e) > 2:
             rows[k] = {"strategy": e.iloc[-1] / e.iloc[0] - 1, "spy": s.iloc[-1] / s.iloc[0] - 1}
-    return pd.DataFrame(rows).T
+    out = pd.DataFrame(rows).T
+    return out if len(out) else pd.DataFrame(columns=["strategy", "spy"])
 
 
 def yearly(equity: pd.Series) -> pd.Series:

@@ -30,6 +30,28 @@ def call_delta(S, K, T, sigma, r=0.0, q=0.0):
     return np.where(T <= 0, (S > K).astype(float), np.exp(-q * T) * norm.cdf(d1))
 
 
+def put_price(S, K, T, sigma, r=0.0, q=0.0):
+    S, K, T, sigma = (np.asarray(x, dtype=float) for x in (S, K, T, sigma))
+    T = np.maximum(T, 0.0)
+    d1 = _d1(S, K, T, sigma, r, q)
+    d2 = d1 - sigma * np.sqrt(T)
+    px = K * np.exp(-r * T) * norm.cdf(-d2) - S * np.exp(-q * T) * norm.cdf(-d1)
+    return np.where(T <= 0, np.maximum(K - S, 0.0), px)
+
+
+def put_delta(S, K, T, sigma, r=0.0, q=0.0):
+    S, K, T, sigma = (np.asarray(x, dtype=float) for x in (S, K, T, sigma))
+    d1 = _d1(S, K, np.maximum(T, 0.0), sigma, r, q)
+    return np.where(T <= 0, -(S < K).astype(float), -np.exp(-q * T) * norm.cdf(-d1))
+
+
+def put_strike_for_delta(S, iv, T, delta_bucket: int, r=0.0) -> float:
+    """OTM put with |delta| = bucket/100: K = S*exp(rT)*exp(z*s + s^2/2) with z<0 from Z_DELTA."""
+    s = float(iv) * np.sqrt(T)
+    z = Z_DELTA[delta_bucket]
+    return float(S) * np.exp(r * T) * np.exp(z * s + 0.5 * s * s)
+
+
 def strike_for_delta(S, iv, T, delta_bucket: int, r=0.0) -> float:
     """K = S * exp(-z_d * s + s^2/2), s = IV * sqrt(T).
 

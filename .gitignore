@@ -10,3 +10,4 @@ results/equity_*.csv
 results/*.log
 results/overlay_equity_*.csv
 results/realistic_equity_*.csv
+results/real_index_leg_equity_*.csv

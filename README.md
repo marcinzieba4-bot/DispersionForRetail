@@ -116,6 +116,52 @@ clearing+exchange per contract uncapped, ES/MES options $3/contract all-in,
 maxDD -23.8% daily / -15.4% month-end, Calmar 0.67 / 1.03, beta 0.21,
 worst month -6.4%, 2008 +28%, all-in cost 4.8%/yr of equity.
 
+### The index leg priced from real trades: the edge disappears
+
+The short 30-delta SPX call can be taken from actual settlement prices
+instead of a model: Cboe's BXMD index writes exactly that option every 3rd
+Friday since 1986 (BXM at-the-money, BXY 2% OTM), and its return minus the
+S&P 500 total return is the realised P&L of the leg, skew included.
+`index_leg="BXMD"` in the engine does this (cycle on 3rd Fridays so the
+dates align; the singles still use VolVue IV, which the live-chain check
+showed prices them within 2%). Scripts: `run_real_index_leg.py`,
+`results/index_leg_real_vs_model.csv`, `results/real_index_leg_VOLVUE.md`,
+`results/reverse_VOLVUE.csv`, `results/put_overlay_VOLVUE.csv`.
+
+Short 30-delta SPX call held to expiry, 2007-2026, per cycle as % of notional:
+real (BXMD) **-0.24%** = -2.9%/yr; flat-IV model **+0.04%** = +0.5%/yr;
+correlation of the two series 0.93, and the model exceeds the real leg in 19 of
+20 calendar years (1.5-8%/yr). The implied premium actually collected is 0.68
+of the model's, against 0.84 measured on today's low-skew chain. The reason is
+simple: the SPX 30-delta call trades at roughly realised vol (ATM 15.2 - skew
+1.7 vs realised 13.5), so there is no premium in it to sell; the flat-IV engine
+sells it at ATM vol and books the ATM variance premium that the market does
+not pay on that strike.
+
+Realistic costs, dividends on, 3rd-Friday cycle, VolVue singles:
+
+| variant | CAGR | Sharpe | maxDD daily | 2008 | 2022 |
+|---|---|---|---|---|---|
+| 5x, index leg model flat IV (as specified) | +11.0% | 1.06 | -23.5% | +36% | -6% |
+| 5x, index leg BXMD real | -5.6% | -0.38 | -81% | -11% | -31% |
+| 3x, index leg BXMD real | -2.7% | -0.31 | -61% | -5% | -19% |
+| 1x, index leg BXMD real | +0.1% | 0.06 | -24% | -1% | -6% |
+| 1x, BXMD real, institutional costs | +0.3% | 0.12 | -23% | 0% | -5% |
+| 5x, BXM ATM real, delta-matched | -8.0% | -0.71 | -87% | -21% | -28% |
+| 5x, singles only (long 30-10 verticals, hedged) | -6.0% | -0.39 | -79% | -29% | -2% |
+| 5x, reversed (sell verticals, buy BXMD call) | -4.0% | -0.27 | -63% | -6% | +27% |
+| 1x, reversed | +0.4% | 0.16 | -13% | 0% | +7% |
+| 3x, BXM ATM real + long 10d put at 1.45x IV | -12.2% | -1.04 | -93% | -16% | -31% |
+| 3x, BXMD real + long 5d put at 1.73x IV | -16.2% | -1.39 | -97% | -17% | -40% |
+
+Reading: the single-name call vertical is close to fairly priced (long and
+short of it both lose roughly the cost load), the index call wing carries no
+premium, and buying OTM puts at their real skew (10-delta at 1.45x ATM, 5-delta
+at 1.73x, 0.3-0.6% of equity per month at 3x) only adds a known negative-carry
+leg. Variance-risk-premium check on VolVue IV: singles +2.3 pts, SPY +2.3 pts
+at the money, with the single/SPY ratio at 1.48 against the spec's 1.57
+break-even; the "richness" the thesis needs is not in the data.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

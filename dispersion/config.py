@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 # --- strike targets (call deltas) as Black-Scholes z-scores ------------------
-Z_DELTA = {30: -0.5244, 10: -1.2816, 1: -2.3263}   # K = S*exp(-z*s + s^2/2)
+Z_DELTA = {30: -0.5244, 25: -0.6745, 10: -1.2816, 5: -1.6449, 1: -2.3263}   # K = S*exp(-z*s + s^2/2)
 DELTA_TARGETS = {30: 0.30, 10: 0.10, 1: 0.01}
 
 # --- universe -----------------------------------------------------------------
@@ -99,6 +99,20 @@ class StrategyConfig:
     # time-varying index call-wing discount: iv_leg = iv30 - coeff * iv_skew_30(SPY,t)/100, floored at floor*iv30
     index_skew_coeff: float = 0.0   # 0.39 = today's measured 1.7pt discount / VolVue SPY skew 4.4
     index_skew_floor: float = 0.75
+    # cycle: "month_end" (spec) or "third_friday" (standard monthlies; aligns with Cboe indices)
+    cycle: str = "month_end"
+    # index leg: "model" (BS flat IV) or a Cboe buy-write index with real traded prices:
+    #   "BXMD" 30-delta SPX call, "BXM" ATM call, "BXY" 2% OTM call. P&L = notional*(r_idx - r_SPXTR)
+    index_leg: str = "model"
+    index_notional_scale: float = 1.0   # delta-match: BXM ~0.30/0.55, BXY ~0.30/0.40
+    # long SPY put overlay (crash hedge): delta bucket (10, 5) or None; priced at iv_put_30 * put_iv_mult
+    put_delta: int | None = None
+    put_iv_mult: float = 1.35           # measured today: 10d put IV = 1.45x ATM, 5d = 1.73x
+    put_notional_scale: float = 1.0
+    # sign flips: +1 as specified; -1 reverses (sell single-name verticals / buy the index call)
+    singles_sign: int = 1
+    index_sign: int = 1
+    dividends: bool = False          # price with trailing-12m dividend yield (from adj/raw close ratio)
 
 
 REFERENCE = {
