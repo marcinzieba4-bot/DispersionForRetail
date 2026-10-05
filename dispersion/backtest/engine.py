@@ -96,10 +96,11 @@ class Backtest:
             self.q = np.log(ratio / ratio.shift(252)).clip(0, 0.08)      # trailing 12m yield per name
             rs = uni.spy / uni.spy_raw
             self.q_spy = np.log(rs / rs.shift(252)).clip(0, 0.08)
-        self.cboe = None
-        if cfg.index_leg != "model":
-            from ..data.cboe import short_call_pnl_panel
-            self.cboe = short_call_pnl_panel(cfg.index_leg, self.spy.index)
+        self.cboe = {}
+        from ..data.cboe import short_call_pnl_panel
+        for name in {cfg.index_leg} | {x[0] for x in cfg.index_legs}:
+            if name != "model":
+                self.cboe[name] = short_call_pnl_panel(name, self.spy.index)
 
     # ------------------------------------------------------------------ sizing
     def _round_units(self, units: float, S: float, target_notional: float, is_index: bool) -> float:
@@ -148,7 +149,7 @@ class Backtest:
         book = cfg.book_fraction * cfg.leverage * E
         per_name = book / len(names)
         prem_paid, costs = 0.0, 0.0
-        for n in names:
+        for n in (names if cfg.singles_scale > 0 else []):
             S0 = float(self.uni.close_adj.loc[t0, n])
             iv = float(ivs.get(n, np.nan))
             if not np.isfinite(S0) or not np.isfinite(iv) or iv <= 0:
@@ -172,7 +173,7 @@ class Backtest:
                 rec.legs.append(Leg(n, -sg * units, K_s, iv * cfg.iv_mult_wing, S0, cfg.short_wing_delta, False, C_s, q=qn))
                 prem_paid -= sg * units * C_s
                 costs += units * C_s * cm.single(cfg.short_wing_delta) + config.commission(n_contr, cm)
-        deployed = sum(abs(l.units) * l.S0 for l in rec.legs if l.bucket == cfg.long_delta)
+        deployed = sum(abs(l.units) * l.S0 for l in rec.legs if l.bucket == cfg.long_delta) if cfg.singles_scale > 0 else book
         S0 = float(self.spy.loc[t0])
         iv_s = float(ivs.get("SPY", np.nan))
         if deployed > 0 and np.isfinite(iv_s):
@@ -184,7 +185,14 @@ class Backtest:
             qs = self._q("SPY", t0)
             isg = cfg.index_sign
             K_i = bs.strike_for_delta(S0, iv_s, T, cfg.index_delta, r - qs)
-            if cfg.index_leg == "model":
+            if cfg.index_legs:
+                for name, sign, scale in cfg.index_legs:
+                    kS = CBOE_K[name]
+                    K_c = K_i if kS is None else kS * S0
+                    C_c = float(bs.call_price(S0, K_c, T, iv_s, r, qs))
+                    rec.legs.append(Leg(name, -sign * units * scale, K_c, iv_s, S0, cfg.index_delta, True, C_c, kind="cboe", q=qs))
+                    costs += units * scale * C_c * cm.index() + config.commission(n_idx * scale, cm, index=is_es)
+            elif cfg.index_leg == "model":
                 C_i = float(bs.call_price(S0, K_i, T, iv_leg, r, qs))
                 rec.legs.append(Leg("SPY", -isg * units, K_i, iv_leg, S0, cfg.index_delta, True, C_i, q=qs))
                 prem_paid -= isg * units * C_i
@@ -193,7 +201,8 @@ class Backtest:
                 K_c = K_i if kS is None else kS * S0
                 C_i = float(bs.call_price(S0, K_c, T, iv_s, r, qs))
                 rec.legs.append(Leg(cfg.index_leg, -isg * units, K_c, iv_s, S0, cfg.index_delta, True, C_i, kind="cboe", q=qs))
-            costs += units * C_i * cm.index() + config.commission(n_idx, cm, index=is_es)
+            if not cfg.index_legs:
+                costs += units * C_i * cm.index() + config.commission(n_idx, cm, index=is_es)
             if cfg.index_wing_delta:
                 K_w = bs.strike_for_delta(S0, iv_s, T, cfg.index_wing_delta, r)
                 C_w = float(bs.call_price(S0, K_w, T, iv_s * cfg.iv_mult_index_wing, r))
@@ -247,9 +256,8 @@ class Backtest:
                 cols = [l.ticker for l in opt]
                 path = pd.concat([self.uni.close_adj, self.spy.rename("SPY")], axis=1)[cols].loc[t0:t1].ffill()
             if cbo:
-                cb = self.cboe.loc[t0:t1]
-                base_i, base_t = float(cb["idx"].loc[t0]), float(cb["tr"].loc[t0])
-                cb_notional = sum(-l.units * l.S0 for l in cbo)   # >0 when short the call, <0 when long
+                cbs = [(self.cboe[l.ticker].loc[t0:t1], -l.units * l.S0) for l in cbo]   # notional >0 when short the call
+                cbs = [(c, float(c["idx"].loc[t0]), float(c["tr"].loc[t0]), n) for c, n in cbs]
             window = days[(days > t0) & (days <= t1)]
             hedge_sh, S_prev = 0.0, float(self.spy.loc[t0])
             r = float(self.rf.loc[t0])
@@ -268,8 +276,8 @@ class Backtest:
                         dl = np.where(is_put, bs.put_delta(S, K, T_rem, ivv, r, qq), bs.call_delta(S, K, T_rem, ivv, r, qq))
                         dollar_delta += float(np.sum(units * dl * S))
                 if cbo:
-                    pnl = cb_notional * (float(cb["idx"].loc[d]) / base_i - float(cb["tr"].loc[d]) / base_t)
-                    mark += pnl
+                    for c, bi, bt, n in cbs:
+                        mark += n * (float(c["idx"].loc[d]) / bi - float(c["tr"].loc[d]) / bt)
                     if d < t1 and k % hedge_every == 0:
                         for l in cbo:
                             dollar_delta += l.units * float(bs.call_delta(S_spy, l.K, T_rem, l.iv * 0.9, r, l.q)) * S_spy

@@ -162,6 +162,22 @@ leg. Variance-risk-premium check on VolVue IV: singles +2.3 pts, SPY +2.3 pts
 at the money, with the single/SPY ratio at 1.48 against the spec's 1.57
 break-even; the "richness" the thesis needs is not in the data.
 
+### Short ATM call + long 30-delta call on SPY, delta-hedged (real prices)
+
+BXM minus BXMD is this spread's realised P&L with the stock exposure
+cancelling exactly; the engine adds the weekly hedge (`index_legs`,
+`singles_scale=0`). Unhedged, 2007-2026: -0.21% of notional per cycle
+(-2.6%/yr, correlation -0.78 with SPX, i.e. a short-delta bet that lost in a
+bull market). Hedged weekly, realistic costs, cash yield included: 1x
++1.4%/yr Sharpe 0.62, 3x +1.0%, 5x +0.4% with a -41% drawdown; ex cash the
+sleeve is about -0.5%/yr per turn. Hedge turnover is 0.4x equity per month at
+1x and 1.9x at 5x, and daily hedging is worse (-0.9% at 5x, 4.2x turnover).
+Each leg alone, hedged, is also flat: short ATM (BXM) -1.7%/yr at 5x, short
+30-delta (BXMD) -0.8%/yr. The spread is crisis-positive (2022 +21%, Covid
++7% at 5x) and bleeds in melt-ups, but the ATM variance premium the trade is
+meant to collect is consumed by gamma cost, hedge error and spreads. Tables:
+`results/atm_vs_30d_spread_VOLVUE.csv`, `results/atm_vs_30d_call_spread_real.csv`.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

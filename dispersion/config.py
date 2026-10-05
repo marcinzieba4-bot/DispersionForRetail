@@ -113,6 +113,10 @@ class StrategyConfig:
     singles_sign: int = 1
     index_sign: int = 1
     dividends: bool = False          # price with trailing-12m dividend yield (from adj/raw close ratio)
+    # multi-leg real-price index structure: tuple of (cboe_index, sign, notional_scale); overrides index_leg.
+    # e.g. (("BXM", -1, 1.0), ("BXMD", +1, 1.0)) = short ATM call + long 30-delta call (BXM - BXMD)
+    index_legs: tuple = ()
+    singles_scale: float = 1.0       # 0.0 -> no single-name legs; index structure sized on the book
 
 
 REFERENCE = {
