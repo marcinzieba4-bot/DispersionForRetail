@@ -237,7 +237,11 @@ class Backtest:
                 rec.legs.append(Leg(n, -sg * units, K_s, iv * cfg.iv_mult_wing, S0, cfg.short_wing_delta, False, C_s, q=qn, beta=bn))
                 prem_paid -= sg * units * C_s
                 costs += units * C_s * cm.single(cfg.short_wing_delta) + config.commission(n_contr, cm)
-        deployed = sum(abs(l.units) * l.S0 for l in rec.legs if l.bucket == cfg.long_delta and l.kind == "call") if cfg.singles_scale > 0 else book
+        if cfg.singles_scale > 0:   # one long-side call leg per name in either structure
+            deployed = sum(abs(l.units) * l.S0 for l in rec.legs if not l.is_index and l.kind == "call"
+                           and (cfg.singles_structure != "vertical" or l.bucket == cfg.long_delta))
+        else:
+            deployed = book
         S0 = float(self.spy.loc[t0])
         iv_s = float(ivs.get("SPY", np.nan))
         if deployed > 0 and np.isfinite(iv_s):
@@ -355,12 +359,14 @@ class Backtest:
                 S_spy = float(self.spy.loc[d])
                 cash *= 1 + float(self.rf.loc[d]) / 252.0
                 cash += hedge_sh * (S_spy - S_prev)
-                if stock_h:
+                if S_name_prev:
                     row = name_px.loc[d]
-                    for n, h in stock_h.items():
+                    for n in single_names:
                         Sn = float(row[n])
                         if np.isfinite(Sn):
-                            cash += h * (Sn - S_name_prev[n]); S_name_prev[n] = Sn
+                            if n in stock_h:
+                                cash += stock_h[n] * (Sn - S_name_prev[n])
+                            S_name_prev[n] = Sn          # reference price advances every day for every name
                 mark, dollar_delta = 0.0, 0.0
                 T_rem = (t1 - d).days / 365.0
                 if opt:
@@ -402,7 +408,7 @@ class Backtest:
                     target = -dollar_delta / S_spy
                     trn = abs(target - hedge_sh) * S_spy
                     cash -= trn * cfg.costs.hedge_bp
-                    turnover.loc[d] = trn
+                    turnover.loc[d] += trn
                     hedge_sh = target
                 if d == t1:
                     cash += mark
