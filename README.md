@@ -323,6 +323,47 @@ hedge, which is what the stop-loss-start-gain literature predicts. Smaller
 bands approach the delta hedge (0.5% band: Sharpe 0.26) at higher turnover;
 larger bands approach unhedged.
 
+### Short index straddle, weekly delta hedge, and short put with a one-sided stop (`results/band_hedge2_VOLVUE.csv`)
+
+Real settlement prices (BXM + PUT for the straddle, PUT for the put-write),
+futures overlay on the SPY close path, 3rd-Friday cycle, realistic costs,
+1bp on futures turnover, cash yield (~1.9%/yr) included, 2007-2026.
+
+| short ATM straddle | CAGR | Sharpe | maxDD | worst month | 2008 | 2020 | 2022 | turnover/yr |
+|---|---|---|---|---|---|---|---|---|
+| 1x weekly delta hedge | +3.8% | 0.62 | -14% | -9.9% | +1% | +8% | -8% | 29x |
+| 3x weekly delta hedge | +7.1% | 0.46 | -41% | -28% | -3% | +21% | -27% | 126x |
+| 5x weekly delta hedge | +8.8% | 0.43 | -63% | -44% | -12% | +29% | -44% | 260x |
+| 1x daily delta hedge | +2.5% | 0.52 | -17% | -9.5% | -8% | +15% | -8% | 48x |
+| 1x band 1%, checked weekly | +2.6% | 0.31 | -31% | -17% | +10% | +5% | -7% | 30x |
+
+| short ATM put (PUT index) | CAGR | Sharpe | maxDD | worst month | 2008 | 2020 | 2022 | turnover/yr |
+|---|---|---|---|---|---|---|---|---|
+| 1x unhedged | +6.6% | 0.71 | -34% | -16% | -24% | +2% | -7% | 0 |
+| 1x weekly delta hedge | +3.9% | 0.74 | -15% | -9.6% | -3% | +6% | +3% | 19x |
+| **1x stop 2% below, unwind back at start (as asked)** | **+3.8%** | **0.61** | **-21%** | **-9.1%** | **+7%** | **+8%** | **+4%** | 14x |
+| 1x stop 2%, unwind at -1% | +4.5% | 0.73 | -18% | -6.6% | +5% | +11% | +1% | 17x |
+| 1x stop 1%, unwind at start | +2.7% | 0.49 | -16% | -6.6% | +11% | +8% | +4% | 22x |
+| 1x stop 3%, unwind at start | +5.1% | 0.72 | -19% | -9.0% | +6% | +19% | -1% | 9x |
+| 1x stop 2%, checked weekly | +5.0% | 0.68 | -19% | -9.9% | -1% | +10% | -1% | 10x |
+| 3x stop 2%, unwind at start | +6.8% | 0.44 | -60% | -27% | +16% | +24% | +7% | 52x |
+| 3x stop 2%, unwind at -1% | +9.1% | 0.56 | -54% | -19% | +9% | +36% | -3% | 77x |
+
+Reading: the one-sided stop works far better on the short put than the
+two-sided band did on the straddle, because the whipsaw cost is paid only
+on the downside while the premium accrues untouched on the way up. The
+2%-stop put-write keeps most of the unhedged carry (3.8% vs 6.6%), cuts the
+drawdown from -34% to -21%, and turns 2008, 2020 and 2022 all positive; its
+weak spot is a V-shaped sell-off (Q4 2018 -16%, worst year -17%), where the
+stop is in for the fall and unwinds at the start point only after the
+recovery. Unwinding at -1% instead of the start, or a 3% trigger, are better
+on Sharpe (0.72-0.73) at slightly worse 2008. The weekly delta hedge is
+still the most efficient (Sharpe 0.74, -15%) but is crisis-neutral rather
+than crisis-positive. Daily checks matter: the weekly-checked stop loses the
+2008 protection. The short straddle with a weekly delta hedge is the index
+variance premium at Sharpe 0.6 and a 2022-shaped tail (-8% at 1x, -44% at
+5x); daily hedging only adds gamma cost.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
