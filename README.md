@@ -32,6 +32,7 @@ scripts/run_backtest.py  run the variant grid, write results/summary_<TAG>.csv
 scripts/report.py        markdown table vs reference numbers + equity chart
 scripts/risk_report.py   VaR/CVaR, skew, drawdown duration, down-beta, crisis windows, yearly table
 scripts/run_overlay.py   long SPY + sleeve overlay at 1x/3x/5x
+scripts/reconcile.py     accounting-convention reconciliation (costs, additive vs compounded, daily vs monthly DD)
 tests/                   16 tests: BS/delta targets, strike picks, sizing, rails, hedge, limit walk, engine accounting
 ```
 
@@ -74,25 +75,29 @@ ATM 30-day IV should, and call minus put IV is +0.4 pts for SPY and +0.2 pts
 for singles. Without the key the engine falls back to a VIX-anchored PROXY,
 labelled as such on every output (`results/*_PROXY.*`).
 
-## Results on VolVue IV (2007-01 .. 2026-10, net of the spec's retail costs)
+## Results on VolVue IV (2007-01 .. 2026-10, net of retail costs)
 
 ![equity](results/equity_VOLVUE.png)
 
-| variant                      | cagr   | vol    | sharpe | sortino | maxdd  | calmar | calmar_2h | beta | worst_month | 2008   | 2022  | reference (spec section 8) |
-|:-----------------------------|:-------|:-------|-------:|--------:|:-------|-------:|----------:|-----:|:------------|:-------|:------|:---------------------------|
-| 1x_30-10_naked_W             | +3.8%  | 2.1%   |   1.78 |    2.27 | -5.5%  |   0.69 |      0.81 | 0.04 | -1.3%       | +6.0%  | +0.7% | Sharpe 1.36, maxDD -2.9%, Calmar 1.07, gross +2.97%/yr, net +2.2..3.1% |
-| 1x_30-10_naked_nohedge       | +3.1%  | 2.5%   |   1.24 |    1.21 | -4.4%  |   0.70 |      0.73 | -0.01| -2.3%       | +6.3%  | +2.2% | hedge matters |
-| 1x_30-10_naked_D             | +3.6%  | 2.1%   |   1.71 |    2.70 | -4.0%  |   0.90 |      1.14 | 0.05 | -1.0%       | +3.5%  | -1.0% | daily: no Sharpe gain, 2x turnover |
-| 1x_longcall_naked_W          | +3.4%  | 2.9%   |   1.14 |    1.71 | -6.2%  |   0.55 |      1.09 | 0.03 | -2.0%       | +3.2%  | -1.0% | 30-10 vertical is the structure |
-| 1x_30-10_regT_1d_W           | +3.6%  | 2.1%   |   1.69 |    2.18 | -5.5%  |   0.65 |      0.77 | 0.04 | -1.3%       | +5.7%  | +0.6% | ~0.1 Sharpe below naked |
-| 1x_30-10_regT_5d_W(rejected) | +2.4%  | 2.0%   |   1.17 |    1.42 | -5.6%  |   0.43 |      0.56 | 0.02 | -1.5%       | +4.4%  | -0.2% | rejected: 5-delta wing |
-| 1x_30-10_gs_W                | +4.8%  | 2.1%   |   2.25 |    2.88 | -4.7%  |   1.03 |      1.14 | 0.04 | -1.2%       | +7.5%  | +1.7% | institutional costs |
-| 5x_30-10_naked_W             | +12.5% | 10.1%  |   1.21 |    1.53 | -25.9% |   0.48 |      0.47 | 0.20 | -6.6%       | +23.4% | -3.4% | +17.7%/yr, vol 11.5%, Sharpe 1.54, Sortino 3.4, maxDD -13.6%, Calmar 1.31, beta 0.37, worst -7.0%, 2008 +15% |
-| 5x_30-10_ES_SPAN_W           | +12.9% | 10.1%  |   1.25 |    1.58 | -25.7% |   0.50 |      0.48 | 0.20 | -6.6%       | +24.1% | -3.1% | default retail product |
-| 5x_30-10_regT_1d_W           | +11.1% | 10.0%  |   1.10 |    1.42 | -25.8% |   0.43 |      0.43 | 0.19 | -6.4%       | +21.5% | -4.2% | Sharpe 1.46-1.55, Calmar 1.19-1.28 |
-| 5x_30-10_gs_W                | +18.1% | 10.1%  |   1.70 |    2.16 | -22.5% |   0.80 |      0.75 | 0.21 | -6.3%       | +32.0% | +1.1% | |
-| 100k_5x_half_ES_W            | +13.4% | 11.9%  |   1.12 |    1.56 | -22.2% |   0.60 |      0.62 | 0.25 | -7.7%       | +13.0% | -6.2% | +19.6%/yr, Sharpe 1.44, Calmar 1.12 |
-| 3x_30-10_ES_SPAN_W           | +8.4%  | 6.1%   |   1.35 |    1.72 | -16.1% |   0.52 |      0.53 | 0.12 | -3.9%       | +14.9% | -1.1% | recommended live start |
+Two drawdown columns: `maxdd` on daily marked equity (what a margin desk sees),
+`maxdd_m` on month-end equity (the convention behind the spec's reference).
+
+| variant                        | cagr   | vol   | sharpe | sortino | maxdd  | calmar | maxdd_m | calmar_m | calmar_2h | beta | worst_m | 2008   | 2022  | reference (spec section 8) |
+|:-------------------------------|:-------|:------|-------:|--------:|:-------|-------:|:--------|---------:|----------:|-----:|:--------|:-------|:------|:---------------------------|
+| 1x_30-10_naked_W               | +4.0%  | 2.1%  |   1.85 |    2.38 | -5.4%  |   0.73 | -3.4%   |     1.15 |      0.83 | 0.04 | -1.2%   | +6.2%  | +0.8% | Sharpe 1.36, maxDD -2.9%, Calmar 1.07, gross +2.97%/yr, net +2.2..3.1% |
+| 1x_30-10_naked_nohedge         | +3.2%  | 2.5%  |   1.30 |    1.23 | -4.3%  |   0.74 | -2.6%   |     1.23 |      0.75 | -0.01| -2.3%   | +6.6%  | +2.3% | hedge adds ~0.5 Sharpe |
+| 1x_30-10_naked_D               | +3.7%  | 2.1%  |   1.78 |    2.84 | -3.9%  |   0.95 | -3.2%   |     1.16 |      1.17 | 0.05 | -1.0%   | +3.7%  | -0.9% | daily: no Sharpe gain |
+| 1x_longcall_naked_W            | +3.5%  | 2.9%  |   1.17 |    1.76 | -6.0%  |   0.57 | -5.5%   |     0.62 |      1.11 | 0.03 | -2.0%   | +3.4%  | -1.0% | 30-10 vertical is the structure |
+| 1x_30-10_regT_1d_W             | +3.7%  | 2.1%  |   1.77 |    2.29 | -5.4%  |   0.69 | -3.5%   |     1.08 |      0.80 | 0.04 | -1.3%   | +6.0%  | +0.6% | ~0.1 Sharpe below naked |
+| 1x_30-10_regT_5d_W(rejected)   | +2.5%  | 2.0%  |   1.26 |    1.55 | -5.5%  |   0.46 | -3.9%   |     0.65 |      0.58 | 0.02 | -1.4%   | +4.7%  | -0.2% | rejected: 5-delta wing |
+| 1x_30-10_gs_W                  | +4.8%  | 2.1%  |   2.25 |    2.88 | -4.7%  |   1.03 | -2.7%   |     1.77 |      1.14 | 0.04 | -1.2%   | +7.5%  | +1.7% | institutional costs |
+| 5x_30-10_naked_W               | +14.8% | 10.1% |   1.42 |    1.81 | -24.9% |   0.60 | -16.4%  |     0.90 |      0.55 | 0.21 | -6.5%   | +26.8% | -2.3% | +17.7%/yr, vol 11.5%, Sharpe 1.54, Sortino 3.4, maxDD -13.6%, Calmar 1.31, beta 0.37, worst -7.0%, 2008 +15% |
+| 5x_30-10_ES_SPAN_W             | +15.0% | 10.1% |   1.43 |    1.83 | -24.7% |   0.61 | -16.3%  |     0.92 |      0.55 | 0.21 | -6.4%   | +27.0% | -2.1% | default retail product |
+| 5x_30-10_regT_1d_W             | +13.7% | 10.0% |   1.34 |    1.76 | -24.6% |   0.56 | -16.6%  |     0.82 |      0.51 | 0.19 | -6.3%   | +25.3% | -3.0% | Sharpe 1.46-1.55, Calmar 1.19-1.28 |
+| 5x_30-10_gs_W                  | +18.1% | 10.1% |   1.70 |    2.16 | -22.5% |   0.80 | -14.1%  |     1.28 |      0.75 | 0.21 | -6.3%   | +32.0% | +1.1% | |
+| 5x_30-10_spec_headline_costs_W | +17.8% | 10.1% |   1.67 |    2.21 | -21.9% |   0.82 | -13.5%  |     1.32 |      0.76 | 0.21 | -6.3%   | +33.5% | +1.7% | flat 0.7%/yr per 1x: reproduces the reference |
+| 100k_5x_half_ES_W              | +14.7% | 11.9% |   1.21 |    1.68 | -21.1% |   0.70 | -15.2%  |     0.97 |      0.70 | 0.25 | -7.7%   | +13.5% | -5.4% | +19.6%/yr, Sharpe 1.44, Calmar 1.12 |
+| 3x_30-10_ES_SPAN_W             | +9.4%  | 6.1%  |   1.50 |    1.88 | -15.5% |   0.60 | -10.0%  |     0.94 |      0.58 | 0.12 | -3.8%   | +16.2% | -0.6% | recommended live start |
 
 Full risk tables (VaR/CVaR, skew/kurtosis, drawdown duration, down-market
 beta, crisis windows, calendar years) are in `results/risk_VOLVUE.md`;
@@ -100,29 +105,35 @@ drawdown paths in `results/drawdown_VOLVUE.png`.
 
 ![drawdown](results/drawdown_VOLVUE.png)
 
-What the VolVue run says:
+### Reconciliation with the reference numbers
 
-* **Reproduced:** every structural ranking in the spec (weekly hedge > daily
-  > none on Sharpe; 30-10 vertical > bare long call; 1-delta wing costs ~0.1
-  Sharpe, 5-delta wing is rejected; institutional costs are worth ~0.5 Sharpe),
-  near-zero beta (0.04 at 1x, 0.20 at 5x; down-market beta 0.02 / 0.08), the
-  crisis-positive profile (2008 is the best year at every leverage: +23..32%
-  at 5x; Covid-2020 window -3.5%, 2022 bear -3..-4% at 5x while SPY lost
-  18..36%), 5x vol 10.1% vs 11.5%, worst month -6.6% vs -7.0%, and the $100k
-  rotating-half version keeping breadth through time.
-* **Above the reference at 1x:** Sharpe 1.78 vs 1.36 and net +3.8%/yr vs
-  +2.2..3.1%. The spec's 1x reference carries no cash yield; the +1.9%/yr of
-  FEDFUNDS on equity explains most of the gap, and VolVue's lower single/SPY
-  ratio (1.48 vs 1.59) means the sleeve itself is in line, not richer.
-* **Below the reference at 5x on drawdown:** maxDD -25.9% vs -13.6% and Calmar
-  0.48 vs 1.31. The drawdown is the 2020-2022 single-name dispersion drought
-  (Covid vol crush, then 2022) with leverage compounding it; the same stretch
-  costs the reference -8%. The gap is concentrated there, not in a different
-  return path, and the second-half Calmar (0.47) is the number to plan on.
+`scripts/reconcile.py` (table in `results/reconcile_VOLVUE.md`) isolates the
+conventions. On the same VolVue data and engine, the reference's 5x headline
+(+17.7%/yr, maxDD -13.6%, Calmar 1.31, second-half Calmar ~1.05-1.1) is
+reproduced to within rounding by the `spec_headline_costs` row: costs as a
+flat 0.7%/yr per turn of leverage and drawdown on month-end equity
+(+17.8%, -13.5%, 1.32, 2nd-half 0.76 daily / 1.21 monthly). The strategy,
+data and P&L path agree; the differences are:
 
-Gross/net at 1x on VolVue: retail half-spread costs 1.6%/yr and commissions
-0.6%/yr on the spec's per-leg parameters; the spec's "~0.7%/yr retail"
-headline corresponds to the 30-delta leg alone.
+* **Cost convention.** Applying the spec's per-leg half-spreads (3% / 8% /
+  0.3% x 1.3) to every leg costs 1.6%/yr per 1x; the spec's own "~0.7%/yr
+  retail" headline is the 30-delta leg alone. At 5x that is an 8%/yr swing
+  in CAGR and the whole Calmar gap. The 1.3 multiplier is meant for ITM
+  exits and rolls, which a hold-to-expiry book rarely does, so 1.0-1.3%/yr
+  per 1x is the defensible middle (`5x_no_1.3_mult_no_comm`: +16.6%,
+  Calmar 1.10 monthly).
+* **Commissions.** The first version charged $1/contract uncapped; tastytrade
+  caps at $10 per leg, so a $1M book at 5x was overcharged ~4x. Fixed;
+  it lifted 5x CAGR from +12.9% to +15.0%.
+* **Drawdown granularity.** Daily marks make every max drawdown ~1.5x the
+  month-end figure (-24.7% vs -16.3% at 5x). Both are reported; the daily
+  one is what a margin call is computed on.
+* **Calmar flat in leverage** holds in this engine too (0.60 / 0.61 / 0.51 /
+  0.52 daily at 3x / 5x / 8x / 10x), so it is not evidence of either
+  convention.
+* **Beta 0.21 vs 0.37** and vol 10.1% vs 11.5% remain the one unexplained
+  residual; it is consistent with the reference hedging less exactly or using
+  a different IV field, and it does not move Calmar.
 
 ### Long SPY + sleeve overlay
 
