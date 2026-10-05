@@ -28,6 +28,14 @@ log = logging.getLogger(__name__)
 SPX_PER_SPY = 10.0
 ES_MULT, MES_MULT = 50.0, 5.0
 CBOE_K = {"BXMD": None, "BXM": 1.0, "BXY": 1.02}   # strike/S for the hedge delta (None -> model K30)
+# option legs each Cboe index holds, for the hedge delta: (kind, strike/S or delta-bucket, sign per unit of index)
+CBOE_LEGS = {
+    "BXMD": [("call", ("d", 30), -1)], "BXM": [("call", 1.0, -1)], "BXY": [("call", 1.02, -1)],
+    "PUT": [("put", 1.0, -1)], "WPUT": [("put", 1.0, -1)], "PUTD": [("put", 1.0, -1)],
+    "PPUT": [("put", 0.95, +1)],
+    "RXM": [("call", ("d", 25), +1), ("put", ("dp", 25), -1)],
+    "CNDR": [("put", ("dp", 20), -1), ("call", ("d", 20), -1), ("put", ("dp", 5), +1), ("call", ("d", 5), +1)],
+}
 
 
 @dataclass
@@ -128,6 +136,21 @@ class Backtest:
             n = np.sign(units)
         return float(n * lot)
 
+    @staticmethod
+    def _cboe_strike(kk, S0, iv, T, rq):
+        if isinstance(kk, tuple):
+            return bs.put_strike_for_delta(S0, iv, T, kk[1], rq) if kk[0] == "dp" else bs.strike_for_delta(S0, iv, T, kk[1], rq)
+        return kk * S0
+
+    def _cboe_delta(self, name, units, S, T_rem, iv, r, q):
+        """Model delta of the index's option legs per unit of index (negative units = short the index position)."""
+        d = 0.0
+        for kind, kk, sg_ in CBOE_LEGS[name]:
+            Kk = self._cboe_strike(kk, S, iv, max(T_rem, 1e-6), r - q)   # strike re-derived at S0 below
+            dl = float(bs.put_delta(S, Kk, T_rem, iv, r, q)) if kind == "put" else float(bs.call_delta(S, Kk, T_rem, iv, r, q))
+            d += sg_ * dl
+        return -units * d * S   # sign: cboe leg units are -sign*units (short index position => +units short)
+
     def _index_iv(self, iv_s: float, t0) -> float:
         cfg = self.cfg
         iv_leg = iv_s * cfg.iv_mult_index
@@ -173,6 +196,8 @@ class Backtest:
                 event = np.isfinite(ratio) and ratio > cfg.term_thresh
                 if cfg.term_filter == "exclude_event" and event:
                     sign_of[n] = 0
+                elif cfg.term_filter == "event_only" and not event:
+                    sign_of[n] = 0
                 elif cfg.term_filter == "event_short" and event:
                     sign_of[n] = -cfg.singles_sign
                 if cfg.perc_filter is not None and np.isfinite(perc) and perc > cfg.perc_filter and sign_of[n] == cfg.singles_sign:
@@ -192,6 +217,15 @@ class Backtest:
             n_contr = units * S0 / (100.0 * self.uni.raw_price(n, t0))
             qn = self._q(n, t0)
             sg = sign_of[n]
+            if cfg.singles_structure == "straddle":
+                ivs_ = iv * cfg.straddle_iv_mult
+                Kx = S0 * np.exp((r - qn) * T)
+                Cc = float(bs.call_price(S0, Kx, T, ivs_, r, qn)); Pp = float(bs.put_price(S0, Kx, T, ivs_, r, qn))
+                rec.legs.append(Leg(n, sg * units, Kx, ivs_, S0, 50, False, Cc, q=qn))
+                rec.legs.append(Leg(n, sg * units, Kx, ivs_, S0, 50, False, Pp, kind="put", q=qn))
+                prem_paid += sg * units * (Cc + Pp)
+                costs += units * (Cc + Pp) * cm.single(50) + 2 * config.commission(n_contr, cm)
+                continue
             K_l = bs.strike_for_delta(S0, iv, T, cfg.long_delta, r - qn)
             C_l = float(bs.call_price(S0, K_l, T, iv * cfg.iv_mult_long, r, qn))
             bn = float(self.beta[n].loc[:t0].dropna().iloc[-1]) if self.beta is not None and n in self.beta and len(self.beta[n].loc[:t0].dropna()) else 1.0
@@ -204,7 +238,7 @@ class Backtest:
                 rec.legs.append(Leg(n, -sg * units, K_s, iv * cfg.iv_mult_wing, S0, cfg.short_wing_delta, False, C_s, q=qn, beta=bn))
                 prem_paid -= sg * units * C_s
                 costs += units * C_s * cm.single(cfg.short_wing_delta) + config.commission(n_contr, cm)
-        deployed = sum(abs(l.units) * l.S0 for l in rec.legs if l.bucket == cfg.long_delta) if cfg.singles_scale > 0 else book
+        deployed = sum(abs(l.units) * l.S0 for l in rec.legs if l.bucket == cfg.long_delta and l.kind == "call") if cfg.singles_scale > 0 else book
         S0 = float(self.spy.loc[t0])
         iv_s = float(ivs.get("SPY", np.nan))
         if deployed > 0 and np.isfinite(iv_s):
@@ -218,11 +252,13 @@ class Backtest:
             K_i = bs.strike_for_delta(S0, iv_s, T, cfg.index_delta, r - qs)
             if cfg.index_legs:
                 for name, sign, scale in cfg.index_legs:
-                    kS = CBOE_K[name]
-                    K_c = K_i if kS is None else kS * S0
-                    C_c = float(bs.call_price(S0, K_c, T, iv_s, r, qs))
-                    rec.legs.append(Leg(name, -sign * units * scale, K_c, iv_s, S0, cfg.index_delta, True, C_c, kind="cboe", q=qs))
-                    costs += units * scale * C_c * cm.index() + config.commission(n_idx * scale, cm, index=is_es)
+                    # cost estimate: model premium of the index's option legs
+                    C_c = 0.0
+                    for kind, kk, sg_ in CBOE_LEGS[name]:
+                        Kk = self._cboe_strike(kk, S0, iv_s, T, r - qs)
+                        C_c += float(bs.put_price(S0, Kk, T, iv_s, r, qs)) if kind == "put" else float(bs.call_price(S0, Kk, T, iv_s, r, qs))
+                        costs += units * scale * (float(bs.put_price(S0, Kk, T, iv_s, r, qs)) if kind == "put" else float(bs.call_price(S0, Kk, T, iv_s, r, qs))) * cm.index() + config.commission(n_idx * scale, cm, index=is_es)
+                    rec.legs.append(Leg(name, -sign * units * scale, K_i, iv_s, S0, cfg.index_delta, True, C_c, kind="cboe", q=qs))
             elif cfg.index_leg == "model":
                 C_i = float(bs.call_price(S0, K_i, T, iv_leg, r, qs))
                 rec.legs.append(Leg("SPY", -isg * units, K_i, iv_leg, S0, cfg.index_delta, True, C_i, q=qs))
@@ -240,6 +276,17 @@ class Backtest:
                 rec.legs.append(Leg("SPY", units, K_w, iv_s * cfg.iv_mult_index_wing, S0, cfg.index_wing_delta, True, C_w))
                 prem_paid += units * C_w
                 costs += units * C_w * cm.index() + config.commission(n_idx, cm, index=is_es)
+            if cfg.short_put_delta:
+                if not hasattr(self, "_spy_put_iv"):
+                    self._spy_put_iv = self.iv.field_panel("iv_put_30")["SPY"].dropna()
+                v = self._spy_put_iv.loc[:t0]
+                ivp0 = float(v.iloc[-1]) / 100.0 if len(v) else iv_s
+                pu = deployed * cfg.put_notional_scale / S0
+                K_sp = bs.put_strike_for_delta(S0, ivp0, T, cfg.short_put_delta, r - qs)
+                P_sp = float(bs.put_price(S0, K_sp, T, ivp0 * cfg.short_put_iv_mult, r, qs))
+                rec.legs.append(Leg("SPY", -pu, K_sp, ivp0 * cfg.short_put_iv_mult, S0, cfg.short_put_delta, True, P_sp, kind="put", q=qs))
+                prem_paid -= pu * P_sp
+                costs += pu * P_sp * cm.index() + config.commission(pu * S0 / (100.0 * self.uni.raw_price("SPY", t0)), cm)
             if cfg.put_delta:
                 ivp = iv_s
                 if hasattr(self.iv, "field_panel"):
@@ -252,7 +299,7 @@ class Backtest:
                         pass
                 iv_put = ivp * cfg.put_iv_mult
                 pu = deployed * cfg.put_notional_scale / S0
-                K_p = bs.put_strike_for_delta(S0, ivp, T, cfg.put_delta, r)
+                K_p = bs.put_strike_for_delta(S0, ivp, T, cfg.put_delta, r - qs)
                 P_p = float(bs.put_price(S0, K_p, T, iv_put, r))
                 rec.legs.append(Leg("SPY", pu, K_p, iv_put, S0, cfg.put_delta, True, P_p, kind="put"))
                 prem_paid += pu * P_p
@@ -289,6 +336,8 @@ class Backtest:
             if cbo:
                 cbs = [(self.cboe[l.ticker].loc[t0:t1], -l.units * l.S0) for l in cbo]   # notional >0 when short the call
                 cbs = [(c, float(c["idx"].loc[t0]), float(c["tr"].loc[t0]), n) for c, n in cbs]
+                T0 = (t1 - t0).days / 365.0
+                cb_strikes = [[self._cboe_strike(kk, l.S0, l.iv, T0, r - l.q) for kind, kk, sg_ in CBOE_LEGS[l.ticker]] for l in cbo]
             window = days[(days > t0) & (days <= t1)]
             hedge_sh, S_prev = 0.0, float(self.spy.loc[t0])
             r = float(self.rf.loc[t0])
@@ -310,8 +359,13 @@ class Backtest:
                     for c, bi, bt, n in cbs:
                         mark += n * (float(c["idx"].loc[d]) / bi - float(c["tr"].loc[d]) / bt)
                     if d < t1 and k % hedge_every == 0:
-                        for l in cbo:
-                            dollar_delta += l.units * float(bs.call_delta(S_spy, l.K, T_rem, l.iv * 0.9, r, l.q)) * S_spy
+                        for l, ks in zip(cbo, cb_strikes):
+                            dd = 0.0
+                            for (kind, kk, sg_), Kk in zip(CBOE_LEGS[l.ticker], ks):
+                                dl = float(bs.put_delta(S_spy, Kk, T_rem, l.iv, r, l.q)) if kind == "put" else float(bs.call_delta(S_spy, Kk, T_rem, l.iv * 0.9, r, l.q))
+                                dd += sg_ * dl
+                            # l.units = -sign*units: a short index position (sign=-1 -> units>0) holds the index's legs short
+                            dollar_delta += (-l.units) * dd * S_spy
                 if d < t1 and k % hedge_every == 0:
                     target = -dollar_delta / S_spy
                     trn = abs(target - hedge_sh) * S_spy

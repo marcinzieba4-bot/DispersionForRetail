@@ -42,8 +42,18 @@ def sp500_tr() -> pd.Series:
     return df.astype(float).dropna().sort_index()
 
 
+# what each index holds besides the option position: "tr" = long S&P 500 TR, "cash" = T-bills
+CBOE_BASE = {"BXM": "tr", "BXMD": "tr", "BXY": "tr", "PPUT": "tr", "CLL": "tr", "CLLZ": "tr",
+             "PUT": "cash", "WPUT": "cash", "PUTD": "cash", "RXM": "cash", "CNDR": "cash"}
+
+
 def short_call_pnl_panel(idx: str, index: pd.DatetimeIndex) -> pd.DataFrame:
-    """Daily levels aligned to `index` (ffilled): columns [idx, tr]."""
+    """Daily levels aligned to `index` (ffilled): columns [idx, tr]; tr is the
+    index's base (S&P 500 TR, or a FEDFUNDS cash accumulator for collateralised indices)."""
+    from .rates import fedfunds_daily
     a = cboe_index(idx).reindex(index.union(cboe_index(idx).index)).ffill().reindex(index)
-    b = sp500_tr().reindex(index.union(sp500_tr().index)).ffill().reindex(index)
+    if CBOE_BASE.get(idx, "tr") == "cash":
+        b = (1 + fedfunds_daily(index) / 252.0).cumprod() * 100.0
+    else:
+        b = sp500_tr().reindex(index.union(sp500_tr().index)).ffill().reindex(index)
     return pd.DataFrame({"idx": a, "tr": b})

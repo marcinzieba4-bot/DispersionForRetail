@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 # --- strike targets (call deltas) as Black-Scholes z-scores ------------------
-Z_DELTA = {30: -0.5244, 25: -0.6745, 10: -1.2816, 5: -1.6449, 1: -2.3263}   # K = S*exp(-z*s + s^2/2)
+Z_DELTA = {50: 0.0, 30: -0.5244, 25: -0.6745, 20: -0.8416, 10: -1.2816, 5: -1.6449, 1: -2.3263}   # K = S*exp(-z*s + s^2/2)
 DELTA_TARGETS = {30: 0.30, 10: 0.10, 1: 0.01}
 
 # --- universe -----------------------------------------------------------------
@@ -123,6 +123,12 @@ class StrategyConfig:
     term_thresh: float = 1.08
     perc_filter: float | None = None # long singles only if iv_call_30_perc <= this (0-100)
     beta_hedge: bool = False         # hedge dollar-delta x trailing-252d beta instead of raw dollar-delta
+    # index put spread (model): SHORT put at short_put_delta, LONG put at put_delta; IVs = iv_put_30 x mult
+    short_put_delta: int | None = None
+    short_put_iv_mult: float = 1.16  # measured today: 25d put IV = 1.16x ATM
+    # single-name structure: "vertical" (30-10 call spread) | "straddle" (ATM call + ATM put, same IV)
+    singles_structure: str = "vertical"
+    straddle_iv_mult: float = 1.0
 
 
 REFERENCE = {
