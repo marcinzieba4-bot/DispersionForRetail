@@ -639,6 +639,35 @@ drawdown. Hedged, the combined book stays crisis-positive at every leverage
 (Covid +2% to +78%, 2022 +3% to +34%), but that is the PWD half doing all
 the work.
 
+### Index put ratio spread, and a vega tilt on the put-wing book (`results/put_ratio_vega_VOLVUE.csv`)
+
+Ratio spread from real legs: long 1 ATM SPY put (reverse of PUT) + short 2 x
+25-delta puts (RXM + BXMD doubled). Vega tilt: index notional at 1.25x the
+single-name notional (and 1.5x, and the engine's IV-ratio vega match ~1.5x).
+
+| 1x | CAGR | Sharpe | maxDD | worst month | 2008 | 2018 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|
+| put-wing, index x1.0 (reference) | +2.3% | 0.96 | -9.6% | -3.1% | +10% | +3% | +4% | +3% |
+| put-wing, index x1.25 | +2.6% | 0.95 | -10.3% | -3.9% | +10% | +2% | +4% | +3% |
+| put-wing, index x1.5 | +3.0% | 0.91 | -11.0% | -4.8% | +9% | +2% | +4% | +3% |
+| put-wing, vega-matched (IV ratio) | +2.8% | 0.84 | -11.5% | -5.2% | +11% | 0% | +3% | +3% |
+| put-wing x1.25 at 2x / 5x | +3.6% / +5.8% | 0.73 / 0.60 | -19% / -36% | -7.5% / -16% | +19% / +48% | | +7% / +14% | |
+| idx put ratio spread alone, SPY-hedged weekly | +2.5% | 0.70 | -12.4% | -5.6% | +1% | +2% | | |
+| idx put ratio spread alone, unhedged | +1.1% | 0.21 | -21.0% | -13.7% | -6% | +4% | | |
+| idx short 25d put alone, hedged (reference) | +3.1% | 0.99 | -9.9% | -5.7% | -1% | -1% | | |
+| put-wing with ratio-spread index leg, x1.0 | +1.6% | 0.44 | -19.7% | -3.7% | +12% | +7% | +3% | +2% |
+| put-wing with ratio-spread index leg, x1.25 | +1.8% | 0.45 | -21.0% | -4.7% | +12% | +7% | | |
+| put-wing with ratio-spread index leg, x0.5 (net one short 25d) | +1.1% | 0.37 | -19.0% | -3.3% | +12% | +7% | | |
+
+Vega tilt: more index notional raises the mean roughly in proportion
+(+2.3% -> +2.6% -> +3.0%) at a slightly lower Sharpe and a slightly smaller
+2008, because the extra index puts are carry with crash risk; 1.25x is a fair
+compromise (Sharpe 0.95, 2008 +10%). Ratio spread: the long ATM put costs
+more than the second short 25-delta put earns, so the ratio alone is worse
+than the plain short 25-delta put (Sharpe 0.70 vs 0.99 hedged) and loses the
+crash protection unhedged (-6% in 2008, -17% in Covid); as the index leg of
+the put-wing book it halves the Sharpe (0.44) while adding 2 points of 2008.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
