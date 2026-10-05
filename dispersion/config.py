@@ -137,6 +137,9 @@ class StrategyConfig:
     # index sizing: "notional" (= singles notional x index_notional_scale) or "vega" (x median single IV / SPY IV)
     index_notional_mode: str = "notional"
     fixed_notional: bool = False     # size every cycle from the STARTING equity (no shrink after losses)
+    weighting: str = "equal"         # "equal" | "mcap" (market-cap weights within the chosen names) | "sqrt_mcap"
+    weight_cap: float = 1.0          # max weight per name under mcap weighting (e.g. 0.10)
+    select: str = "liquidity"        # universe ranking: "liquidity" (spec) | "mcap" (largest caps)
 
 
 REFERENCE = {

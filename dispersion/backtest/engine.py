@@ -172,6 +172,9 @@ class Backtest:
     def _open_month(self, i: int, t0: pd.Timestamp, t1: pd.Timestamp, E: float) -> MonthRecord:
         cfg, cm = self.cfg, self.cfg.costs
         names = self.uni.tradable(t0)
+        if cfg.select == "mcap":
+            mc_all = self.uni.mcap.loc[:t0].iloc[-1].reindex(names).dropna()
+            names = mc_all.sort_values(ascending=False).index.tolist()
         names = names[(i % 2)::2][: cfg.n_names // 2] if cfg.rotating_half else names[: cfg.n_names]
         rec = MonthRecord(t0, t1, names, E, 0.0, 0.0)
         if len(names) < (config.MIN_NAMES if not cfg.rotating_half else config.MIN_NAMES // 2):
@@ -182,6 +185,21 @@ class Backtest:
         ivs = self.iv.asof(names + ["SPY"], t0)
         book = cfg.book_fraction * cfg.leverage * ((cfg.equity or 1_000_000.0) if cfg.fixed_notional else E)
         per_name = book / len(names)
+        weights = {n: 1.0 / len(names) for n in names}
+        if cfg.weighting in ("mcap", "sqrt_mcap"):
+            mc = self.uni.mcap.loc[:t0].iloc[-1].reindex(names)
+            mc = mc.where(mc > 0).fillna(mc.median())
+            w = np.sqrt(mc) if cfg.weighting == "sqrt_mcap" else mc
+            w = w / w.sum()
+            for _ in range(10):   # iterative cap
+                over = w > cfg.weight_cap
+                if not over.any():
+                    break
+                excess = (w[over] - cfg.weight_cap).sum(); w[over] = cfg.weight_cap
+                under = ~over
+                if under.any():
+                    w[under] += excess * w[under] / w[under].sum()
+            weights = w.to_dict()
         prem_paid, costs = 0.0, 0.0
         sign_of: dict[str, int] = {n: cfg.singles_sign for n in names}
         if self.term is not None:
@@ -209,6 +227,7 @@ class Backtest:
             if not np.isfinite(S0) or not np.isfinite(iv) or iv <= 0:
                 rec.skipped.append(n)
                 continue
+            per_name = book * weights.get(n, 1.0 / max(len(names), 1))
             units = self._round_units(per_name / S0, S0, per_name, False)
             if units == 0:
                 rec.skipped.append(n)
