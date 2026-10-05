@@ -721,6 +721,71 @@ costs scales the cost line with the exposure and leaves the Sharpe where it
 was, so 3x triples both the return and the drawdown (put-wing ex-event 3x:
 +1.6%/yr, -22% maxDD, +27% in 2008).
 
+### Regime-conditioned dispersion: implied correlation decides which wing to trade (`results/regime_*.csv`)
+
+`dispersion/signals.py`, `scripts/run_regime_sleeves.py`, `run_regime.py`, `run_regime_rules.py`,
+`run_regime_book.py`. Signals, all as-of daily: Cboe COR1M/COR3M, a basket implied
+correlation `bcor` solved from VolVue iv_mean_30 of the top-30 names vs SPY
+(correlates 0.92 with COR1M), realized 21/63-day pairwise correlation, VIX,
+single-minus-index vol spread, index and single VRP, and trailing-2-year
+percentile ranks (`*_p`). Each sleeve (short SPY straddle / 25d put / 30d call
+via real Cboe indices; long single straddles / 25d puts / 30-10 verticals /
+30d calls, split-hedged; event short straddles) was run once at fixed notional,
+retail costs, ex cash, so monthly P&L is additive and any regime rule is a sum
+of rows. Quartile tables are in `results/regime_analysis.txt`, rule scores in
+`results/regime_rules.txt`.
+
+What the quartiles say (annualized P&L by entry-date quartile of basket implied corr, Q1 low .. Q4 high):
+
+| book | Q1 | Q2 | Q3 | Q4 |
+|---|---|---|---|---|
+| put-wing dispersion (short idx 25d put, long single 25d puts) | -2.2% | -2.4% | +0.6% | +4.9% [Sharpe 1.08] |
+| outright-call dispersion (short idx 30d call, long single 30d calls) | +0.8% | +1.8% | -3.9% | -3.4% |
+| two-wing straddle dispersion | +0.4% | +2.2% | -4.7% | +1.4% |
+| short idx 25d put alone | +0.3% | -2.3% | +1.4% | +7.4% |
+| long single straddles alone | -2.1% | +0.9% | -5.0% | -3.1% |
+
+Long single-name vol loses in every quartile and loses most when correlation
+is high, so the textbook two-wing book has no regime. The put wing is the
+exception: when implied correlation is in its top quartile the index put is
+rich relative to single puts and the spread earns about 5%/yr while deployed.
+The call wing works the other way round: in low-correlation, low-VIX months
+single calls (delta hedged) earn their realized idiosyncratic moves and the
+index call is dead weight either way. "High correlation and low vol" together
+is a rare regime (8-16% of months; implied corr and VIX correlate 0.64) and
+nothing earns in it. Short index vol pays with high correlation, not low vol.
+
+Regime book (confirmed through the engine with `trade_mask`, fixed notional,
+retail costs, third-Friday cycle, VolVue IV, 2007-2026):
+
+- corr-hi (`bcor_p > 0.75`, 61 of 236 months): put-wing dispersion (x1.05 single put IV) plus a 0.5x short SPY straddle, delta hedged weekly.
+- corr-lo (`bcor < 0.30` and VIX < 20, 78 months): outright-call dispersion, split hedged.
+- always: event selling (short straddles on 100-name event list, book hedge).
+- otherwise cash.
+
+| | L | CAGR | vol | Sharpe | maxDD | Calmar | worst m | Sharpe 2nd half | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| put-wing in corr-hi only | 1x | +0.8% | 1.3% | 0.59 | -2.9% | 0.26 | -1.2% | 0.73 | +3.3% | +3.6% | +1.4% |
+| 0.5x short idx straddle in corr-hi only | 1x | +0.6% | 1.7% | 0.37 | -5.6% | 0.11 | -2.2% | 0.09 | +2.9% | +4.9% | -3.5% |
+| outright-call dispersion in corr-lo only | 1x | +0.8% | 1.3% | 0.59 | -2.1% | 0.36 | -0.9% | 0.75 | +3.1% | -0.2% | 0.0% |
+| event selling always | 1x | +0.6% | 0.9% | 0.59 | -3.9% | 0.14 | -1.1% | 0.22 | +1.2% | +0.7% | +1.2% |
+| put-wing always (reference) | 1x | +0.4% | 2.6% | 0.19 | -10.7% | 0.04 | -3.3% | 0.19 | +8.1% | +4.3% | +0.6% |
+| regime book, ex cash | 1x | +2.3% | 2.4% | 0.94 | -4.8% | 0.48 | -2.0% | 0.79 | +10.4% | +7.3% | -0.7% |
+| regime book + cash yield | 1x | +3.4% | 2.3% | 1.47 | -3.2% | 1.05 | -1.8% | 1.67 | +11.9% | +6.9% | +0.5% |
+| regime book, ex cash | 3x | +5.2% | 5.7% | 0.91 | -9.5% | 0.54 | -5.1% | 0.79 | +30.7% | +14.5% | -1.4% |
+| regime book + cash yield | 3x | +5.9% | 5.5% | 1.06 | -9.0% | 0.65 | -4.5% | 1.08 | +31.4% | +13.8% | -0.5% |
+| regime book, ex cash | 5x | +7.0% | 8.3% | 0.86 | -15.4% | 0.46 | -8.5% | 0.79 | +50.6% | +18.0% | -1.6% |
+
+Engine check: put-wing in corr-hi at 3x through the engine ends at +494k vs
++477k for 3x the 1x run (commission caps), so leverage rows are scaled 1x P&L.
+Caveats: the two thresholds were picked after looking at quartile tables (four
+thresholds and two correlation measures were tried, all positive); both halves
+of the sample are positive for every component; the corr-hi sleeve trades only
+61 months, mostly 2007-2011, 2015, 2018-2020 and 2022; the corr-lo sleeve is
+the 2017-2019 and 2023-2026 regime, which is also where the sample ends. As of
+2026-10-02 basket implied corr is 0.06 (8th percentile), VIX 16: corr-lo, so
+only the call wing and event selling would be on.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

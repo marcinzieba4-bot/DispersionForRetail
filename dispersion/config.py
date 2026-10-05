@@ -142,6 +142,7 @@ class StrategyConfig:
     weighting: str = "equal"         # "equal" | "mcap" (market-cap weights within the chosen names) | "sqrt_mcap"
     weight_cap: float = 1.0          # max weight per name under mcap weighting (e.g. 0.10)
     select: str = "liquidity"        # universe ranking: "liquidity" (spec) | "mcap" (largest caps)
+    trade_mask: object = None        # optional daily bool Series: when False as of the entry date the cycle stays in cash
 
 
 REFERENCE = {

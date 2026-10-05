@@ -177,6 +177,12 @@ class Backtest:
             names = mc_all.sort_values(ascending=False).index.tolist()
         names = names[(i % 2)::2][: cfg.n_names // 2] if cfg.rotating_half else names[: cfg.n_names]
         rec = MonthRecord(t0, t1, names, E, 0.0, 0.0)
+        if cfg.trade_mask is not None:
+            m = cfg.trade_mask.dropna()
+            j = m.index.searchsorted(t0, side="right") - 1
+            if j < 0 or not bool(m.iloc[j]):
+                rec.names = []
+                return rec                                   # regime off: cycle stays in cash
         if len(names) < (config.MIN_NAMES if not cfg.rotating_half else config.MIN_NAMES // 2):
             log.warning("%s: only %d names -> month skipped", t0.date(), len(names))
             return rec

@@ -26,6 +26,8 @@ def cboe_index(idx: str) -> pd.Series:
         r.raise_for_status()
         f.write_text(r.text)
     df = pd.read_csv(f)
+    if df.shape[1] > 2:                                   # COR1M/COR3M ship OHLC: keep the close
+        df = df.iloc[:, [0, -1]]
     df.columns = ["date", "px"]
     df["date"] = pd.to_datetime(df["date"])
     return df.set_index("date")["px"].astype(float).sort_index()
