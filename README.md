@@ -393,6 +393,40 @@ volmageddon spike (both sleeves short gamma) followed by the Q4 V-shape
 sets every drawdown figure above 1x. The best version is the combo with the
 put stop unwound at -1% at 1x-2x: Sharpe 0.82 / 0.66, maxDD -13% / -27%.
 
+### Fixed-notional sizing and the 33/33/33 book with long single-name 30-delta calls (`results/combo3_fixed_VOLVUE.csv`)
+
+`fixed_notional=True`: every cycle trades w x 0.9 x L x E0 regardless of
+drawdown (nothing is shrunk after a losing month); equity = E0 + cumulative
+P&L + cash yield on E0, so returns are additive and the leverage in % of
+live equity rises inside drawdowns. Third sleeve: long 30-delta calls on the
+30 names (outright, or the 30-10 vertical), weekly SPY hedge or unhedged.
+
+| book (fixed notional) | 1x CAGR / Sharpe / maxDD / worst month / 2008 | 2x CAGR / Sharpe / maxDD | 3x CAGR / Sharpe / maxDD |
+|---|---|---|---|
+| 50/50 put-stop 2% + straddle | +3.1% / 0.74 / -14% / -5.5% / +4.6% | +4.3% / 0.56 / -26% | +5.2% / 0.50 / -38% |
+| 50/50 put-stop (unwind -1%) + straddle | +3.3% / 0.81 / -12% / -5.5% / +3.7% | +4.6% / 0.64 / -22% | +5.6% / 0.57 / -32% |
+| 33/33/33 + long 30d calls, hedged | +2.4% / 0.73 / -13% / -3.7% / +0.7% | +3.0% / 0.49 / -26% | +3.6% / 0.41 / -39% |
+| 33/33/33 + long 30d calls, unhedged | +2.9% / 0.78 / -15% / -4.3% / -1.1% | +3.9% / 0.56 / -29% | +4.8% / 0.48 / -43% |
+| 33/33/33 + long 30-10 verticals, hedged | +2.4% / 0.78 / -12% / -3.5% / +1.5% | +3.1% / 0.53 / -23% | +3.7% / 0.44 / -34% |
+| 40/40/20 + long 30d calls, unhedged | +3.0% / 0.78 / -14% / -4.5% / +1.2% | +4.1% / 0.57 / -28% | +5.0% / 0.50 / -41% |
+| 33/33/33, put unwind -1%, calls unhedged | +3.0% / 0.84 / -13% / -3.3% / -1.6% | +4.1% / 0.62 / -26% | +5.0% / 0.53 / -39% |
+
+Sleeve alone, 1x fixed: put-stop +3.2% (Sharpe 0.61), straddle +3.1%
+(0.63), long 30d calls hedged +0.5% (0.12), unhedged +2.4% (0.47, beta 0.20,
+2008 -12%), 30-10 vertical hedged +0.7% (0.24). Monthly correlations:
+straddle vs hedged long calls -0.31 (the real diversifier: long single-name
+gamma against short index gamma), put-stop vs unhedged calls +0.42.
+
+Reading: fixed notional costs little (Sharpe 0.74 vs 0.75 in equity mode at
+1x) and makes drawdowns additive, i.e. a -14% drawdown is 14% of the starting
+equity at every leverage. The long-call sleeve carries no return of its own
+but is negatively correlated with the straddle, so the three-sleeve book has
+the smallest worst month of anything in this study (-3.3% to -3.7% at 1x) at
+a slightly lower CAGR; it also gives up most of the 2008 positivity because
+long single-name calls lose 12% in a crash. The 30-10 vertical is the
+cheapest way to buy that diversification (Sharpe 0.78, 2008 +1.5%). Above 1x
+the 2018 tail still dominates every variant.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

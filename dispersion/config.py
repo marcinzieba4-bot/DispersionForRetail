@@ -134,6 +134,7 @@ class StrategyConfig:
     hedge_scope: str = "book"
     # index sizing: "notional" (= singles notional x index_notional_scale) or "vega" (x median single IV / SPY IV)
     index_notional_mode: str = "notional"
+    fixed_notional: bool = False     # size every cycle from the STARTING equity (no shrink after losses)
 
 
 REFERENCE = {

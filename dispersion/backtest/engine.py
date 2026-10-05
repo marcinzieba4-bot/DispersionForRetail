@@ -180,7 +180,7 @@ class Backtest:
         T = (t1 - t0).days / 365.0
         r = float(self.rf.loc[t0])
         ivs = self.iv.asof(names + ["SPY"], t0)
-        book = cfg.book_fraction * cfg.leverage * E
+        book = cfg.book_fraction * cfg.leverage * ((cfg.equity or 1_000_000.0) if cfg.fixed_notional else E)
         per_name = book / len(names)
         prem_paid, costs = 0.0, 0.0
         sign_of: dict[str, int] = {n: cfg.singles_sign for n in names}
