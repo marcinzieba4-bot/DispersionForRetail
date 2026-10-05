@@ -200,6 +200,58 @@ worth under 1%/yr; IV-percentile conditioning is the strongest signal and is
 still below the retail cost load (~1.2%/yr per turn). The beta hedge only
 lowers beta. Nothing tested turns the call-side book positive.
 
+### Put spreads on the index, from real Cboe legs (`results/put_spread_VOLVUE.csv`)
+
+Cboe's PUT (short ATM put), PPUT (long 5% OTM put on the index), RXM (short
+25-delta put + long 25-delta call), CNDR (20/5 iron condor) and BXMD give the
+put wing from actual settlements; the engine combines them per cycle
+(`index_legs`, sign +1 = hold the index's position) and adds the weekly
+hedge. 2007-2026, realistic costs, cash yield (~1.9%/yr) included:
+
+| index-only structure | 1x CAGR / Sharpe / maxDD / 2008 | 3x CAGR / Sharpe / maxDD |
+|---|---|---|
+| short ATM put, unhedged (PUT) | +6.6% / 0.72 / -34% / -24% (beta 0.54) | +9.6% / 0.49 / -81% |
+| short ATM put, hedged weekly | +3.9% / 0.75 / -15% / -3% | +7.7% / 0.55 / -47% |
+| short 25d put, hedged (RXM + BXMD) | +3.5% / 0.90 / -11% / -1% | +6.8% / 0.62 / -30% |
+| **25d / 5%-OTM put spread, hedged** (RXM + BXMD + PPUT) | **+0.9% / 0.58 / -7% / +4%** | -0.4% / -0.05 / -24% |
+| ATM / 5%-OTM put spread, unhedged | +3.8% / 0.74 / -15% / -7% | +7.2% / 0.53 / -46% |
+| 20/5 iron condor (CNDR) | +0.8% / 0.17 / -18% / -4% | -2.2% / 0.00 / -59% |
+| model 25d/5d spread at measured skew (1.16x, 1.73x) | -0.3% unhedged, -1.2% hedged | -4.5% / -6.6% |
+| short ATM call + long 30d call, hedged (BXM - BXMD) | +1.3% / 0.55 / -12% | +0.6% / 0.12 / -32% |
+
+The premium is in the short put and it is crash risk: the 5%-OTM wing (a
+10-15 delta put at one month) costs ~2.6%/yr of notional, i.e. almost all of
+the 25-delta put's hedged premium, so the defined-risk spread is flat ex
+cash. The ATM/30-delta call-spread row corrects an earlier run of this
+README that had the structure reversed; the conclusion (flat) is unchanged.
+
+### Single-name event selling (`results/event_selling_VOLVUE.csv`, `..._scaling_VOLVUE.csv`)
+
+Short ATM straddles (both legs at VolVue's validated ATM IV) on names whose
+30-day IV sits >8% above the 60-day (an earnings event inside the cycle),
+weekly hedge, per-name notional 0.9L/N, realistic costs (1.5% ATM
+half-spread, capped commissions, fees), 3rd-Friday cycle:
+
+| book (100 most liquid S&P names, ~12 event names/month) | CAGR | Sharpe | maxDD | worst month | 2008 | 2020 | 2022 | cost/yr | deployed |
+|---|---|---|---|---|---|---|---|---|---|
+| 1x | +2.3% | 1.92 | -3.0% | -1.2% | +3.2% | +1.1% | +3.1% | 0.2% | 0.11x |
+| 3x | +3.5% | 1.11 | -9.2% | -3.6% | +5.9% | +2.7% | +6.0% | 0.6% | 0.34x |
+| 5x | +4.8% | 0.93 | -16.2% | -6.0% | +8.6% | +4.2% | +9.0% | 1.0% | 0.56x |
+| 8x | +6.6% | 0.82 | -27.2% | -9.5% | +12.9% | +6.6% | +13.6% | 1.5% | 0.90x |
+| 3x, 3% ATM half-spread | +3.0% | 0.96 | -9.8% | | | | | 1.1% | |
+| 5x, no cash yield | +2.9% | 0.59 | -20.3% | | | | | | |
+| control: non-event names, 3x | +2.2% | 0.24 | -35.8% | -17.3% | -3.2% | -19.0% | -18.0% | | 2.5x |
+| sanity: long straddles on event names, 3x | -1.5% | -0.27 | -32.7% | | | | | | |
+
+This is the only positive, crisis-robust edge found in the whole study: ex
+cash about 1%/yr per turn of leverage, positive in 19 of 20 years, positive
+in 2008, 2020 and 2022, beta ~0, and the control (same structure on
+non-event names) is flat with five times the drawdown. It is small and
+capacity-limited (12 names, 0.56x of equity deployed at 5x), the event flag
+is a term-structure proxy rather than an earnings calendar, and single-name
+straddles are undefined-risk shorts that need a margin plan; but it is real
+in the data.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
