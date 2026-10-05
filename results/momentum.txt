@@ -1,0 +1,63 @@
+=== momentum variants, standalone, 100% of equity compounded, ex cash (point-in-time S&P members, ADV > $20M, 5 bp/side) ===
+mom 12-1, top 5                              cagr=+14.8% vol=31.2% sharpe=0.61 sortino=0.63 maxdd=-75.3% calmar=0.20 worst_m=-27.8% beta=1.33 sh2h=0.78 | 2008=-70% 2009=+9% 2020=+12% 2022=+3% covid=-21% | coverage 83%->100%
+mom 12-1, top 10                             cagr=+12.7% vol=26.9% sharpe=0.59 sortino=0.59 maxdd=-68.1% calmar=0.19 worst_m=-25.6% beta=1.27 sh2h=0.81 | 2008=-55% 2009=+1% 2020=+14% 2022=+4% covid=-26% | coverage 83%->100%
+mom 12-1, top 20                             cagr=+9.4% vol=23.0% sharpe=0.52 sortino=0.49 maxdd=-64.7% calmar=0.15 worst_m=-22.5% beta=1.16 sh2h=0.80 | 2008=-50% 2009=-0% 2020=+10% 2022=-2% covid=-25% | coverage 83%->100%
+mom 6-1, top 5                               cagr=+15.6% vol=32.8% sharpe=0.61 sortino=0.68 maxdd=-75.1% calmar=0.21 worst_m=-26.0% beta=1.36 sh2h=0.73 | 2008=-53% 2009=+13% 2020=+9% 2022=-16% covid=-23% | coverage 83%->100%
+mom 12-1 vol-scaled, top 5                   cagr=+10.9% vol=27.6% sharpe=0.51 sortino=0.55 maxdd=-75.2% calmar=0.14 worst_m=-25.8% beta=1.15 sh2h=0.83 | 2008=-66% 2009=+0% 2020=+13% 2022=+3% covid=-23% | coverage 83%->100%
+mom 12-1, top 5, top-100 mcap only           cagr=+9.4% vol=26.8% sharpe=0.48 sortino=0.53 maxdd=-62.2% calmar=0.15 worst_m=-28.3% beta=1.14 sh2h=0.75 | 2008=-43% 2009=+6% 2020=+1% 2022=+1% covid=-26% | coverage 98%->100%
+mom 12-1, top 10, top-100 mcap only          cagr=+9.2% vol=22.9% sharpe=0.51 sortino=0.52 maxdd=-62.0% calmar=0.15 worst_m=-27.1% beta=1.03 sh2h=0.81 | 2008=-45% 2009=-4% 2020=+8% 2022=-4% covid=-23% | coverage 98%->100%
+ES (TR - cash)                               cagr=+9.1% vol=15.4% sharpe=0.66 sortino=0.59 maxdd=-56.6% calmar=0.16 worst_m=-16.6% beta=1.00 sh2h=0.84 | 2008=-38% 2009=+26% 2020=+18% 2022=-20% covid=-23%
+
+last 6 picks: {'2026-04-17': ['SNDK', 'LITE', 'WDC', 'MU', 'CIEN'], '2026-05-15': ['SNDK', 'LITE', 'WDC', 'CIEN', 'STX'], '2026-06-18': ['SNDK', 'LITE', 'WDC', 'CIEN', 'MU'], '2026-07-17': ['SNDK', 'WDC', 'LITE', 'MU', 'STX'], '2026-08-21': ['SNDK', 'MU', 'WDC', 'LITE', 'STX'], '2026-09-18': ['SNDK', 'MRNA', 'MU', 'LITE', 'WDC']}
+avg names replaced per month: 1.9 of 5
+
+=== combo: w x equity in the leg + 70% of equity in the honest book at L x, cash on all equity ===
+ES w=30% L=0                                 cagr=+4.7% vol=4.5% sharpe=1.05 sortino=0.97 maxdd=-18.3% calmar=0.26 worst_m=-4.5% beta=0.29 sh2h=1.42 | 2008=-10% 2009=+8% 2020=+8% 2022=-4% covid=-6%
+ES w=30% L=3                                 cagr=+8.0% vol=6.8% sharpe=1.16 sortino=1.11 maxdd=-20.3% calmar=0.39 worst_m=-9.8% beta=0.31 sh2h=1.43 | 2008=-9% 2009=+10% 2020=+17% 2022=-0% covid=-7%
+ES w=30% L=4                                 cagr=+9.0% vol=8.1% sharpe=1.11 sortino=1.06 maxdd=-22.0% calmar=0.41 worst_m=-12.4% beta=0.31 sh2h=1.35 | 2008=-9% 2009=+11% 2020=+20% 2022=+1% covid=-7%
+ES w=30% L=10                                cagr=+15.1% vol=17.2% sharpe=0.91 sortino=0.92 maxdd=-37.8% calmar=0.40 worst_m=-27.1% beta=0.34 sh2h=1.06 | 2008=-9% 2009=+16% 2020=+39% 2022=+8% covid=-8%
+ES w=45% L=0                                 cagr=+6.2% vol=6.8% sharpe=0.92 sortino=0.84 maxdd=-27.6% calmar=0.22 worst_m=-6.9% beta=0.44 sh2h=1.24 | 2008=-16% 2009=+12% 2020=+11% 2022=-7% covid=-10%
+ES w=45% L=3                                 cagr=+9.4% vol=8.6% sharpe=1.11 sortino=1.04 maxdd=-28.1% calmar=0.34 worst_m=-10.7% beta=0.46 sh2h=1.37 | 2008=-15% 2009=+14% 2020=+20% 2022=-4% covid=-10%
+ES w=45% L=4                                 cagr=+10.5% vol=9.7% sharpe=1.10 sortino=1.03 maxdd=-29.0% calmar=0.36 worst_m=-13.2% beta=0.46 sh2h=1.34 | 2008=-15% 2009=+15% 2020=+23% 2022=-2% covid=-10%
+ES w=45% L=10                                cagr=+16.6% vol=18.0% sharpe=0.96 sortino=0.96 maxdd=-39.9% calmar=0.42 worst_m=-27.6% beta=0.49 sh2h=1.11 | 2008=-15% 2009=+21% 2020=+42% 2022=+5% covid=-11%
+ES w=60% L=0                                 cagr=+7.6% vol=9.1% sharpe=0.86 sortino=0.77 maxdd=-36.1% calmar=0.21 worst_m=-9.4% beta=0.59 sh2h=1.14 | 2008=-22% 2009=+16% 2020=+14% 2022=-10% covid=-13%
+ES w=60% L=3                                 cagr=+10.8% vol=10.5% sharpe=1.04 sortino=0.95 maxdd=-35.6% calmar=0.31 worst_m=-11.6% beta=0.61 sh2h=1.30 | 2008=-21% 2009=+19% 2020=+23% 2022=-7% covid=-14%
+ES w=60% L=4                                 cagr=+11.9% vol=11.4% sharpe=1.05 sortino=0.99 maxdd=-36.2% calmar=0.33 worst_m=-14.1% beta=0.61 sh2h=1.30 | 2008=-21% 2009=+20% 2020=+26% 2022=-5% covid=-14%
+ES w=60% L=10                                cagr=+18.1% vol=19.0% sharpe=0.98 sortino=0.97 maxdd=-44.5% calmar=0.41 worst_m=-28.2% beta=0.64 sh2h=1.15 | 2008=-21% 2009=+25% 2020=+44% 2022=+2% covid=-15%
+mom 12-1 top 5 w=30% L=0                     cagr=+7.2% vol=9.3% sharpe=0.80 sortino=0.83 maxdd=-29.7% calmar=0.24 worst_m=-8.4% beta=0.39 sh2h=1.03 | 2008=-25% 2009=+3% 2020=+7% 2022=+4% covid=-5%
+mom 12-1 top 5 w=30% L=3                     cagr=+10.4% vol=11.0% sharpe=0.97 sortino=0.95 maxdd=-33.7% calmar=0.31 worst_m=-16.1% beta=0.40 sh2h=1.20 | 2008=-25% 2009=+5% 2020=+16% 2022=+8% covid=-6%
+mom 12-1 top 5 w=30% L=4                     cagr=+11.5% vol=11.9% sharpe=0.98 sortino=0.97 maxdd=-35.8% calmar=0.32 worst_m=-18.6% beta=0.40 sh2h=1.20 | 2008=-25% 2009=+6% 2020=+19% 2022=+9% covid=-6%
+mom 12-1 top 5 w=30% L=10                    cagr=+17.5% vol=19.6% sharpe=0.93 sortino=0.90 maxdd=-47.6% calmar=0.37 worst_m=-32.6% beta=0.43 sh2h=1.11 | 2008=-26% 2009=+11% 2020=+38% 2022=+16% covid=-7%
+mom 12-1 top 5 w=45% L=0                     cagr=+9.6% vol=13.9% sharpe=0.74 sortino=0.77 maxdd=-42.0% calmar=0.23 worst_m=-12.5% beta=0.58 sh2h=0.95 | 2008=-37% 2009=+4% 2020=+10% 2022=+4% covid=-8%
+mom 12-1 top 5 w=45% L=3                     cagr=+12.9% vol=15.2% sharpe=0.88 sortino=0.86 maxdd=-44.4% calmar=0.29 worst_m=-20.0% beta=0.60 sh2h=1.09 | 2008=-36% 2009=+7% 2020=+18% 2022=+8% covid=-9%
+mom 12-1 top 5 w=45% L=4                     cagr=+14.0% vol=16.0% sharpe=0.91 sortino=0.89 maxdd=-46.1% calmar=0.30 worst_m=-22.4% beta=0.60 sh2h=1.12 | 2008=-36% 2009=+8% 2020=+21% 2022=+9% covid=-9%
+mom 12-1 top 5 w=45% L=10                    cagr=+20.0% vol=22.5% sharpe=0.94 sortino=0.91 maxdd=-56.2% calmar=0.36 worst_m=-35.8% beta=0.62 sh2h=1.12 | 2008=-37% 2009=+12% 2020=+39% 2022=+17% covid=-10%
+mom 12-1 top 5 w=60% L=0                     cagr=+11.9% vol=18.6% sharpe=0.70 sortino=0.73 maxdd=-52.6% calmar=0.23 worst_m=-16.7% beta=0.78 sh2h=0.91 | 2008=-47% 2009=+6% 2020=+11% 2022=+5% covid=-11%
+mom 12-1 top 5 w=60% L=3                     cagr=+15.1% vol=19.7% sharpe=0.82 sortino=0.81 maxdd=-54.5% calmar=0.28 worst_m=-23.8% beta=0.79 sh2h=1.03 | 2008=-47% 2009=+8% 2020=+20% 2022=+8% covid=-12%
+mom 12-1 top 5 w=60% L=4                     cagr=+16.2% vol=20.3% sharpe=0.85 sortino=0.83 maxdd=-55.3% calmar=0.29 worst_m=-26.1% beta=0.80 sh2h=1.05 | 2008=-47% 2009=+9% 2020=+23% 2022=+10% covid=-12%
+mom 12-1 top 5 w=60% L=10                    cagr=+22.3% vol=25.9% sharpe=0.92 sortino=0.92 maxdd=-63.7% calmar=0.35 worst_m=-38.9% beta=0.82 sh2h=1.11 | 2008=-48% 2009=+14% 2020=+40% 2022=+17% covid=-14%
+mom 12-1 top 10 w=30% L=0                    cagr=+6.4% vol=8.0% sharpe=0.82 sortino=0.83 maxdd=-26.4% calmar=0.24 worst_m=-7.4% beta=0.37 sh2h=1.12 | 2008=-17% 2009=+1% 2020=+8% 2022=+4% covid=-6%
+mom 12-1 top 10 w=30% L=3                    cagr=+9.6% vol=9.5% sharpe=1.02 sortino=1.00 maxdd=-28.9% calmar=0.33 worst_m=-13.6% beta=0.38 sh2h=1.32 | 2008=-16% 2009=+3% 2020=+17% 2022=+8% covid=-7%
+mom 12-1 top 10 w=30% L=4                    cagr=+10.7% vol=10.5% sharpe=1.03 sortino=1.00 maxdd=-30.8% calmar=0.35 worst_m=-16.1% beta=0.39 sh2h=1.32 | 2008=-16% 2009=+4% 2020=+20% 2022=+9% covid=-7%
+mom 12-1 top 10 w=30% L=10                   cagr=+16.7% vol=18.4% sharpe=0.94 sortino=0.94 maxdd=-43.3% calmar=0.39 worst_m=-30.4% beta=0.41 sh2h=1.15 | 2008=-17% 2009=+8% 2020=+39% 2022=+17% covid=-8%
+mom 12-1 top 10 w=45% L=0                    cagr=+8.5% vol=12.0% sharpe=0.75 sortino=0.75 maxdd=-37.6% calmar=0.23 worst_m=-11.3% beta=0.56 sh2h=1.02 | 2008=-26% 2009=+1% 2020=+11% 2022=+5% covid=-10%
+mom 12-1 top 10 w=45% L=3                    cagr=+11.8% vol=13.1% sharpe=0.92 sortino=0.90 maxdd=-39.8% calmar=0.30 worst_m=-16.2% beta=0.57 sh2h=1.20 | 2008=-25% 2009=+3% 2020=+20% 2022=+8% covid=-11%
+mom 12-1 top 10 w=45% L=4                    cagr=+12.8% vol=13.8% sharpe=0.95 sortino=0.94 maxdd=-40.5% calmar=0.32 worst_m=-18.7% beta=0.58 sh2h=1.23 | 2008=-25% 2009=+4% 2020=+23% 2022=+10% covid=-11%
+mom 12-1 top 10 w=45% L=10                   cagr=+18.9% vol=20.5% sharpe=0.96 sortino=0.92 maxdd=-50.4% calmar=0.38 worst_m=-32.5% beta=0.60 sh2h=1.19 | 2008=-26% 2009=+9% 2020=+41% 2022=+17% covid=-12%
+mom 12-1 top 10 w=60% L=0                    cagr=+10.4% vol=16.0% sharpe=0.71 sortino=0.71 maxdd=-47.4% calmar=0.22 worst_m=-15.1% beta=0.75 sh2h=0.97 | 2008=-35% 2009=+1% 2020=+13% 2022=+5% covid=-14%
+mom 12-1 top 10 w=60% L=3                    cagr=+13.7% vol=16.9% sharpe=0.85 sortino=0.84 maxdd=-49.2% calmar=0.28 worst_m=-19.0% beta=0.76 sh2h=1.12 | 2008=-34% 2009=+4% 2020=+21% 2022=+9% covid=-15%
+mom 12-1 top 10 w=60% L=4                    cagr=+14.8% vol=17.5% sharpe=0.89 sortino=0.86 maxdd=-49.9% calmar=0.30 worst_m=-21.3% beta=0.77 sh2h=1.15 | 2008=-34% 2009=+5% 2020=+24% 2022=+10% covid=-15%
+mom 12-1 top 10 w=60% L=10                   cagr=+20.9% vol=23.1% sharpe=0.95 sortino=0.91 maxdd=-56.9% calmar=0.37 worst_m=-34.7% beta=0.79 sh2h=1.19 | 2008=-34% 2009=+9% 2020=+42% 2022=+18% covid=-16%
+mom 12-1 top 5, top-100 mcap w=30% L=0       cagr=+5.3% vol=8.0% sharpe=0.70 sortino=0.78 maxdd=-23.2% calmar=0.23 worst_m=-7.9% beta=0.33 sh2h=1.04 | 2008=-12% 2009=+3% 2020=+3% 2022=+2% covid=-7%
+mom 12-1 top 5, top-100 mcap w=30% L=3       cagr=+8.6% vol=9.3% sharpe=0.94 sortino=1.04 maxdd=-25.9% calmar=0.33 worst_m=-10.3% beta=0.35 sh2h=1.26 | 2008=-11% 2009=+5% 2020=+12% 2022=+6% covid=-8%
+mom 12-1 top 5, top-100 mcap w=30% L=4       cagr=+9.7% vol=10.3% sharpe=0.96 sortino=1.04 maxdd=-27.2% calmar=0.36 worst_m=-12.9% beta=0.35 sh2h=1.26 | 2008=-11% 2009=+6% 2020=+15% 2022=+8% covid=-8%
+mom 12-1 top 5, top-100 mcap w=30% L=10      cagr=+15.7% vol=18.1% sharpe=0.91 sortino=1.00 maxdd=-40.0% calmar=0.39 worst_m=-27.5% beta=0.38 sh2h=1.13 | 2008=-11% 2009=+11% 2020=+33% 2022=+15% covid=-9%
+mom 12-1 top 5, top-100 mcap w=45% L=0       cagr=+6.9% vol=12.0% sharpe=0.63 sortino=0.70 maxdd=-33.4% calmar=0.21 worst_m=-12.1% beta=0.50 sh2h=0.95 | 2008=-18% 2009=+4% 2020=+4% 2022=+3% covid=-11%
+mom 12-1 top 5, top-100 mcap w=45% L=3       cagr=+10.2% vol=12.9% sharpe=0.83 sortino=0.91 maxdd=-35.5% calmar=0.29 worst_m=-11.3% beta=0.52 sh2h=1.14 | 2008=-18% 2009=+6% 2020=+12% 2022=+7% covid=-12%
+mom 12-1 top 5, top-100 mcap w=45% L=4       cagr=+11.3% vol=13.6% sharpe=0.87 sortino=0.96 maxdd=-36.3% calmar=0.31 worst_m=-13.9% beta=0.52 sh2h=1.17 | 2008=-17% 2009=+7% 2020=+15% 2022=+8% covid=-12%
+mom 12-1 top 5, top-100 mcap w=45% L=10      cagr=+17.4% vol=20.1% sharpe=0.91 sortino=0.99 maxdd=-45.7% calmar=0.38 worst_m=-28.2% beta=0.55 sh2h=1.15 | 2008=-18% 2009=+12% 2020=+33% 2022=+16% covid=-13%
+mom 12-1 top 5, top-100 mcap w=60% L=0       cagr=+8.4% vol=16.0% sharpe=0.59 sortino=0.66 maxdd=-42.4% calmar=0.20 worst_m=-16.4% beta=0.67 sh2h=0.90 | 2008=-25% 2009=+5% 2020=+4% 2022=+3% covid=-15%
+mom 12-1 top 5, top-100 mcap w=60% L=3       cagr=+11.7% vol=16.6% sharpe=0.76 sortino=0.83 maxdd=-44.2% calmar=0.26 worst_m=-15.3% beta=0.69 sh2h=1.05 | 2008=-24% 2009=+7% 2020=+12% 2022=+7% covid=-16%
+mom 12-1 top 5, top-100 mcap w=60% L=4       cagr=+12.7% vol=17.2% sharpe=0.79 sortino=0.87 maxdd=-44.9% calmar=0.28 worst_m=-14.9% beta=0.69 sh2h=1.09 | 2008=-24% 2009=+8% 2020=+15% 2022=+8% covid=-16%
+mom 12-1 top 5, top-100 mcap w=60% L=10      cagr=+18.9% vol=22.6% sharpe=0.89 sortino=0.96 maxdd=-51.1% calmar=0.37 worst_m=-28.9% beta=0.72 sh2h=1.14 | 2008=-24% 2009=+13% 2020=+32% 2022=+16% covid=-17%
+DONE

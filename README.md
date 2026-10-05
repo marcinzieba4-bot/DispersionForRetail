@@ -960,6 +960,47 @@ peak 140% of equity (p95 97%), gross option notional about 45x equity. Same
 leg at 60% with the book at 4x: +10.5%, Sharpe 1.09, maxDD -29%, PM peak 61%.
 
 
+### Momentum sleeve instead of the equity leg (`results/momentum_combo_VOLVUE.csv`)
+
+`dispersion/momentum.py`, `scripts/run_momentum.py`. Each third Friday buy
+the n point-in-time S&P 500 members with the highest 12-1 return (price 21
+days ago over price 252 days ago), ADV above $20M, equal weight, hold to the
+next third Friday; 5 bp per side on turnover (about 1.9 of 5 names change
+per month). Fixed notional per cycle so it blends like the other sleeves.
+Coverage caveat: delisted names are missing from the price panel (83% of
+members priced in 2007, 100% now), which biases a long-only screen upward.
+
+Standalone, 100% of equity compounded, ex cash, 2007-2026:
+
+| sleeve | CAGR | vol | Sharpe | maxDD | worst m | beta | 2008 | 2020 | 2022 | Covid |
+|---|---|---|---|---|---|---|---|---|---|---|
+| mom 12-1, top 5 | +14.8% | 31.2% | 0.61 | -75.3% | -27.8% | 1.33 | -70% | +12% | +3% | -21% |
+| mom 12-1, top 10 | +12.7% | 26.9% | 0.59 | -68.1% | -25.6% | 1.27 | -55% | +14% | +4% | -26% |
+| mom 12-1, top 20 | +9.4% | 23.0% | 0.52 | -64.7% | -22.5% | 1.16 | -50% | +10% | -2% | -25% |
+| mom 6-1, top 5 | +15.6% | 32.8% | 0.61 | -75.1% | -26.0% | 1.36 | -53% | +9% | -16% | -23% |
+| mom 12-1 top 5, top-100 mcap only | +9.4% | 26.8% | 0.48 | -62.2% | -28.3% | 1.14 | -43% | +1% | +1% | -26% |
+| ES (TR - cash) | +9.1% | 15.4% | 0.66 | -56.6% | -16.6% | 1.00 | -38% | +18% | -20% | -23% |
+
+Inside the combo (w x equity in the sleeve, 70% of equity in the honest regime book at L x, cash on all equity):
+
+| equity leg | w | book L | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ES | 30% | 3x | +8.0% | 6.8% | 1.16 | -20.3% | 0.39 | -9.8% | 0.31 | -9% | +17% | 0% |
+| ES | 60% | 3x | +10.8% | 10.5% | 1.04 | -35.6% | 0.31 | -11.6% | 0.61 | -21% | +23% | -7% |
+| mom top 5 | 30% | 0x | +7.2% | 9.3% | 0.80 | -29.7% | 0.24 | -8.4% | 0.39 | -25% | +7% | +4% |
+| mom top 5 | 30% | 3x | +10.4% | 11.0% | 0.97 | -33.7% | 0.31 | -16.1% | 0.40 | -25% | +16% | +8% |
+| mom top 5 | 30% | 4x | +11.5% | 11.9% | 0.98 | -35.8% | 0.32 | -18.6% | 0.40 | -25% | +19% | +9% |
+| mom top 5 | 60% | 3x | +15.1% | 19.7% | 0.82 | -54.5% | 0.28 | -23.8% | 0.79 | -47% | +20% | +8% |
+| mom top 5 | 60% | 4x | +16.2% | 20.3% | 0.85 | -55.3% | 0.29 | -26.1% | 0.80 | -47% | +23% | +10% |
+| mom top 10 | 30% | 4x | +10.7% | 10.5% | 1.03 | -30.8% | 0.35 | -16.1% | 0.39 | -16% | +20% | +9% |
+| mom top 5, top-100 mcap | 30% | 4x | +9.7% | 10.3% | 0.96 | -27.2% | 0.36 | -12.9% | 0.35 | -11% | +15% | +8% |
+
+Vol-matched, 30% in top-5 momentum has the vol of 60% in ES and the two
+blends are the same line (with the book at 3x: 10.4% / Sharpe 0.97 / -34%
+vs 10.8% / 1.04 / -36%). The sleeve replaces index beta with a 5-name,
+one-theme bet (2024-2026 picks are all memory and optical names) that lost
+70% in 2008; its second-half Sharpe (0.78) is the AI-hardware run.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
