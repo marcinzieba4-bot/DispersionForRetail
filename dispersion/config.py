@@ -127,8 +127,10 @@ class StrategyConfig:
     short_put_delta: int | None = None
     short_put_iv_mult: float = 1.16  # measured today: 25d put IV = 1.16x ATM
     # single-name structure: "vertical" (30-10 call spread) | "straddle" (ATM call + ATM put, same IV)
-    singles_structure: str = "vertical"
+    singles_structure: str = "vertical"   # vertical | straddle | wings (long call at long_delta + long put at single_put_delta)
     straddle_iv_mult: float = 1.0
+    single_put_delta: int = 25
+    single_put_iv_mult: float = 1.10      # single-name 25d put IV / ATM (measured on the live chain)
     # hedging scope: "book" (net dollar-delta of everything -> SPY), "split" (each single hedged with its
     # own stock, index legs with SPY), "singles" (per-name stock only), "index" (SPY for index legs only)
     hedge_scope: str = "book"

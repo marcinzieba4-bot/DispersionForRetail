@@ -216,6 +216,30 @@ class Backtest:
             n_contr = units * S0 / (100.0 * self.uni.raw_price(n, t0))
             qn = self._q(n, t0)
             sg = sign_of[n]
+            if cfg.singles_structure in ("wings", "put"):
+                # long call at long_delta (call IV) + long put at single_put_delta (put IV x skew mult)
+                ivput = iv
+                if hasattr(self.iv, "field_panel"):
+                    if not hasattr(self, "_put_iv_panel"):
+                        self._put_iv_panel = self.iv.field_panel("iv_put_30")
+                    if n in self._put_iv_panel.columns:
+                        vp = self._put_iv_panel[n].loc[:t0].dropna()
+                        if len(vp) and (t0 - vp.index[-1]).days <= 7:
+                            ivput = float(vp.iloc[-1]) / 100.0
+                C_l = 0.0
+                if cfg.singles_structure == "wings":
+                    K_l = bs.strike_for_delta(S0, iv, T, cfg.long_delta, r - qn)
+                    C_l = float(bs.call_price(S0, K_l, T, iv * cfg.iv_mult_long, r, qn))
+                    rec.legs.append(Leg(n, sg * units, K_l, iv * cfg.iv_mult_long, S0, cfg.long_delta, False, C_l, q=qn))
+                    costs += units * C_l * cm.single(cfg.long_delta) + config.commission(n_contr, cm)
+                else:   # puts only: keep a zero-size call marker so the index leg sizes off the per-name notional
+                    rec.legs.append(Leg(n, 0.0, S0, iv, S0, cfg.long_delta, False, 0.0, q=qn))
+                K_p = bs.put_strike_for_delta(S0, ivput, T, cfg.single_put_delta, r - qn)
+                P_l = float(bs.put_price(S0, K_p, T, ivput * cfg.single_put_iv_mult, r, qn))
+                rec.legs.append(Leg(n, sg * units, K_p, ivput * cfg.single_put_iv_mult, S0, cfg.single_put_delta, False, P_l, kind="put", q=qn))
+                prem_paid += sg * units * (C_l + P_l)
+                costs += units * P_l * cm.single(30) + config.commission(n_contr, cm)
+                continue
             if cfg.singles_structure == "straddle":
                 ivs_ = iv * cfg.straddle_iv_mult
                 Kx = S0 * np.exp((r - qn) * T)
@@ -237,9 +261,12 @@ class Backtest:
                 rec.legs.append(Leg(n, -sg * units, K_s, iv * cfg.iv_mult_wing, S0, cfg.short_wing_delta, False, C_s, q=qn, beta=bn))
                 prem_paid -= sg * units * C_s
                 costs += units * C_s * cm.single(cfg.short_wing_delta) + config.commission(n_contr, cm)
-        if cfg.singles_scale > 0:   # one long-side call leg per name in either structure
-            deployed = sum(abs(l.units) * l.S0 for l in rec.legs if not l.is_index and l.kind == "call"
-                           and (cfg.singles_structure != "vertical" or l.bucket == cfg.long_delta))
+        if cfg.singles_scale > 0:   # one long-side leg per name in every structure
+            if cfg.singles_structure == "put":
+                deployed = sum(abs(l.units) * l.S0 for l in rec.legs if not l.is_index and l.kind == "put")
+            else:
+                deployed = sum(abs(l.units) * l.S0 for l in rec.legs if not l.is_index and l.kind == "call"
+                               and (cfg.singles_structure != "vertical" or l.bucket == cfg.long_delta))
         else:
             deployed = book
         S0 = float(self.spy.loc[t0])
