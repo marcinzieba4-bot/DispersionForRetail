@@ -178,6 +178,28 @@ Each leg alone, hedged, is also flat: short ATM (BXM) -1.7%/yr at 5x, short
 meant to collect is consumed by gamma cost, hedge error and spreads. Tables:
 `results/atm_vs_30d_spread_VOLVUE.csv`, `results/atm_vs_30d_call_spread_real.csv`.
 
+### Attempts to make it work (all on real index prices, realistic costs, 3x)
+
+`results/filters_VOLVUE.csv`, `results/event_filter_diagnostic.csv`,
+`scripts/fetch_volvue_term.py` (iv_call_20/60, 52-week percentile).
+
+| change | singles-only hedged | dispersion, BXMD index leg |
+|---|---|---|
+| none | -2.9%/yr | -2.7%/yr |
+| beta-weighted hedge | -3.2% (beta 0.00) | -2.9% |
+| exclude earnings-event names (iv30/iv60 > 1.08, ~4 of 30) | -2.2% | -1.9% |
+| short the vertical on event names, long the rest | -2.1% | -2.0% |
+| long only names with 30d IV percentile <= 50 | -0.3% | +0.9% |
+| long only names with percentile <= 30 | -0.7% | |
+| short all verticals | -0.9% | |
+
+Cash yield (~1.9%/yr) is inside every figure, so none of these books earns
+its own carry. The event premium is real (event names carry +2.8 pts of IV
+over subsequent realised vs +1.9 for the rest) but it is 4 names a month and
+worth under 1%/yr; IV-percentile conditioning is the strongest signal and is
+still below the retail cost load (~1.2%/yr per turn). The beta hedge only
+lowers beta. Nothing tested turns the call-side book positive.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
