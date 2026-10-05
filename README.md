@@ -474,6 +474,35 @@ universe 0.88, daily hedging 0.76 (worse), vega-matched 0.84; 2x Sharpe
 Before trading this, the one missing input is a single-name put-skew
 history (ORATS `dlt25Iv` per name or an IvyDB surface).
 
+### Long SPY + put-wing dispersion, grid over proportions and leverage (`results/spy_pwd_grid_VOLVUE.csv`)
+
+Both sleeves resized monthly to live equity, SPY above 1x financed at
+FEDFUNDS, cash on unused equity. The PWD sleeve's return **ex cash** is what
+matters here: +0.43%/yr per 1x at the central 1.05x skew (3.1% vol), about
++1.0% at 1.02x, negative at 1.10x. Most of the Sharpe 1.27 quoted above is the
+1.9%/yr cash yield on a 2.3%-vol sleeve; the engine's own edge is small.
+
+| book (central skew) | gross | CAGR | Sharpe | maxDD | Calmar | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|
+| SPY 1x | 1.0 | +11.0% | 0.76 | -55% | 0.20 | 1.00 | -37% | +18% | -18% |
+| SPY 0.25x (best Calmar overall) | 0.25 | +4.3% | 1.12 | -15% | 0.29 | 0.25 | -8% | +6% | -3% |
+| SPY 0.25x + PWD 1x | 1.1 | +4.7% | 1.01 | -16% | 0.29 | 0.24 | -1% | +11% | -3% |
+| SPY 1x + PWD 2x | 2.8 | +11.5% | 0.75 | -51% | 0.23 | 0.99 | -28% | +29% | -17% |
+| SPY 1x + PWD 4x (best Calmar near 5x gross) | 4.6 | +11.5% | 0.68 | -56% | 0.20 | 0.98 | -20% | +39% | -17% |
+| SPY 1x + PWD 8x (best near 8x gross) | 8.2 | +10.2% | 0.51 | -71% | 0.14 | 0.96 | -4% | +57% | -16% |
+| SPY 1x + PWD 10x (best near 10x gross) | 10.0 | +8.9% | 0.44 | -79% | 0.11 | 0.96 | +2% | +65% | -17% |
+| best Calmar at optimistic 1.02x skew: SPY 0.25x + PWD 2x | 2.0 | +6.7% | 1.03 | -19% | 0.36 | 0.22 | +9% | +18% | 0% |
+| best Calmar at stressed 1.10x skew | | SPY alone wins at every proportion | | | | | | | |
+
+No proportion lifts Calmar above ~0.3 (0.36 at the optimistic skew), and
+5-10x gross buys drawdowns of -56% to -86%. Adding PWD to SPY does what a
+crash-positive overlay should (SPY 1x's 2008 goes from -37% to -4% with 8
+turns of PWD), but the sleeve's non-crisis drawdowns (2014, 2016, 2010 at
+-2 to -3% per turn) scale with leverage while its mean does not, and 2022
+(-17% for every row) is a bear market in which the index put premium pays
+too little to offset the SPY leg. Leverage is the wrong tool for this
+sleeve; it is a hedge with slightly positive carry, not a return engine.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
