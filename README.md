@@ -427,6 +427,53 @@ long single-name calls lose 12% in a crash. The 30-10 vertical is the
 cheapest way to buy that diversification (Sharpe 0.78, 2008 +1.5%). Above 1x
 the 2018 tail still dominates every variant.
 
+### Strike-selective dispersion: sell the index where the curve is rich, buy singles where it is cheap (`results/curve_dispersion_VOLVUE.csv`, `..._sensitivity_VOLVUE.csv`)
+
+Measured on the live chain (`results/live_single_put_skew.csv`): the index
+put wing is steep (25-delta put 1.14x ATM IV, 10-delta 1.41x) while the
+single-name put wing is nearly flat (1.01x and 1.06x medians) and the
+single-name 30-delta call is 1.00x. So the richest point to sell is the
+index OTM put and the cheapest points to buy are single-name OTM puts and
+calls. Index legs from real settlements (short 25-delta put = RXM + BXMD),
+singles at VolVue IV with the measured skew multiplier, both sides hedged
+separately (each single with its own stock, index with SPY), fixed
+notional, realistic costs, 3rd-Friday cycle, cash yield included.
+
+| book, 1x | CAGR | Sharpe | maxDD | worst month | 2008 | 2018 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|
+| short idx 25d put + long single 30d calls | +1.7% | 0.31 | -23% | -11.2% | -8% | -2% | +1% | +4% |
+| **short idx 25d put + long single 25d puts (put-wing dispersion)** | **+2.9%** | **1.27** | **-7.6%** | **-2.9%** | **+12%** | **+4%** | **+5%** | **+3%** |
+| short idx 25d put + long single wings (30d call + 25d put) | +1.4% | 0.34 | -24% | -9.8% | +5% | +4% | +5% | +5% |
+| + short ATM index call | +1.3% | 0.32 | -25% | -7.9% | +9% | +3% | +3% | -6% |
+| idx 20/5 condor + single wings | -0.8% | -0.10 | -42% | | +10% | +4% | | |
+| idx 25d/5% put spread + single wings | -1.7% | -0.28 | -44% | | +9% | +9% | | |
+| put-wing dispersion, book SPY hedge instead of split | +1.5% | 0.59 | -13% | | +6% | | | |
+| put-wing dispersion, unhedged | +1.8% | 0.34 | -35% | -12% | -14% | | | |
+| component: short idx 25d put alone, hedged | +3.1% | 0.99 | -9.9% | -5.7% | -0.5% | -1% | +4% | +3% |
+| component: long single 25d puts alone, stock-hedged | +1.4% | 0.45 | -17% | -2.9% | +14% | +8% | +4% | +3% |
+| component: long single wings alone, stock-hedged | -0.7% | -0.11 | -38% | -8.5% | +7% | +10% | +7% | +4% |
+
+The put-wing dispersion is the best risk-adjusted book in this study and
+the only one positive in every crisis window: the short index put earns the
+index skew premium, the long single-name puts cost almost nothing at a flat
+single-name skew and pay off on single-name gaps (2008 +14% on their own),
+and the two are negatively correlated. Hedging each side with its own
+underlying matters (split 1.27 vs book-SPY 0.59 vs unhedged 0.34).
+
+**It is fragile to one input.** The single-name put skew multiplier is a
+one-day measurement (1.014x median) on a low-skew day, and the result scales
+with it: 1.02x Sharpe 1.27, 1.05x 0.96, 1.10x 0.39, 1.15x negative (the long
+single-put sleeve goes from +0.5% to -1.4%/yr between 1.05x and 1.10x).
+VolVue's iv_put_30 already sits ~3.6% above the chain ATM put, so each row
+is ~1.04x richer than its label; the 1.05x row is the central case if
+today's skew is representative, the 1.10x row is the stressed-skew case.
+Other sensitivities at 1.05x: 10-delta single puts Sharpe 1.55 (but their
+own multiplier would be higher), excluding event names 1.13, 100-name
+universe 0.88, daily hedging 0.76 (worse), vega-matched 0.84; 2x Sharpe
+0.69 / maxDD -17% / 2008 +20%, 3x 0.61 / -24% / +29%, 5x 0.55 / -33% / +50%.
+Before trading this, the one missing input is a single-name put-skew
+history (ORATS `dlt25Iv` per name or an IvyDB surface).
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
