@@ -337,7 +337,8 @@ class Backtest:
                 cbs = [(self.cboe[l.ticker].loc[t0:t1], -l.units * l.S0) for l in cbo]   # notional >0 when short the call
                 cbs = [(c, float(c["idx"].loc[t0]), float(c["tr"].loc[t0]), n) for c, n in cbs]
                 T0 = (t1 - t0).days / 365.0
-                cb_strikes = [[self._cboe_strike(kk, l.S0, l.iv, T0, r - l.q) for kind, kk, sg_ in CBOE_LEGS[l.ticker]] for l in cbo]
+                r0 = float(self.rf.loc[t0])
+                cb_strikes = [[self._cboe_strike(kk, l.S0, l.iv, T0, r0 - l.q) for kind, kk, sg_ in CBOE_LEGS[l.ticker]] for l in cbo]
             window = days[(days > t0) & (days <= t1)]
             hedge_sh, S_prev = 0.0, float(self.spy.loc[t0])
             r = float(self.rf.loc[t0])
