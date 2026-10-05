@@ -952,6 +952,14 @@ a free improvement: they add short SPX put exposure on top of the put-wing
 sleeve, which is already short the index put in corr-hi months, and they
 cost option commissions and margin instead of a futures margin deposit.
 
+Asked-for extreme, 60% short ATM put + long 30d call with the book at 10x on
+70% of equity (`results/regime_putcall_60_10x.txt`): CAGR +16.6%, vol 18.1%,
+Sharpe 0.95, maxDD -41% (month-end -37%), worst month -28%, worst 12 months
+-28%, CVaR95 -11% per month, beta 0.48, 2008 -17%, Covid window -13%, PM
+peak 140% of equity (p95 97%), gross option notional about 45x equity. Same
+leg at 60% with the book at 4x: +10.5%, Sharpe 1.09, maxDD -29%, PM peak 61%.
+
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
