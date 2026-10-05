@@ -527,6 +527,37 @@ the Sharpe (0.92 / 0.84) with a modestly higher mean. Weighting is a
 second-order choice next to the skew input; equal or 10%-capped is the
 defensible default.
 
+### Put-wing dispersion decomposed, and at 5x (`results/pwd_decomposition_VOLVUE.csv`)
+
+Structure: SHORT SPX/SPY 25-delta puts (real settlements, RXM + BXMD),
+LONG 25-delta puts on the 30 single names (VolVue put IV x 1.05), each side
+hedged with its own underlying weekly, fixed notional. Attribution at 1x:
+
+| component, 1x | CAGR | Sharpe | maxDD | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|
+| sleeve with cash yield (as reported) | +2.3% | 0.96 | -9.6% | +10.4% | +4.2% | +2.6% |
+| sleeve, NO cash yield | +0.4% | 0.19 | -10.7% | +8.1% | +4.3% | +0.6% |
+| short SPY 25d put leg alone, hedged, no cash | +1.6% | 0.49 | -10.9% | -2.6% (GFC window) | -0.9% | +0.9% |
+| long single 25d puts leg alone, hedged, no cash | -1.7% | -0.45 | -37.2% | +10.7% (GFC window) | +4.5% | -0.8% |
+
+So ~1.9 of the 2.3 points of CAGR is money-market yield on the collateral;
+the option book itself earns +0.4%/yr on 2.6% vol (Sharpe 0.19). The short
+index put is the carry (+1.6%/yr hedged); the long single-name puts cost
+-1.7%/yr in normal years and pay +11% in 2008, +4.5% in Covid. The book is a
+crash hedge financed by index put premium, with the carry almost exactly
+consumed by the hedge.
+
+| 5x | CAGR | vol | Sharpe | maxDD | worst month | cost/yr | 2008 | 2014 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| fixed notional, with cash | +4.7% | 9.4% | 0.55 | -33% | -12.7% | 3.6% | +50% | -10% | +14% | +4.5% |
+| fixed notional, no cash | +2.3% | 10.6% | 0.29 | -37% | -14.3% | 3.6% | +49% | | +10% | +2% |
+| sized to live equity (compounding), with cash | +5.3% | 13.9% | 0.45 | -45% | -17.6% | 6.4% | +50% | -16% | +26% | +7% |
+
+At 5x the sleeve's own Sharpe is 0.29, costs are 3.6%/yr of equity, and the
+drawdown (-33% fixed, -45% compounding) comes from the quiet years (2010,
+2014, 2016, 2023-25) when the long single-name puts bleed and the index
+premium does not cover five turns of it.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
