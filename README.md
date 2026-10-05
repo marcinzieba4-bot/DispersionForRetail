@@ -1052,6 +1052,58 @@ the best Calmar of any combo in this project (8.8%/yr, Sharpe 1.06, maxDD
 -16%, Calmar 0.55, 2008 -3%). Caveat: twelve stop variants were tried on
 one history, so expect the realised benefit to be smaller than the table.
 
+### Trailing stops with re-entry (`results/momentum_reentry_VOLVUE.csv`)
+
+`scripts/run_momentum_reentry.py`; `momentum_leg(trail=, reentry=)`. After a
+trailing stop the name can come back within the cycle when it closes above
+its exit price (`above_exit`), 5% or 10% above its post-exit low
+(`low+0.05`, `low+0.10`), or above the high it had before the stop
+(`new_high`). Signal on the close, trade at the next close, repeated round
+trips allowed and paid at 5 bp per side.
+
+Standalone, top-5 12-1 momentum, 100% of equity compounded, ex cash:
+
+| variant | CAGR | vol | Sharpe | maxDD | Calmar | worst m | 2008 | 2020 | Covid | stop+re-entry events per cycle |
+|---|---|---|---|---|---|---|---|---|---|---|
+| no stop | +14.8% | 31.2% | 0.61 | -75.3% | 0.20 | -27.8% | -70% | +12% | -21% | 0 |
+| trail 10%, no re-entry | +11.4% | 24.6% | 0.57 | -57.5% | 0.20 | -25.8% | -47% | +33% | +4% | 0 |
+| trail 10%, re-enter above exit | +11.2% | 28.3% | 0.53 | -68.8% | 0.16 | -29.8% | -60% | +30% | -1% | 4.2 |
+| trail 10%, re-enter low+5% | +10.7% | 28.1% | 0.51 | -73.2% | 0.15 | -32.2% | -66% | +24% | -6% | 3.8 |
+| trail 10%, re-enter new high | +10.7% | 25.7% | 0.53 | -61.0% | 0.18 | -25.8% | -51% | +37% | +2% | 2.5 |
+| trail 15%, no re-entry | +12.6% | 27.0% | 0.59 | -62.0% | 0.20 | -29.7% | -52% | +30% | +1% | 0 |
+| trail 15%, re-enter above exit | +13.5% | 29.0% | 0.59 | -65.9% | 0.20 | -25.1% | -59% | +24% | -5% | 1.8 |
+| trail 15%, re-enter low+5% | +11.9% | 29.5% | 0.54 | -71.2% | 0.17 | -33.0% | -63% | +26% | -6% | 1.7 |
+| trail 15%, re-enter low+10% | +11.9% | 28.8% | 0.54 | -69.8% | 0.17 | -29.4% | -60% | +26% | -4% | 1.5 |
+| trail 15%, re-enter new high | +12.5% | 28.1% | 0.57 | -63.9% | 0.20 | -29.7% | -55% | +33% | +1% | 1.1 |
+| trail 20%, no re-entry | +14.2% | 30.0% | 0.60 | -68.6% | 0.21 | -35.4% | -61% | +32% | -2% | 0 |
+| trail 20%, re-enter above exit | +14.5% | 30.9% | 0.60 | -70.9% | 0.20 | -30.2% | -64% | +33% | -2% | 0.9 |
+| trend + trail 15%, no re-entry | +11.1% | 22.3% | 0.60 | -34.9% | 0.32 | -24.8% | -19% | +8% | -18% | 0 |
+| trend + trail 15%, re-enter above exit | +10.7% | 23.3% | 0.57 | -38.6% | 0.28 | -25.1% | -22% | -2% | -22% | 1.5 |
+| trend + trail 15%, re-enter new high | +10.6% | 22.7% | 0.57 | -35.4% | 0.30 | -25.6% | -19% | +8% | -18% | 1.0 |
+
+Inside the combo (30% sleeve, 70% of equity in the honest regime book at 3x, cash on all equity):
+
+| sleeve | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 |
+|---|---|---|---|---|---|---|---|---|---|
+| ES (reference) | +8.0% | 6.8% | 1.16 | -20.3% | 0.39 | -9.8% | 0.31 | -9% | +17% |
+| mom5 trail 15%, no re-entry | +9.5% | 9.8% | 0.98 | -27.5% | 0.34 | -10.9% | 0.31 | -16% | +20% |
+| mom5 trail 15%, re-enter above exit | +9.8% | 10.3% | 0.97 | -29.4% | 0.33 | -12.3% | 0.35 | -19% | +18% |
+| mom5 trail 15%, re-enter low+5% | +9.4% | 10.5% | 0.92 | -32.0% | 0.30 | -14.4% | 0.36 | -21% | +19% |
+| mom5 trail 15%, re-enter new high | +9.5% | 10.1% | 0.95 | -28.5% | 0.33 | -12.1% | 0.33 | -17% | +20% |
+| mom5 trend + trail 15%, no re-entry | +8.8% | 8.4% | 1.06 | -16.0% | 0.55 | -8.4% | 0.20 | -3% | +13% |
+| mom5 trend + trail 15%, re-enter above exit | +8.7% | 8.6% | 1.02 | -17.4% | 0.50 | -8.4% | 0.22 | -4% | +10% |
+| mom5 trend + trail 15%, re-enter new high | +8.6% | 8.5% | 1.03 | -16.2% | 0.53 | -8.4% | 0.20 | -3% | +13% |
+
+Re-entry does not pay. Every rule gives back most of the drawdown
+protection the stop bought (trail 15%: -62% without re-entry, -66% to -71%
+with) and lowers the Sharpe by 0 to 0.08, because in a falling market a
+name that bounces 5% off its low and is bought back is usually stopped
+again (1.5-4 round trips per cycle at 10%), and each round trip pays
+spread. Re-entering only on a new high is the least harmful because it
+rarely fires, and then it adds nothing. The one thing re-entry buys is a
+higher CAGR at the 15% stop (+13.5% vs +12.6% with "above exit"), at a
+higher vol, which is the same Sharpe.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

@@ -1,0 +1,45 @@
+=== top-5 12-1 momentum, trailing stops with re-entry, standalone, 100% of equity compounded, ex cash ===
+no stop                                        cagr=+14.8% vol=31.2% sharpe=0.61 sortino=0.63 maxdd=-75.3% calmar=0.20 worst_m=-27.8% beta=1.33 sh2h=0.78 | 2008=-70% 2020=+12% 2022=+3% covid=-21% | events/cycle=0.0
+trail 10%, no re-entry                         cagr=+11.4% vol=24.6% sharpe=0.57 sortino=0.61 maxdd=-57.5% calmar=0.20 worst_m=-25.8% beta=0.83 sh2h=0.51 | 2008=-47% 2020=+33% 2022=-14% covid=+4% | events/cycle=0.0
+trail 10%, re-enter above_exit                 cagr=+11.2% vol=28.3% sharpe=0.53 sortino=0.52 maxdd=-68.8% calmar=0.16 worst_m=-29.8% beta=1.08 sh2h=0.62 | 2008=-60% 2020=+30% 2022=-9% covid=-1% | events/cycle=4.2
+trail 10%, re-enter low+0.05                   cagr=+10.7% vol=28.1% sharpe=0.51 sortino=0.50 maxdd=-73.2% calmar=0.15 worst_m=-32.2% beta=1.08 sh2h=0.60 | 2008=-66% 2020=+24% 2022=-13% covid=-6% | events/cycle=3.8
+trail 10%, re-enter low+0.10                   cagr=+9.2% vol=27.1% sharpe=0.47 sortino=0.49 maxdd=-72.2% calmar=0.13 worst_m=-27.6% beta=1.00 sh2h=0.52 | 2008=-61% 2020=+29% 2022=-15% covid=-1% | events/cycle=3.1
+trail 10%, re-enter new_high                   cagr=+10.7% vol=25.7% sharpe=0.53 sortino=0.57 maxdd=-61.0% calmar=0.18 worst_m=-25.8% beta=0.91 sh2h=0.49 | 2008=-51% 2020=+37% 2022=-16% covid=+2% | events/cycle=2.5
+trail 15%, no re-entry                         cagr=+12.6% vol=27.0% sharpe=0.59 sortino=0.60 maxdd=-62.0% calmar=0.20 worst_m=-29.7% beta=1.00 sh2h=0.66 | 2008=-52% 2020=+30% 2022=-1% covid=+1% | events/cycle=0.0
+trail 15%, re-enter above_exit                 cagr=+13.5% vol=29.0% sharpe=0.59 sortino=0.60 maxdd=-65.9% calmar=0.20 worst_m=-25.1% beta=1.15 sh2h=0.75 | 2008=-59% 2020=+24% 2022=+3% covid=-5% | events/cycle=1.8
+trail 15%, re-enter low+0.05                   cagr=+11.9% vol=29.5% sharpe=0.54 sortino=0.53 maxdd=-71.2% calmar=0.17 worst_m=-33.0% beta=1.18 sh2h=0.70 | 2008=-63% 2020=+26% 2022=+1% covid=-6% | events/cycle=1.7
+trail 15%, re-enter low+0.10                   cagr=+11.9% vol=28.8% sharpe=0.54 sortino=0.54 maxdd=-69.8% calmar=0.17 worst_m=-29.4% beta=1.13 sh2h=0.68 | 2008=-60% 2020=+26% 2022=-2% covid=-4% | events/cycle=1.5
+trail 15%, re-enter new_high                   cagr=+12.5% vol=28.1% sharpe=0.57 sortino=0.59 maxdd=-63.9% calmar=0.20 worst_m=-29.7% beta=1.05 sh2h=0.65 | 2008=-55% 2020=+33% 2022=+0% covid=+1% | events/cycle=1.1
+trail 20%, no re-entry                         cagr=+14.2% vol=30.0% sharpe=0.60 sortino=0.63 maxdd=-68.6% calmar=0.21 worst_m=-35.4% beta=1.15 sh2h=0.69 | 2008=-61% 2020=+32% 2022=+3% covid=-2% | events/cycle=0.0
+trail 20%, re-enter above_exit                 cagr=+14.5% vol=30.9% sharpe=0.60 sortino=0.61 maxdd=-70.9% calmar=0.20 worst_m=-30.2% beta=1.22 sh2h=0.76 | 2008=-64% 2020=+33% 2022=+3% covid=-2% | events/cycle=0.9
+trail 20%, re-enter low+0.05                   cagr=+13.4% vol=31.1% sharpe=0.57 sortino=0.58 maxdd=-74.4% calmar=0.18 worst_m=-30.2% beta=1.25 sh2h=0.73 | 2008=-68% 2020=+29% 2022=+4% covid=-4% | events/cycle=0.9
+trail 20%, re-enter low+0.10                   cagr=+14.1% vol=30.7% sharpe=0.59 sortino=0.61 maxdd=-71.9% calmar=0.20 worst_m=-35.1% beta=1.19 sh2h=0.73 | 2008=-65% 2020=+32% 2022=+3% covid=-2% | events/cycle=0.8
+trail 20%, re-enter new_high                   cagr=+13.9% vol=30.1% sharpe=0.59 sortino=0.62 maxdd=-69.8% calmar=0.20 worst_m=-35.4% beta=1.16 sh2h=0.69 | 2008=-63% 2020=+33% 2022=+3% covid=-2% | events/cycle=0.6
+trend + trail 15%, re-enter None               cagr=+11.1% vol=22.3% sharpe=0.60 sortino=0.57 maxdd=-34.9% calmar=0.32 worst_m=-24.8% beta=0.64 sh2h=0.57 | 2008=-19% 2020=+8% 2022=-3% covid=-18% | events/cycle=0.0
+trend + trail 15%, re-enter above_exit         cagr=+10.7% vol=23.3% sharpe=0.57 sortino=0.51 maxdd=-38.6% calmar=0.28 worst_m=-25.1% beta=0.69 sh2h=0.59 | 2008=-22% 2020=-2% 2022=-5% covid=-22% | events/cycle=1.5
+trend + trail 15%, re-enter low+0.05           cagr=+10.2% vol=23.7% sharpe=0.54 sortino=0.48 maxdd=-42.1% calmar=0.24 worst_m=-33.0% beta=0.68 sh2h=0.54 | 2008=-19% 2020=-2% 2022=-3% covid=-23% | events/cycle=1.5
+trend + trail 15%, re-enter new_high           cagr=+10.6% vol=22.7% sharpe=0.57 sortino=0.54 maxdd=-35.4% calmar=0.30 worst_m=-25.6% beta=0.64 sh2h=0.52 | 2008=-19% 2020=+8% 2022=-3% covid=-18% | events/cycle=1.0
+
+=== inside the combo: w x equity in the sleeve + 70% of equity in the honest book at L x, cash on all equity ===
+ES 30% + book 3x                               cagr=+8.0% vol=6.8% sharpe=1.16 sortino=1.11 maxdd=-20.3% calmar=0.39 worst_m=-9.8% beta=0.31 sh2h=1.43 | 2008=-9% 2020=+17% 2022=-0% covid=-7%
+mom5 no stop w=30% L=3                         cagr=+10.4% vol=11.0% sharpe=0.97 sortino=0.95 maxdd=-33.7% calmar=0.31 worst_m=-16.1% beta=0.40 sh2h=1.20 | 2008=-25% 2020=+16% 2022=+8% covid=-6%
+mom5 no stop w=60% L=3                         cagr=+15.1% vol=19.7% sharpe=0.82 sortino=0.81 maxdd=-54.5% calmar=0.28 worst_m=-23.8% beta=0.79 sh2h=1.03 | 2008=-47% 2020=+20% 2022=+8% covid=-12%
+mom5 trail 15%, no re-entry w=30% L=3          cagr=+9.5% vol=9.8% sharpe=0.98 sortino=0.97 maxdd=-27.5% calmar=0.34 worst_m=-10.9% beta=0.31 sh2h=1.14 | 2008=-16% 2020=+20% 2022=+6% covid=+0%
+mom5 trail 15%, no re-entry w=60% L=3          cagr=+13.5% vol=17.2% sharpe=0.83 sortino=0.81 maxdd=-44.9% calmar=0.30 worst_m=-18.9% beta=0.61 sh2h=0.95 | 2008=-33% 2020=+29% 2022=+6% covid=+1%
+mom5 trail 15%, re-enter above_exit w=30% L=3  cagr=+9.8% vol=10.3% sharpe=0.97 sortino=0.97 maxdd=-29.4% calmar=0.33 worst_m=-12.3% beta=0.35 sh2h=1.18 | 2008=-19% 2020=+18% 2022=+7% covid=-1%
+mom5 trail 15%, re-enter above_exit w=60% L=3  cagr=+14.1% vol=18.4% sharpe=0.82 sortino=0.82 maxdd=-48.1% calmar=0.29 worst_m=-16.3% beta=0.70 sh2h=1.01 | 2008=-38% 2020=+26% 2022=+8% covid=-2%
+mom5 trail 15%, re-enter low+0.05 w=30% L=3    cagr=+9.4% vol=10.5% sharpe=0.92 sortino=0.88 maxdd=-32.0% calmar=0.30 worst_m=-14.4% beta=0.36 sh2h=1.13 | 2008=-21% 2020=+19% 2022=+7% covid=-1%
+mom5 trail 15%, re-enter low+0.05 w=60% L=3    cagr=+13.3% vol=18.8% sharpe=0.77 sortino=0.73 maxdd=-52.4% calmar=0.25 worst_m=-20.7% beta=0.71 sh2h=0.96 | 2008=-41% 2020=+27% 2022=+7% covid=-3%
+mom5 trail 15%, re-enter low+0.10 w=30% L=3    cagr=+9.3% vol=10.3% sharpe=0.93 sortino=0.90 maxdd=-30.9% calmar=0.30 worst_m=-12.5% beta=0.35 sh2h=1.12 | 2008=-20% 2020=+19% 2022=+6% covid=-1%
+mom5 trail 15%, re-enter low+0.10 w=60% L=3    cagr=+13.1% vol=18.3% sharpe=0.77 sortino=0.75 maxdd=-50.7% calmar=0.26 worst_m=-18.6% beta=0.68 sh2h=0.94 | 2008=-39% 2020=+27% 2022=+5% covid=-2%
+mom5 trail 15%, re-enter new_high w=30% L=3    cagr=+9.5% vol=10.1% sharpe=0.95 sortino=0.95 maxdd=-28.5% calmar=0.33 worst_m=-12.1% beta=0.33 sh2h=1.11 | 2008=-17% 2020=+20% 2022=+6% covid=+0%
+mom5 trail 15%, re-enter new_high w=60% L=3    cagr=+13.5% vol=18.0% sharpe=0.80 sortino=0.79 maxdd=-46.5% calmar=0.29 worst_m=-18.9% beta=0.64 sh2h=0.92 | 2008=-35% 2020=+31% 2022=+6% covid=+1%
+mom5 trend + trail 15%, re-enter None w=30% L=3 cagr=+8.8% vol=8.4% sharpe=1.06 sortino=1.07 maxdd=-16.0% calmar=0.55 worst_m=-8.4% beta=0.20 sh2h=1.13 | 2008=-3% 2020=+13% 2022=+5% covid=-6%
+mom5 trend + trail 15%, re-enter None w=60% L=3 cagr=+12.3% vol=14.3% sharpe=0.90 sortino=0.89 maxdd=-22.1% calmar=0.56 worst_m=-15.4% beta=0.40 sh2h=0.91 | 2008=-9% 2020=+15% 2022=+4% covid=-11%
+mom5 trend + trail 15%, re-enter above_exit w=30% L=3 cagr=+8.7% vol=8.6% sharpe=1.02 sortino=1.00 maxdd=-17.4% calmar=0.50 worst_m=-8.4% beta=0.22 sh2h=1.14 | 2008=-4% 2020=+10% 2022=+4% covid=-7%
+mom5 trend + trail 15%, re-enter above_exit w=60% L=3 cagr=+12.1% vol=14.8% sharpe=0.86 sortino=0.81 maxdd=-24.8% calmar=0.49 worst_m=-15.5% beta=0.43 sh2h=0.93 | 2008=-11% 2020=+9% 2022=+2% covid=-14%
+mom5 trend + trail 15%, re-enter low+0.05 w=30% L=3 cagr=+8.6% vol=8.7% sharpe=1.00 sortino=0.96 maxdd=-17.9% calmar=0.48 worst_m=-9.2% beta=0.22 sh2h=1.08 | 2008=-3% 2020=+10% 2022=+5% covid=-7%
+mom5 trend + trail 15%, re-enter low+0.05 w=60% L=3 cagr=+11.8% vol=15.1% sharpe=0.83 sortino=0.77 maxdd=-27.2% calmar=0.44 worst_m=-19.2% beta=0.42 sh2h=0.87 | 2008=-9% 2020=+9% 2022=+4% covid=-14%
+mom5 trend + trail 15%, re-enter new_high w=30% L=3 cagr=+8.6% vol=8.5% sharpe=1.03 sortino=1.04 maxdd=-16.2% calmar=0.53 worst_m=-8.4% beta=0.20 sh2h=1.08 | 2008=-3% 2020=+13% 2022=+5% covid=-6%
+mom5 trend + trail 15%, re-enter new_high w=60% L=3 cagr=+12.0% vol=14.5% sharpe=0.86 sortino=0.85 maxdd=-22.5% calmar=0.53 worst_m=-15.4% beta=0.40 sh2h=0.86 | 2008=-9% 2020=+15% 2022=+4% covid=-11%
+DONE
