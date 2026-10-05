@@ -293,6 +293,36 @@ reference price in the per-name stock hedge and a zero index notional under
 the straddle structure); both are fixed and this table is from the corrected
 engine.
 
+### Short index straddle with a stop-and-reverse futures hedge (`results/band_hedge_VOLVUE.csv`)
+
+Straddle P&L from real settlements (BXM + PUT); overlay: long 1 unit of
+futures when the close is >= S0(1+a), short 1 unit when <= S0(1-a), unwind
+when the close comes back through S0(1+-b) (b=0: the starting point).
+Daily closes (intraday crossings are missed), 3rd-Friday cycle, realistic
+costs, 1bp on futures turnover, cash yield included.
+
+| 1x | CAGR | Sharpe | maxDD | worst month | 2008 | 2020 | futures turnover/yr |
+|---|---|---|---|---|---|---|---|
+| unhedged | +1.4% | 0.19 | -33% | -14.4% | -16% | -16% | 0 |
+| weekly BS delta hedge | +3.8% | 0.62 | -14% | -9.9% | +1% | +8% | 29x |
+| band 1%, unwind at start (as asked) | +0.7% | 0.12 | -32% | -8.8% | +5% | +9% | 41x |
+| band 1%, unwind at 0.5% | -0.3% | 0.00 | -40% | -8.7% | +3% | +7% | 41x |
+| band 1%, unwind at 1% (symmetric) | -0.0% | 0.03 | -31% | -7.3% | -3% | +9% | 50x |
+| band 0.5%, unwind at start | +1.9% | 0.26 | -26% | -9.7% | +4% | +16% | 59x |
+| band 2%, unwind at start | -0.2% | 0.02 | -41% | -11.1% | +1% | +7% | 23x |
+| band 3%, unwind at start | +1.4% | 0.21 | -36% | -10.8% | +4% | +20% | 17x |
+| band 1%, half-size hedge | +1.3% | 0.24 | -23% | -10.2% | -5% | -3% | 22x |
+
+At 3x every band variant is between -6.6% and -0.5%/yr with 70-88%
+drawdowns, against +7.1% / -41% for the weekly delta hedge. The band hedge
+does protect the tails (2008 and Covid turn positive, worst month shrinks
+from -14% to -9%), but each round trip through the band costs about the band
+width in whipsaw, and with 15-20 round trips a year that eats the straddle
+premium: it is a worse replication of the option than the continuous delta
+hedge, which is what the stop-loss-start-gain literature predicts. Smaller
+bands approach the delta hedge (0.5% band: Sharpe 0.26) at higher turnover;
+larger bands approach unhedged.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
