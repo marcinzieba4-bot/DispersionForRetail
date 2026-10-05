@@ -918,6 +918,40 @@ grid: cash yield needs T-bill collateral (tastytrade sweep pays less; take
 0.5-1%/yr off), ES implied financing has run 0.2-0.5% over fed funds, and
 entry-IV marks understate drawdowns in vol spikes.
 
+### Option structures instead of ES as the equity leg (`results/regime_putcall_VOLVUE.csv`)
+
+`scripts/run_regime_putcall.py`. The equity leg of the combo replaced by
+unhedged option structures priced off real Cboe indices: short ATM SPX put
+(PUT), short ATM put + long 30d call (PUT held, BXMD overlay held short),
+short 25d put + long 25d call (RXM), and a covered call (BXMD overlay + ES).
+Each at w x equity, 70% of equity in the honest regime book (no straddle)
+at L x, cash yield on all equity, rebalanced each cycle. Standalone on a
+fixed 100% notional, ex cash: ES Sharpe 0.48 (beta 0.80), short ATM put
+0.51 (beta 0.43, 2008 -25%), ATM put + 30d call 0.56 (beta 0.55, 2008 -33%),
+RXM 0.57 (beta 0.36, 2008 -23%), covered call + ES 0.71 (beta 0.98).
+
+| equity leg | w | book L | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | beta | 2008 | 2020 | 2022 | PM peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ES | 30% | 3x | +8.0% | 6.8% | 1.16 | 1.11 | -20.3% | 0.39 | -9.8% | 0.31 | -9% | +17% | 0% | 41% |
+| ES | 30% | 4x | +9.0% | 8.1% | 1.11 | 1.06 | -22.0% | 0.41 | -12.4% | 0.31 | -9% | +20% | +1% | 54% |
+| short ATM put | 30% | 3x | +6.4% | 6.0% | 1.09 | 0.98 | -16.4% | 0.39 | -10.8% | 0.17 | -5% | +11% | +3% | 44% |
+| short ATM put + long 30d call | 30% | 3x | +7.2% | 6.2% | 1.17 | 1.09 | -17.3% | 0.42 | -9.5% | 0.23 | -7% | +15% | +3% | 44% |
+| short ATM put + long 30d call | 30% | 4x | +8.3% | 7.6% | 1.09 | 1.05 | -19.8% | 0.42 | -12.1% | 0.23 | -7% | +18% | +4% | 57% |
+| short ATM put + long 30d call | 45% | 3x | +8.4% | 7.3% | 1.15 | 1.02 | -22.3% | 0.38 | -10.1% | 0.33 | -12% | +17% | +1% | 46% |
+| short 25d put + long 25d call (RXM) | 30% | 3x | +6.4% | 5.6% | 1.15 | 1.18 | -14.6% | 0.44 | -7.7% | 0.15 | -4% | +10% | +6% | 44% |
+| short 25d put + long 25d call (RXM) | 45% | 3x | +7.2% | 6.2% | 1.15 | 1.11 | -17.5% | 0.41 | -7.4% | 0.22 | -8% | +10% | +6% | 46% |
+| covered call + ES | 30% | 3x | +7.2% | 6.5% | 1.11 | 1.03 | -18.8% | 0.38 | -11.1% | 0.25 | -8% | +13% | 0% | 45% |
+
+Vol-matched, the option legs and ES are the same trade: ATM put + 30d call
+at 45% has the vol of ES at 30% and gives 8.4% / Sharpe 1.15 / -22% vs
+8.0% / 1.16 / -20%. The structures give up upside participation for premium,
+so they do better in sideways-down years (2022 +3% vs 0%) and worse in
+rebounds (2020 +15% vs +17%), with a lower beta but a higher down-beta. RXM
+at 30% is the lowest-drawdown line (Calmar 0.44, -14.6%). None of them is
+a free improvement: they add short SPX put exposure on top of the put-wing
+sleeve, which is already short the index put in corr-hi months, and they
+cost option commissions and margin instead of a futures margin deposit.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
