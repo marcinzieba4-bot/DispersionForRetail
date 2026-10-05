@@ -117,6 +117,12 @@ class StrategyConfig:
     # e.g. (("BXM", -1, 1.0), ("BXMD", +1, 1.0)) = short ATM call + long 30-delta call (BXM - BXMD)
     index_legs: tuple = ()
     singles_scale: float = 1.0       # 0.0 -> no single-name legs; index structure sized on the book
+    # single-name selection filters (need data/cache/volvue_term.parquet)
+    term_filter: str = "none"        # "none" | "exclude_event" (drop names with iv30/iv60 > thresh)
+                                     # | "event_short" (long non-event names, SHORT the vertical on event names)
+    term_thresh: float = 1.08
+    perc_filter: float | None = None # long singles only if iv_call_30_perc <= this (0-100)
+    beta_hedge: bool = False         # hedge dollar-delta x trailing-252d beta instead of raw dollar-delta
 
 
 REFERENCE = {

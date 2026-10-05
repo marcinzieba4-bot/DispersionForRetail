@@ -103,3 +103,17 @@ class VolVueIV(IVProvider):
         p = d.pivot_table(index="date", columns="ticker", values=field).sort_index()
         p.columns = [c.replace(".", "-") for c in p.columns]
         return p
+
+
+TERM_FILE = CACHE / "volvue_term.parquet"
+
+
+def term_panels() -> dict[str, pd.DataFrame]:
+    """{field: dates x tickers} for the extra fields pulled by scripts/fetch_volvue_term.py."""
+    d = pd.read_parquet(TERM_FILE)
+    out = {}
+    for f in [c for c in d.columns if c not in ("ticker", "date")]:
+        p = d.dropna(subset=[f]).pivot_table(index="date", columns="ticker", values=f).sort_index()
+        p.columns = [c.replace(".", "-") for c in p.columns]
+        out[f] = p
+    return out

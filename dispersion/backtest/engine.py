@@ -42,6 +42,7 @@ class Leg:
     premium: float    # per unit at entry (positive)
     kind: str = "call"   # call | put | cboe
     q: float = 0.0       # dividend yield used for pricing
+    beta: float = 1.0    # hedge weight (beta-weighted hedge)
 
 
 @dataclass
@@ -96,6 +97,16 @@ class Backtest:
             self.q = np.log(ratio / ratio.shift(252)).clip(0, 0.08)      # trailing 12m yield per name
             rs = uni.spy / uni.spy_raw
             self.q_spy = np.log(rs / rs.shift(252)).clip(0, 0.08)
+        self.term = None
+        if cfg.term_filter != "none" or cfg.perc_filter is not None:
+            from ..data.volvue import term_panels
+            self.term = term_panels()
+            self.iv30_panel = iv.panel() * 100.0
+        self.beta = None
+        if cfg.beta_hedge:
+            r_ = np.log(uni.close_adj).diff(); rs = np.log(uni.spy).diff()
+            cov = r_.rolling(252, min_periods=120).cov(rs); var = rs.rolling(252, min_periods=120).var()
+            self.beta = cov.div(var, axis=0).clip(0.2, 3.0)
         self.cboe = {}
         from ..data.cboe import short_call_pnl_panel
         for name in {cfg.index_leg} | {x[0] for x in cfg.index_legs}:
@@ -149,6 +160,25 @@ class Backtest:
         book = cfg.book_fraction * cfg.leverage * E
         per_name = book / len(names)
         prem_paid, costs = 0.0, 0.0
+        sign_of: dict[str, int] = {n: cfg.singles_sign for n in names}
+        if self.term is not None:
+            def asof(panel, n):
+                if n not in panel.columns:
+                    return np.nan
+                v = panel[n].loc[:t0].dropna()
+                return float(v.iloc[-1]) if len(v) and (t0 - v.index[-1]).days <= 7 else np.nan
+            for n in list(names):
+                ratio = asof(self.iv30_panel, n) / asof(self.term["iv_call_60"], n)
+                perc = asof(self.term["iv_call_30_perc"], n)
+                event = np.isfinite(ratio) and ratio > cfg.term_thresh
+                if cfg.term_filter == "exclude_event" and event:
+                    sign_of[n] = 0
+                elif cfg.term_filter == "event_short" and event:
+                    sign_of[n] = -cfg.singles_sign
+                if cfg.perc_filter is not None and np.isfinite(perc) and perc > cfg.perc_filter and sign_of[n] == cfg.singles_sign:
+                    sign_of[n] = 0
+            names = [n for n in names if sign_of[n] != 0]
+            per_name = book / max(len(names), 1)
         for n in (names if cfg.singles_scale > 0 else []):
             S0 = float(self.uni.close_adj.loc[t0, n])
             iv = float(ivs.get(n, np.nan))
@@ -161,16 +191,17 @@ class Backtest:
                 continue
             n_contr = units * S0 / (100.0 * self.uni.raw_price(n, t0))
             qn = self._q(n, t0)
-            sg = cfg.singles_sign
+            sg = sign_of[n]
             K_l = bs.strike_for_delta(S0, iv, T, cfg.long_delta, r - qn)
             C_l = float(bs.call_price(S0, K_l, T, iv * cfg.iv_mult_long, r, qn))
-            rec.legs.append(Leg(n, sg * units, K_l, iv * cfg.iv_mult_long, S0, cfg.long_delta, False, C_l, q=qn))
+            bn = float(self.beta[n].loc[:t0].dropna().iloc[-1]) if self.beta is not None and n in self.beta and len(self.beta[n].loc[:t0].dropna()) else 1.0
+            rec.legs.append(Leg(n, sg * units, K_l, iv * cfg.iv_mult_long, S0, cfg.long_delta, False, C_l, q=qn, beta=bn))
             prem_paid += sg * units * C_l
             costs += units * C_l * cm.single(cfg.long_delta) + config.commission(n_contr, cm)
             if cfg.short_wing_delta:
                 K_s = bs.strike_for_delta(S0, iv, T, cfg.short_wing_delta, r - qn)
                 C_s = float(bs.call_price(S0, K_s, T, iv * cfg.iv_mult_wing, r, qn))
-                rec.legs.append(Leg(n, -sg * units, K_s, iv * cfg.iv_mult_wing, S0, cfg.short_wing_delta, False, C_s, q=qn))
+                rec.legs.append(Leg(n, -sg * units, K_s, iv * cfg.iv_mult_wing, S0, cfg.short_wing_delta, False, C_s, q=qn, beta=bn))
                 prem_paid -= sg * units * C_s
                 costs += units * C_s * cm.single(cfg.short_wing_delta) + config.commission(n_contr, cm)
         deployed = sum(abs(l.units) * l.S0 for l in rec.legs if l.bucket == cfg.long_delta) if cfg.singles_scale > 0 else book
@@ -251,7 +282,7 @@ class Backtest:
             cbo = [l for l in rec.legs if l.kind == "cboe"]
             if opt:
                 units = np.array([l.units for l in opt]); K = np.array([l.K for l in opt]); ivv = np.array([l.iv for l in opt])
-                qq = np.array([l.q for l in opt])
+                qq = np.array([l.q for l in opt]); bb = np.array([l.beta for l in opt])
                 is_put = np.array([l.kind == "put" for l in opt])
                 cols = [l.ticker for l in opt]
                 path = pd.concat([self.uni.close_adj, self.spy.rename("SPY")], axis=1)[cols].loc[t0:t1].ffill()
@@ -274,7 +305,7 @@ class Backtest:
                     mark += float(np.sum(units * px))
                     if d < t1 and k % hedge_every == 0:
                         dl = np.where(is_put, bs.put_delta(S, K, T_rem, ivv, r, qq), bs.call_delta(S, K, T_rem, ivv, r, qq))
-                        dollar_delta += float(np.sum(units * dl * S))
+                        dollar_delta += float(np.sum(units * dl * S * bb))
                 if cbo:
                     for c, bi, bt, n in cbs:
                         mark += n * (float(c["idx"].loc[d]) / bi - float(c["tr"].loc[d]) / bt)
