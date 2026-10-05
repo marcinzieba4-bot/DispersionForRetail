@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from dispersion import config  # noqa: E402
+from dispersion import bs, config  # noqa: E402
 from dispersion.backtest import metrics  # noqa: E402
 from dispersion.backtest.engine import Backtest, third_fridays  # noqa: E402
 from dispersion.data.cboe import cboe_index, sp500_tr  # noqa: E402
@@ -52,12 +52,12 @@ def main():
         try:
             real.append(bx.loc[b] / bx.loc[a] - tr.loc[b] / tr.loc[a])
             S0, S1 = float(spy.loc[a]), float(spy.loc[b]); v = float(P.loc[:a].iloc[-1]); T = (b - a).days / 365
-            K = config.__dict__ and __import__("dispersion.bs", fromlist=["bs"]).strike_for_delta(S0, v, T, 30, 0.0)
-            C0 = float(__import__("dispersion.bs", fromlist=["bs"]).call_price(S0, K, T, v, 0.0))
+            K = bs.strike_for_delta(S0, v, T, 30, 0.0)
+            C0 = float(bs.call_price(S0, K, T, v, 0.0))
             model.append((C0 - max(S1 - K, 0)) / S0)
         except KeyError:
             pass
-    real, model = np.array(real), np.array(model)
+    real, model = np.array(real, dtype=float), np.array(model, dtype=float)
     skew = pd.DataFrame({"real_BXMD": real, "model_flatIV": model}, index=cyc[1:len(real) + 1])
     skew.to_csv(RESULTS / "index_leg_real_vs_model.csv")
     print("\nShort 30d SPX call, per cycle, %% of index notional: real(BXMD) mean %.3f%%  model(flat IV) mean %.3f%%  -> model overstates by %.2f%%/yr of index notional; corr %.2f" % (
