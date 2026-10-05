@@ -668,6 +668,59 @@ than the plain short 25-delta put (Sharpe 0.70 vs 0.99 hedged) and loses the
 crash protection unhedged (-6% in 2008, -17% in Covid); as the index leg of
 the put-wing book it halves the Sharpe (0.44) while adding 2 points of 2008.
 
+### Cost ladder: retail vs institutional vs zero costs, ex cash (`results/cost_ladder_VOLVUE.csv`)
+
+`scripts/run_cost_ladder.py`. Question: does any book work once costs drop
+to institutional levels? Every candidate book re-run with cash yield off,
+fixed starting notional, third-Friday cycle, at four cost levels: `retail`
+(REALISTIC_SPY: capped $10/leg commissions, per-leg half-spreads, SPY/ES
+hedge), `GS 1.5% flat` (1.5% of premium on every option leg incl. the index,
+1 bp hedge, no commissions), `GS 0.75% flat`, and `zero`. 3x shown at the GS
+1.5% level only. Note the 1.5% flat model charges *more* than retail on index
+legs (SPX/SPY options are tighter than 1.5% of premium), so for index-only
+books the honest institutional comparator is the 0.75% row.
+
+| book | costs | L | CAGR ex cash | Sharpe | maxDD | worst m | cost/yr | 2008 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|
+| spec call book (30-10 verticals vs real idx 30d call) | retail | 1x | -1.3% | -0.44 | -28.8% | -4.8% | 1.29% | -0.8% | -7.3% |
+| | GS 1.5% | 1x | -0.5% | -0.16 | -18.5% | -4.2% | 0.58% | +0.2% | -5.8% |
+| | GS 0.75% | 1x | -0.2% | -0.05 | -14.7% | -4.0% | 0.29% | +0.7% | -5.1% |
+| | zero | 1x | +0.3% | +0.13 | -10.7% | -3.8% | 0 | +1.3% | -4.3% |
+| two-wing straddle dispersion | retail | 1x | -0.2% | +0.01 | -31.8% | -6.9% | 1.73% | +5.9% | -6.3% |
+| | GS 0.75% | 1x | +0.5% | +0.11 | -30.1% | -6.7% | 1.10% | +6.8% | -5.2% |
+| | zero | 1x | +1.6% | +0.34 | -26.5% | -6.2% | 0 | +9.0% | -3.0% |
+| put-wing dispersion (x1.05) | retail | 1x | +0.4% | +0.19 | -10.7% | -3.3% | 0.85% | +8.1% | +0.6% |
+| | GS 1.5% | 1x | +0.5% | +0.21 | -10.6% | -3.3% | 0.80% | +8.1% | +0.5% |
+| | GS 1.5% | 3x | +1.3% | +0.24 | -26.4% | -9.3% | 2.39% | +26.2% | +1.1% |
+| | GS 0.75% | 1x | +0.8% | +0.36 | -9.5% | -3.2% | 0.40% | +8.8% | +0.9% |
+| | zero | 1x | +1.3% | +0.54 | -8.1% | -3.1% | 0 | +9.7% | +1.4% |
+| put-wing dispersion, ex-event (x1.05) | retail | 1x | +0.6% | +0.29 | -8.6% | -2.8% | 0.72% | +8.4% | -0.3% |
+| | GS 1.5% | 3x | +1.6% | +0.32 | -22.0% | -8.0% | 2.01% | +27.1% | -1.0% |
+| | GS 0.75% | 1x | +0.9% | +0.45 | -7.5% | -2.7% | 0.34% | +8.9% | 0.0% |
+| | zero | 1x | +1.3% | +0.64 | -6.3% | -2.6% | 0 | +9.7% | +0.4% |
+| event selling (short straddles on event names, 100 names) | retail | 1x | +0.6% | +0.59 | -3.9% | -1.1% | 0.21% | +1.2% | +1.2% |
+| | GS 1.5% | 3x | +1.5% | +0.61 | -10.0% | -3.1% | 0.63% | +3.4% | +3.1% |
+| | GS 0.75% | 1x | +0.7% | +0.69 | -3.6% | -1.1% | 0.11% | +1.4% | +1.3% |
+| | zero | 1x | +0.8% | +0.80 | -3.3% | -1.1% | 0 | +1.6% | +1.4% |
+| short idx 25d put, hedged | retail | 1x | +1.6% | +0.49 | -10.9% | -6.3% | 0.19% | -2.7% | +1.0% |
+| | GS 1.5% | 3x | +3.4% | +0.42 | -31.1% | -18.1% | 1.50% | -10.3% | +1.4% |
+| | zero | 1x | +1.8% | +0.55 | -10.8% | -6.1% | 0 | -2.3% | +1.2% |
+| short idx straddle, delta hedged W | retail | 1x | +1.8% | +0.37 | -14.1% | -9.9% | 0.25% | +0.6% | -6.6% |
+| | GS 1.5% | 3x | +3.5% | +0.30 | -41.5% | -30.9% | 2.48% | -1.8% | -15.1% |
+| | zero | 1x | +2.1% | +0.42 | -13.7% | -9.7% | 0 | +1.1% | -6.1% |
+
+Reading: costs are not what stops these books. The zero-cost row is the
+gross edge, and at 1x it is 0.3-2.1%/yr ex cash for every book; the best
+zero-cost Sharpes ex cash are event selling (0.80, but only 0.9% vol and
+capacity-bound) and ex-event put-wing dispersion (0.64). The spec call book
+has no gross edge at all (+0.3%/yr, Sharpe 0.13 with free trading). Going
+from retail to GS 0.75% adds about 0.4%/yr to the single-name books (put-wing
+Sharpe 0.19 -> 0.36, ex-event 0.29 -> 0.45) and nothing to the index-only
+books, whose retail cost is already 0.2-0.25%/yr. Leverage at institutional
+costs scales the cost line with the exposure and leaves the Sharpe where it
+was, so 3x triples both the return and the drawdown (put-wing ex-event 3x:
++1.6%/yr, -22% maxDD, +27% in 2008).
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
