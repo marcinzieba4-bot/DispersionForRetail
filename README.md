@@ -503,6 +503,30 @@ turns of PWD), but the sleeve's non-crisis drawdowns (2014, 2016, 2010 at
 too little to offset the SPY leg. Leverage is the wrong tool for this
 sleeve; it is a hedge with slightly positive carry, not a return engine.
 
+### Equal vs market-cap weighted single-name legs (`results/weighting_VOLVUE.csv`)
+
+`weighting="mcap"` (optionally capped per name), `select="mcap"`; index legs
+real, both sides hedged separately, fixed notional 1x, realistic costs.
+
+| book | equal | mcap uncapped (max 22%) | mcap cap 10% | sqrt-mcap | top-50 by cap, cap 8% |
+|---|---|---|---|---|---|
+| spec call book (30-10 verticals vs idx 30d call) | -0.0% / Sharpe -0.00 / maxDD -23% | -0.1% / -0.01 / -27% | -0.2% / -0.07 / -25% | -0.1% / -0.02 / -24% | -0.1% / -0.02 / -22% |
+| long 30d calls vs idx 30d call | -0.3% / -0.10 / -28% | -1.2% / -0.23 / -40% | -1.1% / -0.32 / -35% | -0.7% / -0.20 / -32% | |
+| long single straddles vs idx straddle | +1.4% / 0.28 / -30% | +3.0% / 0.36 / -26% (2008 +60%) | +1.1% / 0.23 / -31% | +2.0% / 0.35 / -27% | |
+| put-wing dispersion (x1.05) | +2.3% / 0.96 / -9.6% | +4.0% / 0.64 / -10.5% (2008 +48%) | +2.7% / 0.92 / -9.7% | +3.0% / 0.84 / -8.4% | +2.5% / 0.93 / -9.1% |
+| long single wings vs idx 25d put | +0.6% / 0.15 / -28% | +2.3% / 0.31 / -28% (2008 +45%) | +0.6% / 0.14 / -29% | +1.3% / 0.26 / -26% | |
+| long 30d calls only, stock-hedged | -0.4% / -0.07 / -29% | -1.3% / -0.16 / -42% | -1.1% / -0.22 / -36% | -0.8% / -0.13 / -34% | -1.1% / -0.23 / -33% |
+
+Cap weights do not help the call books (more vol, same or lower mean: the
+single-name call wing is fair at every weight). On the put-side books they
+raise the mean through concentration: uncapped cap weights put 22% of the
+book in one name and the 2008 gain (+48% to +60%) is the largest names'
+puts (financials); Sharpe falls (0.96 -> 0.64) because that concentration
+adds vol in every other year. A 10% cap or square-root weights keep most of
+the Sharpe (0.92 / 0.84) with a modestly higher mean. Weighting is a
+second-order choice next to the skew input; equal or 10%-capped is the
+defensible default.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
