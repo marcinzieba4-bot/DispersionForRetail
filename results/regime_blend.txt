@@ -1,0 +1,41 @@
+SPY forward-cycle return by regime at entry (ann. mean / ann. vol / n):
+  corr-hi  +28.1% / 19.5% / 61
+  corr-lo  +8.7% / 10.6% / 76
+  mid      +4.9% / 21.8% / 99
+SPY forward-cycle return by VIX at entry:
+  <15    +11.0% / 9.5% / 80
+  15-20  -4.2% / 20.0% / 71
+  20-25  +21.0% / 16.6% / 42
+  25-30  +37.0% / 13.8% / 23
+  >30    +26.9% / 36.7% / 20
+
+=== cash yield on all equity; 30% ES (gated) + 70% capital in the regime book at L x ===
+cash only                                            cagr=+1.6% vol=0.5% sharpe=2.96 sortino=nan maxdd=+0.0% calmar=nan worst_m=+0.0% cvar=+0.0% beta=0.00 sh2h=4.54 | 2008=+1.9% 2020=+0.4% 2022=+1.7% covid=+0.1%
+30% ES always + 70% cash (no book)                   cagr=+4.7% vol=4.5% sharpe=1.05 sortino=0.97 maxdd=-18.3% calmar=0.26 worst_m=-4.5% cvar=-2.7% beta=0.29 sh2h=1.42 | 2008=-10.3% 2020=+7.7% 2022=-4.3% covid=-6.2%
+
+-- book 3x on the 70% (= 2.1x equity in book notional)
+70% book 3x, no ES                                   cagr=+7.7% vol=6.4% sharpe=1.19 sortino=1.53 maxdd=-12.4% calmar=0.62 worst_m=-6.3% cvar=-2.9% beta=0.02 sh2h=1.16 | 2008=+26.3% 2020=+22.0% 2022=-1.1% covid=+3.7%
+30% ES always + 70% book 3x                          cagr=+10.8% vol=8.1% sharpe=1.32 sortino=1.32 maxdd=-14.4% calmar=0.75 worst_m=-8.9% cvar=-4.4% beta=0.32 sh2h=1.33 | 2008=+11.2% 2020=+29.8% 2022=-7.0% covid=-3.1%
+30% ES off in corr-hi + 70% book 3x                  cagr=+8.7% vol=7.1% sharpe=1.22 sortino=1.34 maxdd=-17.9% calmar=0.49 worst_m=-6.3% cvar=-3.8% beta=0.23 sh2h=1.23 | 2008=+13.7% 2020=+17.2% 2022=-7.8% covid=-6.5%
+30% ES only if VIX<20 + 70% book 3x                  cagr=+8.0% vol=6.9% sharpe=1.15 sortino=1.27 maxdd=-16.3% calmar=0.49 worst_m=-6.3% cvar=-3.6% beta=0.16 sh2h=1.16 | 2008=+18.4% 2020=+11.7% 2022=-1.1% covid=-6.5%
+30% ES off in corr-hi & off if VIX>25 + 70% book 3x  cagr=+8.7% vol=6.9% sharpe=1.25 sortino=1.43 maxdd=-17.9% calmar=0.49 worst_m=-6.3% cvar=-3.5% beta=0.18 sh2h=1.19 | 2008=+22.5% 2020=+12.8% 2022=-7.8% covid=-6.5%
+30% ES only in corr-lo + 70% book 3x                 cagr=+8.1% vol=6.7% sharpe=1.21 sortino=1.50 maxdd=-13.1% calmar=0.62 worst_m=-6.3% cvar=-3.2% beta=0.07 sh2h=1.29 | 2008=+21.9% 2020=+23.3% 2022=-1.1% covid=+3.2%
+
+-- book 5x on the 70% (= 3.5x equity in book notional)
+70% book 5x, no ES                                   cagr=+11.6% vol=10.7% sharpe=1.08 sortino=1.38 maxdd=-20.7% calmar=0.56 worst_m=-10.6% cvar=-5.0% beta=0.04 sh2h=1.01 | 2008=+44.9% 2020=+37.5% 2022=-3.6% covid=+6.1%
+30% ES always + 70% book 5x                          cagr=+14.8% vol=11.8% sharpe=1.24 sortino=1.36 maxdd=-22.5% calmar=0.66 worst_m=-13.1% cvar=-6.2% beta=0.34 sh2h=1.19 | 2008=+27.6% 2020=+45.5% 2022=-9.3% covid=-1.0%
+30% ES off in corr-hi + 70% book 5x                  cagr=+12.7% vol=10.9% sharpe=1.16 sortino=1.34 maxdd=-25.5% calmar=0.50 worst_m=-10.6% cvar=-5.6% beta=0.25 sh2h=1.11 | 2008=+30.5% 2020=+32.0% 2022=-10.0% covid=-4.4%
+30% ES only if VIX<20 + 70% book 5x                  cagr=+11.9% vol=10.9% sharpe=1.10 sortino=1.27 maxdd=-23.9% calmar=0.50 worst_m=-10.6% cvar=-5.5% beta=0.17 sh2h=1.05 | 2008=+36.0% 2020=+25.8% 2022=-3.6% covid=-4.4%
+30% ES off in corr-hi & off if VIX>25 + 70% book 5x  cagr=+12.7% vol=10.8% sharpe=1.16 sortino=1.38 maxdd=-25.5% calmar=0.50 worst_m=-10.6% cvar=-5.4% beta=0.19 sh2h=1.07 | 2008=+40.6% 2020=+27.0% 2022=-10.0% covid=-4.4%
+30% ES only in corr-lo + 70% book 5x                 cagr=+12.1% vol=10.8% sharpe=1.11 sortino=1.40 maxdd=-20.7% calmar=0.58 worst_m=-10.6% cvar=-5.1% beta=0.09 sh2h=1.11 | 2008=+40.0% 2020=+38.9% 2022=-3.6% covid=+5.6%
+
+-- book 10x on the 70% (= 7.0x equity in book notional)
+70% book 10x, no ES                                  cagr=+21.2% vol=21.5% sharpe=1.00 sortino=1.25 maxdd=-38.9% calmar=0.54 worst_m=-21.4% cvar=-10.3% beta=0.08 sh2h=0.89 | 2008=+101.1% 2020=+79.4% 2022=-11.4% covid=+11.9%
+30% ES always + 70% book 10x                         cagr=+24.5% vol=22.2% sharpe=1.10 sortino=1.31 maxdd=-40.2% calmar=0.61 worst_m=-23.9% cvar=-11.2% beta=0.38 sh2h=1.01 | 2008=+77.4% 2020=+87.9% 2022=-16.7% covid=+4.0%
+30% ES off in corr-hi + 70% book 10x                 cagr=+22.3% vol=21.3% sharpe=1.06 sortino=1.25 maxdd=-42.3% calmar=0.53 worst_m=-21.4% cvar=-10.6% beta=0.30 sh2h=0.96 | 2008=+81.3% 2020=+72.0% 2022=-17.3% covid=+0.7%
+30% ES only if VIX<20 + 70% book 10x                 cagr=+21.4% vol=21.4% sharpe=1.02 sortino=1.23 maxdd=-41.1% calmar=0.52 worst_m=-21.4% cvar=-10.6% beta=0.22 sh2h=0.92 | 2008=+89.1% 2020=+63.9% 2022=-11.4% covid=+0.7%
+30% ES off in corr-hi & off if VIX>25 + 70% book 10x cagr=+22.3% vol=21.3% sharpe=1.05 sortino=1.26 maxdd=-42.3% calmar=0.53 worst_m=-21.4% cvar=-10.6% beta=0.24 sh2h=0.94 | 2008=+95.4% 2020=+65.5% 2022=-17.3% covid=+0.7%
+30% ES only in corr-lo + 70% book 10x                cagr=+21.7% vol=21.6% sharpe=1.02 sortino=1.26 maxdd=-38.9% calmar=0.56 worst_m=-21.4% cvar=-10.4% beta=0.13 sh2h=0.95 | 2008=+94.5% 2020=+81.2% 2022=-11.4% covid=+11.4%
+
+yearly, 30% ES off in corr-hi + 70% book 10x: 2007=+4% 2008=+81% 2009=+16% 2010=+42% 2011=+66% 2012=+10% 2013=+11% 2014=-2% 2015=+35% 2016=+2% 2017=+42% 2018=-8% 2019=+4% 2020=+72% 2021=+26% 2022=-17% 2023=+58% 2024=+14% 2025=-1% 2026=+39%
+DONE

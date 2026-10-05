@@ -815,6 +815,44 @@ regime is on, and its drawdown is a long shallow one (668 days), not a crash; mo
 most of the blend's drawdowns are SPY's; the 3x book inside the blend turns
 2008 positive because the put wing pays while SPY falls.
 
+### 30% ES + 70% regime book, rebalanced, cash yield on all equity, ES regime-gated (`results/regime_blend_VOLVUE.csv`)
+
+`scripts/run_regime_blend.py`. Every third-Friday cycle: 30% of equity as ES
+futures exposure (gated by regime), 70% of equity as the regime book's
+capital at L x fixed notional, FEDFUNDS on all equity (futures tie up no
+cash; ES carry = SPY total return minus the cash rate), 1 bp on ES turnover.
+First, how SPY itself behaves by regime at entry (forward cycle return,
+annualized mean / vol / months): corr-hi +28% / 19.5% / 61, corr-lo +8.7% /
+10.6% / 76, mid +4.9% / 21.8% / 99. Correlation spikes mark selloffs that
+have mostly already happened, so switching ES off in corr-hi removes the
+rebounds; corr-lo is the low-vol, steady part of the equity premium.
+
+| | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | CVaR95 m | beta | 2008 | 2020 | 2022 | Covid |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| cash only | +1.6% | 0.5% | | | 0 | | | | 0 | +1.9% | +0.4% | +1.7% | |
+| 30% ES always, no book | +4.7% | 4.5% | 1.05 | 0.97 | -18.3% | 0.26 | -4.5% | -2.7% | 0.29 | -10.3% | +7.7% | -4.3% | -6.2% |
+| 70% book 3x, no ES | +7.7% | 6.4% | 1.19 | 1.53 | -12.4% | 0.62 | -6.3% | -2.9% | 0.02 | +26.3% | +22.0% | -1.1% | +3.7% |
+| 30% ES always + 70% book 3x | +10.8% | 8.1% | 1.32 | 1.32 | -14.4% | 0.75 | -8.9% | -4.4% | 0.32 | +11.2% | +29.8% | -7.0% | -3.1% |
+| 30% ES only in corr-lo + 70% book 3x | +8.1% | 6.7% | 1.21 | 1.50 | -13.1% | 0.62 | -6.3% | -3.2% | 0.07 | +21.9% | +23.3% | -1.1% | +3.2% |
+| 30% ES off in corr-hi + 70% book 3x | +8.7% | 7.1% | 1.22 | 1.34 | -17.9% | 0.49 | -6.3% | -3.8% | 0.23 | +13.7% | +17.2% | -7.8% | -6.5% |
+| 70% book 5x, no ES | +11.6% | 10.7% | 1.08 | 1.38 | -20.7% | 0.56 | -10.6% | -5.0% | 0.04 | +44.9% | +37.5% | -3.6% | +6.1% |
+| 30% ES always + 70% book 5x | +14.8% | 11.8% | 1.24 | 1.36 | -22.5% | 0.66 | -13.1% | -6.2% | 0.34 | +27.6% | +45.5% | -9.3% | -1.0% |
+| 30% ES only in corr-lo + 70% book 5x | +12.1% | 10.8% | 1.11 | 1.40 | -20.7% | 0.58 | -10.6% | -5.1% | 0.09 | +40.0% | +38.9% | -3.6% | +5.6% |
+| 70% book 10x, no ES | +21.2% | 21.5% | 1.00 | 1.25 | -38.9% | 0.54 | -21.4% | -10.3% | 0.08 | +101% | +79% | -11.4% | +11.9% |
+| 30% ES always + 70% book 10x | +24.5% | 22.2% | 1.10 | 1.31 | -40.2% | 0.61 | -23.9% | -11.2% | 0.38 | +77% | +88% | -16.7% | +4.0% |
+| 30% ES only in corr-lo + 70% book 10x | +21.7% | 21.6% | 1.02 | 1.26 | -38.9% | 0.56 | -21.4% | -10.4% | 0.13 | +95% | +81% | -11.4% | +11.4% |
+| 30% ES off in corr-hi + 70% book 10x | +22.3% | 21.3% | 1.06 | 1.25 | -42.3% | 0.53 | -21.4% | -10.6% | 0.30 | +81% | +72% | -17.3% | +0.7% |
+
+Gating the ES leg does not improve the mix: "ES always" has the best Sharpe
+and Calmar at every leverage, "ES only in corr-lo" is the gate that keeps the
+crisis years positive (beta 0.1), and "ES off in corr-hi" is worse than both
+because it misses the post-spike rebounds. 10x on the 70% is 7x equity in
+option notional: the Sharpe stays about 1.0 because fixed-notional P&L scales,
+but the max drawdown is 39-42% and the worst month 21-24%, and a short 25d SPY
+put book of 7x equity does not fit any retail margin rail (the spec's 60% rail
+caps this book near 3x). Yearly at 10x, ES off in corr-hi: 2008 +81, 2011 +66,
+2015 +35, 2017 +42, 2020 +72, 2022 -17, 2023 +58, 2025 -1, 2026 +39.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
