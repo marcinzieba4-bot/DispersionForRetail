@@ -46,6 +46,7 @@ if __name__ == "__main__":
     ap.add_argument("--start", default="2007-01-31")
     ap.add_argument("--end", default=None)
     ap.add_argument("--iv", default="auto")
+    ap.add_argument("--tag", default=None)
     args = ap.parse_args()
     config.Z_DELTA.setdefault(5, -1.6449)
 
@@ -65,7 +66,9 @@ if __name__ == "__main__":
         rows.append(st)
         curves[name] = res.equity
         print(f"{name:32s} {metrics.fmt(st)}  calmar_2h={sh['calmar']:.2f}  2008={yr.get(2008, float('nan')):+.1%}")
-    tag = "PROXY" if ivp.is_proxy else "LICENSED"
+    tag = "PROXY" if ivp.is_proxy else ("VOLVUE" if "VolVue" in ivp.name else "LICENSED")
+    if args.tag:
+        tag = args.tag
     df = pd.DataFrame(rows).set_index("variant")
     df.to_csv(RESULTS / f"summary_{tag}.csv")
     pd.DataFrame(curves).to_csv(RESULTS / f"equity_{tag}.csv")

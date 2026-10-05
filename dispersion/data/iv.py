@@ -136,7 +136,15 @@ class ProxyIV(IVProvider):
 
 
 def get_provider(source: str, close_adj=None, spy=None) -> IVProvider:
-    if source in ("auto", "csv", "orats", "volvue", "ivydb"):
+    if source in ("auto", "volvue", "volvue_put", "volvue_mean"):
+        from . import volvue as vv
+        if vv.CACHE_FILE.exists() or (source != "auto" and __import__("os").environ.get("VOLVUE_API_KEY")):
+            field = {"volvue_put": "iv_put_30", "volvue_mean": "iv_mean_30"}.get(source, "iv_call_30")
+            log.info("IV source: VolVue %s", field)
+            return vv.VolVueIV(field)
+        if source != "auto":
+            raise FileNotFoundError("no VolVue cache; run scripts/fetch_volvue.py")
+    if source in ("auto", "csv", "orats", "ivydb"):
         files = sorted(glob.glob(str(IV_DIR / "*.csv")))
         if files:
             log.info("IV source: %s", files)
