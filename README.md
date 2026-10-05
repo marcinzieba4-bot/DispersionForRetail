@@ -1001,6 +1001,57 @@ vs 10.8% / 1.04 / -36%). The sleeve replaces index beta with a 5-name,
 one-theme bet (2024-2026 picks are all memory and optical names) that lost
 70% in 2008; its second-half Sharpe (0.78) is the AI-hardware run.
 
+### Stop-losses on the momentum sleeve (`results/momentum_stops_VOLVUE.csv`)
+
+`scripts/run_momentum_stops.py`; `momentum_leg(stop=, trail=, sleeve_stop=, trend=)`.
+Stops trigger on the daily close and are executed at the next close (gap
+risk included); a stopped name stays in cash until the next third Friday.
+`trend` skips the cycle when SPY is below its 200-day average.
+
+Standalone, top-5 12-1 momentum, 100% of equity compounded, ex cash:
+
+| variant | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 | Covid |
+|---|---|---|---|---|---|---|---|---|---|---|
+| no stop | +14.8% | 31.2% | 0.61 | -75.3% | 0.20 | -27.8% | 1.33 | -70% | +12% | -21% |
+| name stop -10% | +13.6% | 26.4% | 0.63 | -63.2% | 0.21 | -32.1% | 0.97 | -54% | +41% | +4% |
+| name stop -15% | +13.9% | 28.4% | 0.61 | -62.5% | 0.22 | -26.8% | 1.10 | -54% | +40% | +1% |
+| name stop -20% | +15.5% | 29.9% | 0.64 | -68.6% | 0.23 | -27.4% | 1.16 | -62% | +39% | -2% |
+| trailing -10% | +11.4% | 24.6% | 0.57 | -57.5% | 0.20 | -25.8% | 0.83 | -47% | +33% | +4% |
+| trailing -15% | +12.6% | 27.0% | 0.59 | -62.0% | 0.20 | -29.7% | 1.00 | -52% | +30% | +1% |
+| sleeve stop -10% | +11.7% | 27.8% | 0.55 | -63.4% | 0.18 | -35.2% | 1.00 | -52% | +37% | +2% |
+| sleeve stop -15% | +15.8% | 30.6% | 0.64 | -63.8% | 0.25 | -32.2% | 1.07 | -56% | +45% | +2% |
+| trailing -15% + sleeve -10% | +11.8% | 26.3% | 0.57 | -57.4% | 0.21 | -29.8% | 0.92 | -43% | +25% | +2% |
+| SPY > 200d trend filter | +12.0% | 24.3% | 0.60 | -48.0% | 0.25 | -26.0% | 0.75 | -24% | -18% | -36% |
+| trend filter + trailing -15% | +11.1% | 22.3% | 0.60 | -34.9% | 0.32 | -24.8% | 0.64 | -19% | +8% | -18% |
+
+Inside the combo (w x equity in the sleeve, 70% of equity in the honest regime book at L x, cash on all equity):
+
+| sleeve | w | book L | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| ES (reference) | 30% | 3x | +8.0% | 6.8% | 1.16 | -20.3% | 0.39 | -9.8% | 0.31 | -9% | +17% | 0% |
+| mom5 no stop | 30% | 3x | +10.4% | 11.0% | 0.97 | -33.7% | 0.31 | -16.1% | 0.40 | -25% | +16% | +8% |
+| mom5 name stop -15% | 30% | 3x | +9.9% | 10.2% | 0.98 | -27.9% | 0.36 | -10.9% | 0.34 | -17% | +23% | +6% |
+| mom5 trailing -15% | 30% | 3x | +9.5% | 9.8% | 0.98 | -27.5% | 0.34 | -10.9% | 0.31 | -16% | +20% | +6% |
+| mom5 sleeve stop -10% | 30% | 3x | +9.3% | 10.0% | 0.95 | -28.5% | 0.33 | -11.8% | 0.32 | -16% | +22% | +4% |
+| mom5 trailing -15% + sleeve -10% | 30% | 3x | +9.2% | 9.5% | 0.98 | -25.3% | 0.36 | -9.9% | 0.29 | -12% | +18% | +4% |
+| mom5 trend filter | 30% | 3x | +9.1% | 8.8% | 1.05 | -20.9% | 0.44 | -8.4% | 0.24 | -5% | +5% | +3% |
+| mom5 trend + trailing -15% | 30% | 3x | +8.8% | 8.4% | 1.06 | -16.0% | 0.55 | -8.4% | 0.20 | -3% | +13% | +5% |
+| mom5 trend + trailing -15% | 30% | 4x | +9.8% | 9.4% | 1.05 | -19.2% | 0.51 | -11.1% | 0.21 | -3% | +16% | +6% |
+| mom5 trend + trailing -15% | 60% | 3x | +12.3% | 14.3% | 0.90 | -22.1% | 0.56 | -15.4% | 0.40 | -9% | +15% | +4% |
+
+Per-name and sleeve stops cut the sleeve's drawdown from -75% to about
+-60% and 2008 from -70% to about -50% without changing the Sharpe (0.55-0.64
+across all of them); they cost 1-3 points of CAGR when the stop is tight
+and are paid back in 2020 (+40% vs +12%) because stopped names re-enter
+on the next rebalance. The 200-day trend filter is the control that
+actually changes the shape: it halves 2008 and the drawdown, at the cost of
+missing rebounds (2020 -18% alone, Covid window -36%). Trend filter plus a
+15% trailing stop is the best risk-controlled version (maxDD -35%, Calmar
+0.32 standalone) and, inside the combo at 30% with the book at 3x, gives
+the best Calmar of any combo in this project (8.8%/yr, Sharpe 1.06, maxDD
+-16%, Calmar 0.55, 2008 -3%). Caveat: twelve stop variants were tried on
+one history, so expect the realised benefit to be smaller than the table.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
