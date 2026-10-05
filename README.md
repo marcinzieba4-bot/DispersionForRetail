@@ -1104,6 +1104,57 @@ rarely fires, and then it adds nothing. The one thing re-entry buys is a
 higher CAGR at the 15% stop (+13.5% vs +12.6% with "above exit"), at a
 higher vol, which is the same Sharpe.
 
+### Momentum sleeve as long ATM calls, or ATM / 20-delta call spreads (`results/momentum_options_VOLVUE.csv`)
+
+`dispersion/momentum_options.py`, `scripts/run_momentum_options.py`. Same 5
+momentum names each third Friday, but instead of the stock buy 1-month ATM
+calls on them (optionally selling a 20-delta call against each), Black-Scholes
+at the VolVue 30-day call IV, marks at entry IV, settled at expiry, spec
+half-spreads (1.5% ATM, 3% at 20d) and capped commissions. Share count =
+what the stock sleeve would hold ("2x" doubles it to roughly delta-match an
+ATM call to stock). 4.9 of 5 names have IV on average. Premium paid: ATM
+calls 55% of notional per year, call spread 39%; costs 1.0-1.6%/yr.
+
+Standalone, 100% of equity compounded, ex cash:
+
+| sleeve | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 | 2022 | Covid |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| stock, no stop | +14.8% | 31.2% | 0.61 | -75.3% | 0.20 | -27.8% | 1.33 | -70% | +12% | +3% | -21% |
+| stock, trend + trail 15% | +11.1% | 22.3% | 0.60 | -34.9% | 0.32 | -24.8% | 0.64 | -19% | +8% | -3% | -18% |
+| ATM calls | +3.2% | 16.6% | 0.27 | -51.9% | 0.06 | -12.1% | 0.50 | -28% | +17% | -11% | +5% |
+| ATM calls, 2x (delta-matched) | +3.6% | 33.1% | 0.27 | -78.6% | 0.05 | -23.1% | 1.00 | -51% | +27% | -23% | +8% |
+| ATM / 20d call spread | +3.9% | 11.0% | 0.41 | -33.5% | 0.12 | -8.6% | 0.34 | -22% | +10% | -2% | +1% |
+| ATM / 20d call spread, 2x | +6.7% | 22.0% | 0.40 | -57.2% | 0.12 | -16.6% | 0.69 | -40% | +16% | -6% | +2% |
+| ATM calls, trend filter | +2.2% | 12.5% | 0.24 | -42.3% | 0.05 | -10.4% | 0.27 | -7% | -1% | -4% | -7% |
+| ATM / 20d spread, trend filter | +2.4% | 7.9% | 0.34 | -26.9% | 0.09 | -7.2% | 0.18 | -5% | -3% | 0% | -6% |
+
+Inside the combo (w x equity in the sleeve, 70% of equity in the honest regime book at L x, cash on all equity):
+
+| sleeve | w | book L | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| ES (reference) | 30% | 3x | +8.0% | 6.8% | 1.16 | -20.3% | 0.39 | -9.8% | 0.31 | -9% | +17% |
+| stock, trend + trail 15% | 30% | 3x | +8.8% | 8.4% | 1.06 | -16.0% | 0.55 | -8.4% | 0.20 | -3% | +13% |
+| ATM calls | 30% | 3x | +6.1% | 7.5% | 0.83 | -21.9% | 0.28 | -10.7% | 0.16 | -6% | +15% |
+| ATM calls | 60% | 3x | +7.1% | 11.7% | 0.65 | -37.0% | 0.19 | -13.0% | 0.31 | -15% | +21% |
+| ATM / 20d call spread | 30% | 3x | +6.1% | 6.4% | 0.96 | -15.2% | 0.40 | -10.2% | 0.12 | -4% | +13% |
+| ATM / 20d call spread | 60% | 3x | +7.3% | 8.9% | 0.85 | -24.0% | 0.31 | -12.0% | 0.22 | -11% | +16% |
+| ATM / 20d call spread | 60% | 4x | +8.4% | 10.1% | 0.85 | -25.6% | 0.33 | -14.6% | 0.22 | -11% | +19% |
+| ATM / 20d spread, trend filter | 30% | 3x | +5.6% | 5.6% | 1.01 | -12.1% | 0.47 | -8.4% | 0.07 | +1% | +9% |
+| ATM / 20d spread, trend filter | 60% | 3x | +6.4% | 7.0% | 0.92 | -14.2% | 0.45 | -8.4% | 0.12 | 0% | +8% |
+
+Buying the momentum names through ATM calls loses most of the sleeve's
+return to premium: 55% of notional per year at the 40-50% IVs these names
+carry, so the Sharpe falls from 0.61 (stock) to 0.27 and the 2008 drawdown
+is not avoided (-28%, since the calls are rebought every month on the way
+down). Selling the 20-delta call back recovers part of it (Sharpe 0.41,
+maxDD -34%, worst month -8.6%) because the names' upside beyond 20 delta
+in a month is worth less than the skew-rich call sold; it is the only
+option version that beats the stock sleeve on drawdown per unit of return,
+and only at low vol. Inside the combo the call spread at 30% is close to
+the ES line on Sharpe (0.96 vs 1.16) with a smaller drawdown (-15% vs -20%)
+and beta 0.12; the stock sleeve with trend filter and trailing stop still
+dominates on Calmar.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
