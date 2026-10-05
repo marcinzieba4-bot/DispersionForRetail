@@ -1,0 +1,16 @@
+putwing | corr-hi              months traded=61  per 1x equity when on: regt mean=39% max=41% | pm mean=4% max=6% | opt notional=359% stock hedge=41%
+0.5x idx straddle | corr-hi    months traded=61  per 1x equity when on: regt mean=12% max=16% | pm mean=3% max=4% | opt notional=90% stock hedge=1%
+callout dispersion | corr-lo   months traded=78  per 1x equity when on: regt mean=45% max=46% | pm mean=5% max=6% | opt notional=180% stock hedge=54%
+event selling | always         months traded=225  per 1x equity when on: regt mean=3% max=18% | pm mean=1% max=4% | opt notional=24% stock hedge=0%
+regime book 1x ex cash                           cagr=+2.29% sharpe=0.94 maxdd=-4.8% worst_m=-2.0% 2008=+10.4% 2020=+7.3% 2022=-0.7%
+regime book 1x ex cash, signal lagged 1 day      cagr=+1.66% sharpe=0.53 maxdd=-10.3% worst_m=-8.4% 2008=-2.1% 2020=+7.8% 2022=-2.2%
+
+composite regime book per 1x equity: regt mean=31% p95=58% max=98% | pm mean=5% p95=10% max=16% | opt notional max=646%
+peak-margin months (pm):
+             regt     pm  opt_notional
+2007-05-18  0.934  0.156         6.210
+2025-03-21  0.978  0.139         6.462
+2018-10-19  0.615  0.128         5.346
+2007-03-16  0.567  0.117         4.920
+2019-02-15  0.532  0.110         4.734
+DONE

@@ -853,6 +853,71 @@ put book of 7x equity does not fit any retail margin rail (the spec's 60% rail
 caps this book near 3x). Yearly at 10x, ES off in corr-hi: 2008 +81, 2011 +66,
 2015 +35, 2017 +42, 2020 +72, 2022 -17, 2023 +58, 2025 -1, 2026 +39.
 
+### Realism checks on the regime book, and the ES + book combo grid (`results/regime_combo_*_VOLVUE.csv`)
+
+`dispersion/backtest/margin.py`, `scripts/run_regime_realism.py`, `run_regime_combo.py`.
+Three checks on the regime book before leveraging it:
+
+1. **Signal timing (fails as first built).** Lagging the entry signal by one
+   trading day cut the 1x book from Sharpe 0.94 to 0.53 and 2008 from +10% to
+   -2%. Cause: basket implied correlation is noisy on third Fridays (the
+   30-day IV interpolation jumps across the expiring month); on 17 Oct 2008
+   the trailing percentile read 0.68 on the entry day and 0.96 the day before,
+   so the unlagged book happened to skip the two worst put-wing months. Fix:
+   5-day-smoothed `bcor` and VIX, percentile on the smoothed series, lagged
+   one day (`results/regime_robust_VOLVUE.csv`: smoothing 5-21 days and lags
+   0-2 all give cycle-P&L Sharpe 0.61-0.77; thresholds 0.60-0.85 / 0.25-0.35
+   give 0.49-0.77). The honest book is roughly 30% weaker than the first cut
+   and has no 2008 alpha.
+2. **Intra-month marks.** With the honest signal the corr-hi sleeve is on in
+   Oct-Nov 2008; the 0.5x short SPY straddle lost 5% of equity in the
+   calendar month to 20 Nov 2008 at daily marks (cycle P&L -3.5%). Marks are
+   at entry IV, so a real vol spike would mark worse. The straddle component
+   has Sharpe 0.12 on its own and is dropped from the combo book.
+3. **Margin.** Per cycle, from the actual legs: Reg-T (naked-short rule,
+   straddle rule, 50% on stock hedges) and a TIMS-style portfolio margin
+   (worst loss over +/-12% SPY, +/-15% single-name moves at entry IV, per
+   underlying, no cross-name offset). Composite book without the straddle,
+   per 1x equity: PM mean 4%, p95 8%, max 12%; Reg-T mean 28%, max 89%. So
+   the book needs a portfolio-margin account at any size, and 10x on 70% of
+   equity (7x) needs 131% of equity at peak under PM x1.5 house factor.
+
+Honest book (5-day smoothed, 1-day lag, no straddle), 1x ex cash: CAGR
++1.3%, vol 2.1%, Sharpe 0.65, maxDD -5.6%, worst month -3.9%, second-half
+Sharpe 0.73. Components: put-wing in corr-hi 59 months Sharpe 0.35, outright
+call dispersion in corr-lo 80 months Sharpe 0.30, event selling Sharpe 0.59.
+
+Combo grid: ES exposure 30/45/60% of equity (60% = 2x on a 30% sleeve), ES
+always or only in corr-lo, book at L x on 70% of equity, rebalanced each
+cycle, FEDFUNDS on all equity, 1 bp ES turnover; feasibility = PM peak x1.5
+house + 6% ES initial margin <= 60% of equity.
+
+| | book L | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 | 2022 | PM peak | Reg-T peak | fits 60% PM |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0% ES always | 2x | +3.8% | 3.3% | 1.12 | -8.1% | 0.46 | -5.6% | 0.01 | +3% | +6% | +4% | 26% | 125% | yes |
+| 0% ES always | 3x | +4.8% | 5.0% | 0.97 | -12.0% | 0.40 | -8.4% | 0.01 | +3% | +10% | +6% | 39% | 187% | yes |
+| 30% ES always | 0x | +4.7% | 4.5% | 1.05 | -18.3% | 0.26 | -4.5% | 0.29 | -10% | +8% | -4% | 2% | 2% | yes |
+| 30% ES always | 2x | +6.9% | 5.7% | 1.20 | -19.3% | 0.36 | -7.2% | 0.30 | -10% | +14% | -2% | 28% | 127% | yes |
+| 30% ES always | 3x | +8.0% | 6.8% | 1.16 | -20.3% | 0.39 | -9.8% | 0.31 | -9% | +17% | -0% | 41% | 189% | yes |
+| 30% ES always | 4x | +9.0% | 8.1% | 1.11 | -22.0% | 0.41 | -12.4% | 0.31 | -9% | +20% | +1% | 54% | 252% | yes |
+| 30% ES always | 5x | +10.1% | 9.5% | 1.06 | -24.2% | 0.42 | -15.0% | 0.32 | -9% | +23% | +2% | 67% | 314% | no |
+| 30% ES corr-lo | 3x | +5.5% | 5.6% | 1.00 | -16.7% | 0.33 | -8.4% | 0.09 | +3% | +0% | +6% | 41% | 189% | yes |
+| 45% ES always | 3x | +9.4% | 8.6% | 1.11 | -28.1% | 0.34 | -10.7% | 0.46 | -15% | +20% | -4% | 42% | 190% | yes |
+| 45% ES always | 4x | +10.5% | 9.7% | 1.10 | -29.0% | 0.36 | -13.2% | 0.46 | -15% | +23% | -2% | 55% | 252% | yes |
+| 60% ES always | 3x | +10.8% | 10.5% | 1.04 | -35.6% | 0.30 | -11.6% | 0.61 | -21% | +23% | -7% | 43% | 191% | yes |
+| 60% ES always | 5x | +13.0% | 12.5% | 1.05 | -37.1% | 0.35 | -16.5% | 0.61 | -21% | +29% | -4% | 69% | 316% | no |
+| 60% ES always | 10x | +18.1% | 19.0% | 0.98 | -44.5% | 0.41 | -28.2% | 0.64 | -21% | +44% | +2% | 134% | 628% | no |
+| 30% ES always | 10x | +15.1% | 17.2% | 0.91 | -37.8% | 0.40 | -27.1% | 0.34 | -9% | +39% | +8% | 133% | 626% | no |
+
+Best feasible by Sharpe: 30% ES + book 2x-3x (Sharpe 1.16-1.20). Best
+feasible by Calmar with ES: 30% ES + book 4x (CAGR 9.0%, Sharpe 1.11, maxDD
+-22%, PM peak 54%). The asked-for 2x SPX + 10x book is 18.1%/yr at Sharpe
+0.98 but a 45% max drawdown, a 28% worst month and 134% of equity in
+portfolio margin at peak: it cannot be held. Realistic deductions not in the
+grid: cash yield needs T-bill collateral (tastytrade sweep pays less; take
+0.5-1%/yr off), ES implied financing has run 0.2-0.5% over fed funds, and
+entry-IV marks understate drawdowns in vol spikes.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
