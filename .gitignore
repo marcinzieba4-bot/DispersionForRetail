@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+data/cache/
+data/iv/*.csv
+data/iv/*.parquet
+*.egg-info/
+.env
+results/*.png
+results/equity_*.csv
+results/*.log
