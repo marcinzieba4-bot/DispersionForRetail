@@ -27,6 +27,9 @@ def summary(equity: pd.Series, spy: pd.Series | None = None, rf: pd.Series | Non
     dd = drawdown(eq)
     maxdd = dd.min()
     calmar = cagr / abs(maxdd) if maxdd < 0 else np.nan
+    eq_m = (1 + mr).cumprod()
+    maxdd_monthly = (eq_m / eq_m.cummax() - 1).min()
+    calmar_monthly = cagr / abs(maxdd_monthly) if maxdd_monthly < 0 else np.nan
     # drawdown duration: longest peak-to-recovery stretch in calendar days
     under = dd < 0
     longest, cur, start = 0, 0, None
@@ -39,6 +42,7 @@ def summary(equity: pd.Series, spy: pd.Series | None = None, rf: pd.Series | Non
     if start is not None:
         longest = max(longest, (dd.index[-1] - start).days)
     out = dict(cagr=cagr, vol=vol, sharpe=sharpe, sortino=sortino, maxdd=maxdd, calmar=calmar,
+               maxdd_monthly=maxdd_monthly, calmar_monthly=calmar_monthly,
                worst_month=mr.min(), best_month=mr.max(), months=len(mr), years=yrs,
                pct_pos_months=(mr > 0).mean(),
                var95_m=mr.quantile(0.05), cvar95_m=mr[mr <= mr.quantile(0.05)].mean(),
@@ -92,5 +96,6 @@ def second_half(equity: pd.Series) -> dict:
 
 def fmt(stats: dict) -> str:
     keys = [("cagr", "{:+.1%}"), ("vol", "{:.1%}"), ("sharpe", "{:.2f}"), ("sortino", "{:.2f}"),
-            ("maxdd", "{:+.1%}"), ("calmar", "{:.2f}"), ("beta", "{:.2f}"), ("worst_month", "{:+.1%}")]
+            ("maxdd", "{:+.1%}"), ("calmar", "{:.2f}"), ("maxdd_monthly", "{:+.1%}"), ("calmar_monthly", "{:.2f}"),
+            ("beta", "{:.2f}"), ("worst_month", "{:+.1%}")]
     return "  ".join(f"{k}={f.format(stats[k])}" for k, f in keys if k in stats and stats[k] == stats[k])

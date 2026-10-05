@@ -34,6 +34,7 @@ def variants(args):
         "100k_5x_half_ES_W": C(leverage=5, index_instrument="ES", costs=config.RETAIL_ES, rotating_half=True,
                                contract_granularity=True, equity=100_000),
         "3x_30-10_ES_SPAN_W": C(leverage=3, index_instrument="ES", costs=config.RETAIL_ES),
+        "5x_30-10_spec_headline_costs_W": C(leverage=5, costs=config.SPEC_HEADLINE),
     }
     if args.only:
         v = {k: c for k, c in v.items() if any(s in k for s in args.only)}

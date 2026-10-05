@@ -38,6 +38,7 @@ class CostModel:
     hedge_bp: float = 1e-4       # 1bp of hedge turnover
     commission_open: float = 1.0 # $/contract to open (tastytrade); $0 to close
     commission_close: float = 0.0
+    commission_cap: float = 10.0 # tastytrade caps commissions at $10 per leg per order
     mult: float = HALF_SPREAD_MULT
 
     def single(self, delta_bucket: int) -> float:
@@ -51,6 +52,12 @@ RETAIL_SPY = CostModel("retail_spy")
 RETAIL_ES = CostModel("retail_es", index_opt=0.003)
 INSTITUTIONAL = CostModel("gs", single_atm=0.015, single_30d=0.015, single_10d=0.015, single_1d=0.015,
                           index_opt=0.015, commission_open=0.0, commission_close=0.0)
+SPEC_HEADLINE = CostModel("spec_headline_0.7pct", 0, 0, 0, 0, 0, 1e-4, 0, 0, 1.0)  # + flat 0.7%/yr per 1x in engine
+
+
+def commission(n_contracts: float, cm: CostModel) -> float:
+    """Per-leg open commission with the broker's per-leg cap (one ticket per name per month)."""
+    return min(n_contracts * cm.commission_open, cm.commission_cap) if cm.commission_open else 0.0
 
 
 @dataclass(frozen=True)

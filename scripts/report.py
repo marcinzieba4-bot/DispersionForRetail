@@ -15,16 +15,17 @@ REF_ROWS = {
     "5x_30-10_ES_SPAN_W": ("5x ES/MES SPAN (default retail)", "same as 5x naked, ES costs 0.3%"),
     "5x_30-10_regT_1d_W": ("5x Reg-T 1-delta wing", "Sharpe 1.46-1.55, Calmar 1.19-1.28"),
     "100k_5x_half_ES_W": ("$100k rotating half", "+19.6%/yr, Sharpe 1.44, Calmar 1.12"),
+    "5x_30-10_spec_headline_costs_W": ("5x with the spec's flat 0.7%/yr per 1x cost", "matches the other session's convention"),
 }
 
 
 def main(tag="PROXY"):
     df = pd.read_csv(RESULTS / f"summary_{tag}.csv", index_col=0)
-    cols = ["cagr", "vol", "sharpe", "sortino", "maxdd", "calmar", "calmar_2h", "beta", "worst_month", "y2008", "y2022"]
+    cols = ["cagr", "vol", "sharpe", "sortino", "maxdd", "calmar", "maxdd_monthly", "calmar_monthly", "calmar_2h", "beta", "worst_month", "y2008", "y2022"]
     out = df[cols].copy()
-    for c in ["cagr", "vol", "maxdd", "worst_month", "y2008", "y2022"]:
+    for c in ["cagr", "vol", "maxdd", "maxdd_monthly", "worst_month", "y2008", "y2022"]:
         out[c] = out[c].map(lambda x: f"{x:+.1%}")
-    for c in ["sharpe", "sortino", "calmar", "calmar_2h", "beta"]:
+    for c in ["sharpe", "sortino", "calmar", "calmar_monthly", "calmar_2h", "beta"]:
         out[c] = out[c].map(lambda x: f"{x:.2f}")
     out["reference (spec §8)"] = [REF_ROWS.get(i, ("", ""))[1] for i in out.index]
     md = out.to_markdown()
