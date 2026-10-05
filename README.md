@@ -31,6 +31,7 @@ scripts/fetch_data.py    download everything
 scripts/run_backtest.py  run the variant grid, write results/summary_<TAG>.csv
 scripts/report.py        markdown table vs reference numbers + equity chart
 scripts/risk_report.py   VaR/CVaR, skew, drawdown duration, down-beta, crisis windows, yearly table
+scripts/run_overlay.py   long SPY + sleeve overlay at 1x/3x/5x
 tests/                   16 tests: BS/delta targets, strike picks, sizing, rails, hedge, limit walk, engine accounting
 ```
 
@@ -122,6 +123,18 @@ What the VolVue run says:
 Gross/net at 1x on VolVue: retail half-spread costs 1.6%/yr and commissions
 0.6%/yr on the spec's per-leg parameters; the spec's "~0.7%/yr retail"
 headline corresponds to the 30-delta leg alone.
+
+### Long SPY + sleeve overlay
+
+`scripts/run_overlay.py` layers the sleeve on a 100% long-SPY book (equity in
+SPY shares, so the sleeve earns no cash yield; sized monthly off total equity).
+Tables in `results/overlay_VOLVUE.md`, chart `results/overlay_VOLVUE.png`.
+On VolVue IV, 2007-2026: SPY alone +10.9%/yr, Sharpe 0.75, maxDD -55%;
+SPY + 3x sleeve +17.3%, Sharpe 0.98, maxDD -52%; SPY + 5x sleeve +21.6%,
+Sharpe 1.05, maxDD -51%, beta 1.19. The overlay adds return almost
+one-for-one but barely touches the equity drawdown: the sleeve's 2008 gain
+(+13..23%) offsets a third of SPY's loss, while 2020-2022 the sleeve and SPY
+draw down together.
 
 ### Earlier PROXY-IV run (no licensed data)
 
