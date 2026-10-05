@@ -33,6 +33,7 @@ scripts/report.py        markdown table vs reference numbers + equity chart
 scripts/risk_report.py   VaR/CVaR, skew, drawdown duration, down-beta, crisis windows, yearly table
 scripts/run_overlay.py   long SPY + sleeve overlay at 1x/3x/5x
 scripts/reconcile.py     accounting-convention reconciliation (costs, additive vs compounded, daily vs monthly DD)
+scripts/run_realistic.py most realistic tastytrade cost model, full risk stats across L and account size
 tests/                   16 tests: BS/delta targets, strike picks, sizing, rails, hedge, limit walk, engine accounting
 ```
 
@@ -104,6 +105,16 @@ beta, crisis windows, calendar years) are in `results/risk_VOLVUE.md`;
 drawdown paths in `results/drawdown_VOLVUE.png`.
 
 ![drawdown](results/drawdown_VOLVUE.png)
+
+### Most realistic retail scenario
+
+`scripts/run_realistic.py` -> `results/realistic_VOLVUE.md` / `.png`. Costs:
+per-leg half-spreads as specified without the 1.3 exit/roll multiplier (hold
+to expiry), tastytrade commissions $1/contract capped at $10/leg, $0.15
+clearing+exchange per contract uncapped, ES/MES options $3/contract all-in,
+1bp hedge turnover. At 5x on ES/MES: +15.9%/yr, vol 10.1%, Sharpe 1.51,
+maxDD -23.8% daily / -15.4% month-end, Calmar 0.67 / 1.03, beta 0.21,
+worst month -6.4%, 2008 +28%, all-in cost 4.8%/yr of equity.
 
 ### Reconciliation with the reference numbers
 

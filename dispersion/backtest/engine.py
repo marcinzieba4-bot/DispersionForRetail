@@ -146,13 +146,13 @@ class Backtest:
             C_i = float(bs.call_price(S0, K_i, T, iv_s, r))
             rec.legs.append(Leg("SPY", -units, K_i, iv_s, S0, cfg.index_delta, True, C_i))
             prem_paid -= units * C_i
-            costs += units * C_i * cm.index() + config.commission(n_idx, cm)
+            costs += units * C_i * cm.index() + config.commission(n_idx, cm, index=cfg.index_instrument == "ES")
             if cfg.index_wing_delta:
                 K_w = bs.strike_for_delta(S0, iv_s, T, cfg.index_wing_delta, r)
                 C_w = float(bs.call_price(S0, K_w, T, iv_s, r))
                 rec.legs.append(Leg("SPY", units, K_w, iv_s, S0, cfg.index_wing_delta, True, C_w))
                 prem_paid += units * C_w
-                costs += units * C_w * cm.index() + config.commission(n_idx, cm)
+                costs += units * C_w * cm.index() + config.commission(n_idx, cm, index=cfg.index_instrument == "ES")
         if cm.name.startswith("spec_headline"):
             costs += 0.007 / 12 * book
         rec.net_premium, rec.costs = prem_paid, costs

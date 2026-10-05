@@ -9,3 +9,4 @@ data/iv/*.parquet
 results/equity_*.csv
 results/*.log
 results/overlay_equity_*.csv
+results/realistic_equity_*.csv

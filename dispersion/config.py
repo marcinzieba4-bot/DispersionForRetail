@@ -39,6 +39,8 @@ class CostModel:
     commission_open: float = 1.0 # $/contract to open (tastytrade); $0 to close
     commission_close: float = 0.0
     commission_cap: float = 10.0 # tastytrade caps commissions at $10 per leg per order
+    fee_per_contract: float = 0.0  # clearing/exchange/regulatory fees, uncapped, per contract opened
+    index_fee_per_contract: float = 0.0  # futures-option all-in fee per contract (ES ~$4, MES ~$2)
     mult: float = HALF_SPREAD_MULT
 
     def single(self, delta_bucket: int) -> float:
@@ -55,9 +57,18 @@ INSTITUTIONAL = CostModel("gs", single_atm=0.015, single_30d=0.015, single_10d=0
 SPEC_HEADLINE = CostModel("spec_headline_0.7pct", 0, 0, 0, 0, 0, 1e-4, 0, 0, 1.0)  # + flat 0.7%/yr per 1x in engine
 
 
-def commission(n_contracts: float, cm: CostModel) -> float:
-    """Per-leg open commission with the broker's per-leg cap (one ticket per name per month)."""
-    return min(n_contracts * cm.commission_open, cm.commission_cap) if cm.commission_open else 0.0
+def commission(n_contracts: float, cm: CostModel, index: bool = False) -> float:
+    """Per-leg open commission with the broker's per-leg cap (one ticket per name
+    per month) plus uncapped clearing/exchange fees."""
+    c = min(n_contracts * cm.commission_open, cm.commission_cap) if cm.commission_open else 0.0
+    return c + n_contracts * (cm.index_fee_per_contract if index else cm.fee_per_contract)
+
+
+# Most realistic retail model: per-leg half-spreads as specified, no 1.3 exit/roll
+# multiplier (hold to expiry), tastytrade commissions capped per leg, clearing
+# and exchange fees uncapped, ES/MES futures-option fees all-in.
+REALISTIC_ES = CostModel("realistic_es", index_opt=0.003, mult=1.0, fee_per_contract=0.15, index_fee_per_contract=3.0)
+REALISTIC_SPY = CostModel("realistic_spy", mult=1.0, fee_per_contract=0.15)
 
 
 @dataclass(frozen=True)
