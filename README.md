@@ -786,6 +786,35 @@ the 2017-2019 and 2023-2026 regime, which is also where the sample ends. As of
 2026-10-02 basket implied corr is 0.06 (8th percentile), VIX 16: corr-lo, so
 only the call wing and event selling would be on.
 
+### Regime book: full risk stats and the 30% SPY + 70% regime-book blend (`results/regime_risk_VOLVUE.csv`)
+
+`scripts/run_regime_risk.py`. Regime book ex cash = the four components above
+summed at fixed notional (1x = 1M notional on 1M equity). Blend = 30% of
+starting equity held in SPY (total return) plus 70% of equity as the regime
+book's capital; "b&h" lets the SPY weight drift, "rebalanced" resets 30/70 at
+every third-Friday cycle. The book's monthly beta to SPY is 0.01.
+
+| | CAGR | vol | Sharpe | Sortino | maxDD | mDD (month-end) | Calmar | worst m | VaR95 m | CVaR95 m | skew | DD days | beta | down-beta | 2008 | Covid | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| regime book ex cash 1x | +2.3% | 2.4% | 0.94 | 1.23 | -4.8% | -3.6% | 0.48 | -2.0% | -0.9% | -1.4% | +0.9 | 1,027 | 0.01 | -0.07 | +10.4% | +1.3% | -0.7% |
+| regime book ex cash 3x | +5.2% | 5.7% | 0.91 | 1.22 | -9.5% | -7.9% | 0.54 | -5.1% | -2.4% | -3.6% | +0.9 | 1,027 | 0.01 | -0.07 | +30.7% | +2.5% | -1.4% |
+| SPY buy & hold | +10.9% | 15.4% | 0.76 | 0.67 | -55.2% | -50.8% | 0.20 | -16.5% | -7.6% | -11.4% | -0.7 | 1,996 | 1.00 | 1.00 | -36.8% | -23.4% | -18.2% |
+| 30% SPY b&h + 70% book 1x | +6.4% | 6.5% | 0.99 | 0.92 | -16.7% | -13.4% | 0.38 | -5.3% | -3.0% | -4.6% | -0.4 | 1,183 | 0.39 | 0.42 | -3.9% | -10.8% | -10.5% |
+| 30% SPY b&h + 70% book 3x | +7.5% | 6.5% | 1.15 | 1.08 | -13.5% | -10.9% | 0.56 | -5.5% | -2.9% | -4.4% | -0.2 | 847 | 0.31 | 0.31 | +10.4% | -7.6% | -8.7% |
+| 30/70 rebalanced, book 1x | +5.6% | 5.1% | 1.09 | 0.99 | -14.8% | -12.5% | 0.38 | -4.7% | -2.5% | -3.9% | -0.5 | 1,183 | 0.30 | 0.32 | -4.9% | -5.2% | -6.2% |
+| 30/70 rebalanced, book 3x | +9.6% | 8.1% | 1.18 | 1.16 | -15.3% | -13.6% | 0.63 | -8.9% | -3.6% | -5.9% | -0.3 | 1,170 | 0.32 | 0.28 | +9.7% | -3.1% | -8.1% |
+
+Yearly, regime book ex cash 1x: 2007 +0.6, 2008 +10.4, 2009 +1.0, 2010 +4.7,
+2011 +7.0, 2012 +0.6, 2013 +0.2, 2014 -0.2, 2015 +3.8, 2016 +0.6, 2017 +3.3,
+2018 -1.0, 2019 +0.1, 2020 +7.3, 2021 +1.6, 2022 -0.7, 2023 +4.0, 2024 +0.4,
+2025 -0.4, 2026 +2.9. The book earns in correlation spikes (2008, 2010-11,
+2015, 2020) and in calm low-correlation years with single-name dispersion
+(2017, 2023, 2026); it is flat in 2012-14, 2019, 2021, 2024-25 when neither
+regime is on, and its drawdown is a long shallow one (1,027 days from the
+2011 peak), not a crash. Blending with SPY adds equity beta (0.3-0.4) and
+most of the blend's drawdowns are SPY's; the 3x book inside the blend turns
+2008 positive because the put wing pays while SPY falls.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
