@@ -15,7 +15,8 @@ dispersion/
   data/prices.py         yfinance daily closes / volume / shares / splits, parquet cache
   data/universe.py       top-100 by market cap -> top-30 by trailing-12m median $ volume
   data/rates.py          FRED FEDFUNDS, VIXCLS, CBOE single-name vol indices
-  data/iv.py             IV provider: ORATS/VolVue/IvyDB CSV loaders + labelled PROXY fallback
+  data/iv.py             IV provider interface, CSV loaders (ORATS/IvyDB), labelled PROXY fallback
+  data/volvue.py         VolVue /query client: iv_call_30, iv_put_30, iv_mean_30, iv_skew_30 (cached)
   backtest/engine.py     monthly roll, weekly hedge, costs, leverage, Reg-T / naked / ES variants
   backtest/metrics.py    CAGR, vol, Sharpe, Sortino, maxDD, Calmar, beta, yearly, 2nd-half
   execution/strikes.py   listed-chain strike selection from IV30 (furthest strike for the 1-delta wing)
@@ -29,6 +30,7 @@ dispersion/
 scripts/fetch_data.py    download everything
 scripts/run_backtest.py  run the variant grid, write results/summary_<TAG>.csv
 scripts/report.py        markdown table vs reference numbers + equity chart
+scripts/risk_report.py   VaR/CVaR, skew, drawdown duration, down-beta, crisis windows, yearly table
 tests/                   16 tests: BS/delta targets, strike picks, sizing, rails, hedge, limit walk, engine accounting
 ```
 
@@ -37,76 +39,95 @@ tests/                   16 tests: BS/delta targets, strike picks, sizing, rails
 ```bash
 pip install -r requirements.txt
 python scripts/fetch_data.py          # ~10 min: 976 historical S&P tickers, shares, splits, FRED
+python scripts/fetch_volvue.py        # VOLVUE_API_KEY: traded 30d IVs (else the engine uses the PROXY)
 python scripts/run_backtest.py        # all variants, 2007-01 .. today
-python scripts/report.py PROXY        # table + results/equity_PROXY.png
+python scripts/report.py VOLVUE       # table + results/equity_VOLVUE.png
+python scripts/risk_report.py VOLVUE  # tails, crisis windows, drawdowns -> results/risk_VOLVUE.md
 python -m pytest -q
 # execution, offline mechanics check (no credentials needed):
 python -m dispersion.execution.runner roll  --paper --dry-run --leverage 3 --index-mode ES
 python -m dispersion.execution.runner hedge --paper --dry-run
 ```
 
-## The critical input: implied vols
+## Implied vols: VolVue (traded) is wired in; the proxy stays as a fallback
 
-The spec is explicit that entry IVs must be **traded** 30-day IVs (ORATS,
-OptionMetrics/IvyDB, LiveVol, VolVue) and that realized-vol proxies inflate the
-numbers. **No licensed IV source is reachable from this build**, so the
-reference numbers in spec section 8 are *not* reproduced here. What is in place:
+`data/volvue.py` pulls daily `iv_call_30` / `iv_put_30` / `iv_mean_30` /
+`iv_skew_30` for every universe ticker plus SPY from the VolVue query API
+(`VOLVUE_API_KEY`), caches them in `data/cache/volvue_iv30.parquet`, and
+`get_provider("auto")` selects them whenever the cache exists. Coverage is
+99.8% of the top-30 slots every month from 2006 (VolVue also carries the
+delisted 2008 names, but yfinance has no prices for them, so they still cannot
+be traded). The engine prices with `iv_call_30`, the wing we trade.
 
-* `data/iv.py` loads any of those vendors from CSV dropped in `data/iv/`
-  (format table in `data/iv/README.md`); the run then relabels itself
-  `LICENSED` and that is the run to compare with section 8.
-* Until then the engine falls back to **PROXY IV**, labelled as such on every
-  output: SPY IV = VIX (a true implied, so no crash lag at the index level);
-  single-name IV = VIX x (63-day realized vol ratio to SPY, clipped 1.0-3.0), overridden
-  by the real CBOE single-name indices (AAPL, AMZN, GOOGL, GS, IBM) where FRED has them.
-  Diagnostics on this proxy: cross-sectional median single/SPY ratio 1.60
-  (spec: 1.59 traded, 1.57 break-even); on the five names with real indices the
-  proxy and the real median ratios agree to two decimals. What the proxy cannot
-  see is single-name event premia and the call-wing skew, which is where the
-  spec locates the richness, so it is expected to under-collect.
+```bash
+export VOLVUE_API_KEY=...
+python scripts/fetch_volvue.py            # ~3 min, 679 tickers, 3.15M rows
+python scripts/run_backtest.py --iv volvue
+python scripts/report.py VOLVUE && python scripts/risk_report.py VOLVUE
+```
 
-## Results (PROXY IV, 2007-01 .. 2026-10, net of the spec's retail costs)
+Data check (`results/iv_diagnostic_volvue_vs_proxy.csv`): VolVue's
+cross-sectional median single/SPY 30d IV ratio is 1.48 over 2007-2026 (spec:
+1.59 traded, 1.57 break-even), its SPY level sits 1-3 points under VIX as an
+ATM 30-day IV should, and call minus put IV is +0.4 pts for SPY and +0.2 pts
+for singles. Without the key the engine falls back to a VIX-anchored PROXY,
+labelled as such on every output (`results/*_PROXY.*`).
 
-![equity](results/equity_PROXY.png)
+## Results on VolVue IV (2007-01 .. 2026-10, net of the spec's retail costs)
 
-| variant                      | cagr   | vol    |   sharpe |   sortino | maxdd   |   calmar |   calmar_2h |   beta | worst_month   | y2008   | y2022   | reference (spec section 8) |
-|:-----------------------------|:-------|:-------|---------:|----------:|:--------|---------:|------------:|-------:|:--------------|:--------|:--------|:---------------------------|
-| 1x_30-10_naked_W             | +2.4%  | 2.4%   |     1.00 |      1.37 | -6.1%   |     0.39 |        0.59 |   0.05 | -1.8%         | +1.9%   | -0.1%   | Sharpe 1.36, maxDD -2.9%, Calmar 1.07, gross +2.97%/yr, net +2.2..3.1% |
-| 1x_30-10_naked_nohedge       | +1.8%  | 2.6%   |     0.69 |      0.82 | -6.6%   |     0.27 |        0.47 |   0.01 | -2.1%         | +2.2%   | +1.7%   | (hedge matters) |
-| 1x_30-10_naked_D             | +2.2%  | 2.3%   |     0.97 |      1.43 | -5.3%   |     0.43 |        0.70 |   0.06 | -1.1%         | +0.1%   | -1.4%   | daily = no Sharpe gain over weekly |
-| 1x_longcall_naked_W          | +0.5%  | 3.3%   |     0.16 |      0.21 | -31.6%  |     0.01 |        0.21 |   0.04 | -1.9%         | -2.1%   | -2.6%   | 30-10 vertical is the right structure |
-| 1x_30-10_regT_1d_W           | +2.1%  | 2.4%   |     0.88 |      1.18 | -6.6%   |     0.32 |        0.51 |   0.05 | -1.8%         | +1.6%   | -0.3%   | ~0.1 Sharpe below naked |
-| 1x_30-10_regT_5d_W(rejected) | +0.8%  | 2.3%   |     0.35 |      0.42 | -15.7%  |     0.05 |        0.22 |   0.03 | -1.5%         | +0.3%   | -1.2%   | rejected: 5-delta wing |
-| 1x_30-10_gs_W                | +3.5%  | 2.4%   |     1.46 |      2.19 | -4.3%   |     0.81 |        1.06 |   0.05 | -1.7%         | +3.5%   | +0.9%   | institutional costs |
-| 5x_30-10_naked_W             | +5.0%  | 11.4%  |     0.48 |      0.62 | -31.7%  |     0.16 |        0.24 |   0.27 | -9.5%         | +1.7%   | -7.3%   | +17.7%/yr, vol 11.5%, Sharpe 1.54, Sortino 3.4, maxDD -13.6%, Calmar 1.31, beta 0.37, worst -7.0%, 2008 +15% |
-| 5x_30-10_ES_SPAN_W           | +5.3%  | 11.4%  |     0.51 |      0.67 | -31.1%  |     0.17 |        0.26 |   0.27 | -9.5%         | +2.3%   | -7.0%   | default retail product |
-| 5x_30-10_regT_1d_W           | +3.4%  | 11.3%  |     0.35 |      0.45 | -34.8%  |     0.10 |        0.18 |   0.25 | -9.3%         | +0.0%   | -8.2%   | Sharpe 1.46-1.55, Calmar 1.19-1.28 |
-| 5x_30-10_gs_W                | +10.9% | 11.4%  |     0.96 |      1.40 | -23.3%  |     0.47 |        0.55 |   0.27 | -9.1%         | +9.9%   | -2.5%   | |
-| 100k_5x_half_ES_W            | +4.1%  | 13.0%  |     0.37 |      0.51 | -39.3%  |     0.10 |        0.21 |   0.30 | -7.9%         | -8.5%   | -13.5%  | +19.6%/yr, Sharpe 1.44, Calmar 1.12 |
-| 3x_30-10_ES_SPAN_W           | +4.0%  | 6.9%   |     0.60 |      0.80 | -19.1%  |     0.21 |        0.31 |   0.16 | -5.6%         | +2.2%   | -3.5%   | recommended live start |
+![equity](results/equity_VOLVUE.png)
 
-Gross/net decomposition at 1x (same run): gross ex-cash **+2.4%/yr** (spec
-+2.97%), retail half-spread costs 1.6%/yr, commissions 0.6%/yr, cash yield
-on equity +1.9%/yr. The spec's "~0.7%/yr retail" headline corresponds to the
-30-delta leg alone at its 3% x 1.3 half-spread; applying the stated per-leg
-parameters to all legs gives the figure above.
+| variant                      | cagr   | vol    | sharpe | sortino | maxdd  | calmar | calmar_2h | beta | worst_month | 2008   | 2022  | reference (spec section 8) |
+|:-----------------------------|:-------|:-------|-------:|--------:|:-------|-------:|----------:|-----:|:------------|:-------|:------|:---------------------------|
+| 1x_30-10_naked_W             | +3.8%  | 2.1%   |   1.78 |    2.27 | -5.5%  |   0.69 |      0.81 | 0.04 | -1.3%       | +6.0%  | +0.7% | Sharpe 1.36, maxDD -2.9%, Calmar 1.07, gross +2.97%/yr, net +2.2..3.1% |
+| 1x_30-10_naked_nohedge       | +3.1%  | 2.5%   |   1.24 |    1.21 | -4.4%  |   0.70 |      0.73 | -0.01| -2.3%       | +6.3%  | +2.2% | hedge matters |
+| 1x_30-10_naked_D             | +3.6%  | 2.1%   |   1.71 |    2.70 | -4.0%  |   0.90 |      1.14 | 0.05 | -1.0%       | +3.5%  | -1.0% | daily: no Sharpe gain, 2x turnover |
+| 1x_longcall_naked_W          | +3.4%  | 2.9%   |   1.14 |    1.71 | -6.2%  |   0.55 |      1.09 | 0.03 | -2.0%       | +3.2%  | -1.0% | 30-10 vertical is the structure |
+| 1x_30-10_regT_1d_W           | +3.6%  | 2.1%   |   1.69 |    2.18 | -5.5%  |   0.65 |      0.77 | 0.04 | -1.3%       | +5.7%  | +0.6% | ~0.1 Sharpe below naked |
+| 1x_30-10_regT_5d_W(rejected) | +2.4%  | 2.0%   |   1.17 |    1.42 | -5.6%  |   0.43 |      0.56 | 0.02 | -1.5%       | +4.4%  | -0.2% | rejected: 5-delta wing |
+| 1x_30-10_gs_W                | +4.8%  | 2.1%   |   2.25 |    2.88 | -4.7%  |   1.03 |      1.14 | 0.04 | -1.2%       | +7.5%  | +1.7% | institutional costs |
+| 5x_30-10_naked_W             | +12.5% | 10.1%  |   1.21 |    1.53 | -25.9% |   0.48 |      0.47 | 0.20 | -6.6%       | +23.4% | -3.4% | +17.7%/yr, vol 11.5%, Sharpe 1.54, Sortino 3.4, maxDD -13.6%, Calmar 1.31, beta 0.37, worst -7.0%, 2008 +15% |
+| 5x_30-10_ES_SPAN_W           | +12.9% | 10.1%  |   1.25 |    1.58 | -25.7% |   0.50 |      0.48 | 0.20 | -6.6%       | +24.1% | -3.1% | default retail product |
+| 5x_30-10_regT_1d_W           | +11.1% | 10.0%  |   1.10 |    1.42 | -25.8% |   0.43 |      0.43 | 0.19 | -6.4%       | +21.5% | -4.2% | Sharpe 1.46-1.55, Calmar 1.19-1.28 |
+| 5x_30-10_gs_W                | +18.1% | 10.1%  |   1.70 |    2.16 | -22.5% |   0.80 |      0.75 | 0.21 | -6.3%       | +32.0% | +1.1% | |
+| 100k_5x_half_ES_W            | +13.4% | 11.9%  |   1.12 |    1.56 | -22.2% |   0.60 |      0.62 | 0.25 | -7.7%       | +13.0% | -6.2% | +19.6%/yr, Sharpe 1.44, Calmar 1.12 |
+| 3x_30-10_ES_SPAN_W           | +8.4%  | 6.1%   |   1.35 |    1.72 | -16.1% |   0.52 |      0.53 | 0.12 | -3.9%       | +14.9% | -1.1% | recommended live start |
 
-What reproduces and what does not:
+Full risk tables (VaR/CVaR, skew/kurtosis, drawdown duration, down-market
+beta, crisis windows, calendar years) are in `results/risk_VOLVUE.md`;
+drawdown paths in `results/drawdown_VOLVUE.png`.
 
-* **Reproduces (structure):** near-zero beta at 1x (0.05), crisis profile
-  (2008 positive, 2022 roughly flat at 1x, losses from single-name droughts),
-  weekly hedge > daily hedge > no hedge, 30-10 vertical >> bare long call,
-  1-delta Reg-T wing costs ~0.1 Sharpe while the 5-delta wing is rejected,
-  institutional costs add ~0.5 Sharpe, vol at 5x = 11.4% (spec 11.5%).
-* **Does not reproduce (level):** Sharpe 1.00 vs 1.36 at 1x, and at 5x the
-  compounding of a thinner sleeve return under heavier costs gives +5% vs
-  +17.7%/yr with a -31% drawdown. Two causes, both anticipated by the spec:
-  the proxy IV under-collects the single-name call wing, and yfinance has no
-  prices for names delisted before today, so the 2007-2012 universe misses
-  the LEH/BSC/WB-type names whose IV was richest. Coverage is still 30/30
-  slots every month. Put licensed IVs in `data/iv/` and rerun before drawing
-  conclusions about the level; the second-half Calmar (`calmar_2h`) is the
-  forward expectation to use, per the spec.
+![drawdown](results/drawdown_VOLVUE.png)
+
+What the VolVue run says:
+
+* **Reproduced:** every structural ranking in the spec (weekly hedge > daily
+  > none on Sharpe; 30-10 vertical > bare long call; 1-delta wing costs ~0.1
+  Sharpe, 5-delta wing is rejected; institutional costs are worth ~0.5 Sharpe),
+  near-zero beta (0.04 at 1x, 0.20 at 5x; down-market beta 0.02 / 0.08), the
+  crisis-positive profile (2008 is the best year at every leverage: +23..32%
+  at 5x; Covid-2020 window -3.5%, 2022 bear -3..-4% at 5x while SPY lost
+  18..36%), 5x vol 10.1% vs 11.5%, worst month -6.6% vs -7.0%, and the $100k
+  rotating-half version keeping breadth through time.
+* **Above the reference at 1x:** Sharpe 1.78 vs 1.36 and net +3.8%/yr vs
+  +2.2..3.1%. The spec's 1x reference carries no cash yield; the +1.9%/yr of
+  FEDFUNDS on equity explains most of the gap, and VolVue's lower single/SPY
+  ratio (1.48 vs 1.59) means the sleeve itself is in line, not richer.
+* **Below the reference at 5x on drawdown:** maxDD -25.9% vs -13.6% and Calmar
+  0.48 vs 1.31. The drawdown is the 2020-2022 single-name dispersion drought
+  (Covid vol crush, then 2022) with leverage compounding it; the same stretch
+  costs the reference -8%. The gap is concentrated there, not in a different
+  return path, and the second-half Calmar (0.47) is the number to plan on.
+
+Gross/net at 1x on VolVue: retail half-spread costs 1.6%/yr and commissions
+0.6%/yr on the spec's per-leg parameters; the spec's "~0.7%/yr retail"
+headline corresponds to the 30-delta leg alone.
+
+### Earlier PROXY-IV run (no licensed data)
+
+Kept for comparison in `results/summary_PROXY.*`: the proxy gave the same
+structural rankings but +2.4%/yr, Sharpe 1.00 at 1x and only +5%/yr at 5x,
+confirming the spec's warning that proxied IVs are not a substitute.
 
 ## Mechanics implemented (spec sections)
 
