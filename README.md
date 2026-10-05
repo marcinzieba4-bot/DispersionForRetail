@@ -585,6 +585,36 @@ skew is flat so a nearer strike buys more theta per unit of tail. The index
 skew premium is relatively largest against the far wing; the right pairing
 is the index 25d put against the single-name 25d (or further) put, not 35d.
 
+### Short SPY 25-delta put vs long single-name 35-delta calls (`results/rr_dispersion_VOLVUE.csv`)
+
+A dispersion-flavoured risk reversal: both legs are long delta, so unhedged it
+is a leveraged long-market position; hedged it is short index put vol
+against long single-name call vol. Index leg real (RXM + BXMD), singles at
+VolVue call IV (30-45d calls ~1.00x ATM on the live chain), fixed notional.
+
+| 1x | CAGR | Sharpe | maxDD | worst month | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|
+| long single 30d calls, both sides hedged | +1.7% | 0.31 | -23% | -11.2% | 0.06 | -8% | +1% | +4% |
+| **long single 35d calls, both sides hedged** | **+1.8%** | **0.32** | **-24%** | **-12.2%** | 0.06 | -8% | +1% | +4% |
+| long single 40d calls | +2.0% | 0.35 | -24% | -12.9% | 0.07 | -7% | +1% | +5% |
+| long single ATM calls | +3.0% | 0.49 | -21% | -12.7% | 0.07 | -4% | +2% | +6% |
+| 35d, net SPY hedge instead of split | +1.6% | 0.28 | -29% | -12.8% | 0.08 | -10% | 0% | +2% |
+| 35d, unhedged | +4.1% | 0.53 | -41% | -16.2% | 0.46 | -30% | -12% | -5% |
+| 35d, hedged, no cash yield | +0.8% | 0.16 | -26% | -12.8% | 0.07 | -10% | +1% | +3% |
+| long single 35d calls alone, stock-hedged, no cash | -1.2% | -0.21 | -32% | -11.1% | 0.00 | -7% | +2% | +3% |
+| 35d, event names excluded | +1.9% | 0.43 | -18% | -8.5% | 0.06 | -3% | -3% | +4% |
+| 35d, 2x hedged / unhedged | +2.1% / +5.9% | 0.22 / 0.38 | -49% / -83% | -25% / -36% | 0.13 / 1.09 | -19% / -63% | | |
+| 35d, 5x | equity goes to ~zero in 2008 (hedged -61%, unhedged -95% in the GFC window) | | | | | | | |
+
+Reading: this book is crisis-NEGATIVE by construction (the short index put
+loses and the single-name calls expire worthless in the same month), so it
+is the mirror of the put-wing book: more carry (+0.8%/yr ex cash hedged, +4%
+unhedged with beta 0.46), much worse tails (2008 -8% hedged, -30% unhedged
+at 1x). Moving the calls toward the money helps slightly (ATM Sharpe 0.49)
+because the single-name call wing is fair at every delta while the hedge
+captures more realised vol near the money, but the long single-name calls
+on their own still bleed -1.2%/yr. Not viable above 1x.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

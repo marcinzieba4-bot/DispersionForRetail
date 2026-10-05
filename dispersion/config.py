@@ -44,7 +44,9 @@ class CostModel:
     mult: float = HALF_SPREAD_MULT
 
     def single(self, delta_bucket: int) -> float:
-        return {30: self.single_30d, 10: self.single_10d, 1: self.single_1d, 50: self.single_atm}[delta_bucket] * self.mult
+        d = int(delta_bucket)
+        rate = self.single_atm if d >= 45 else self.single_30d if d >= 20 else self.single_10d if d >= 5 else self.single_1d
+        return rate * self.mult
 
     def index(self) -> float:
         return self.index_opt * self.mult
