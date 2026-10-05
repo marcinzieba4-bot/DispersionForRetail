@@ -202,8 +202,7 @@ class Backtest:
                     sign_of[n] = -cfg.singles_sign
                 if cfg.perc_filter is not None and np.isfinite(perc) and perc > cfg.perc_filter and sign_of[n] == cfg.singles_sign:
                     sign_of[n] = 0
-            names = [n for n in names if sign_of[n] != 0]
-            per_name = book / max(len(names), 1)
+            names = [n for n in names if sign_of[n] != 0]   # per-name notional stays book/N of the full list
         for n in (names if cfg.singles_scale > 0 else []):
             S0 = float(self.uni.close_adj.loc[t0, n])
             iv = float(ivs.get(n, np.nan))

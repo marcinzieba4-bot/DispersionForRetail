@@ -14,15 +14,19 @@ uni = load_universe(); iv = VolVueIV("iv_call_30"); C = config.StrategyConfig; R
 base = dict(cycle="third_friday", dividends=True, singles_scale=0.0, costs=R)
 V = {}
 for L in (1, 3):
-    V[f"{L}x_PUT_shortATMput_real_unhedged"] = C(leverage=L, index_legs=(("PUT", -1, 1.0),), hedge_freq=None, **base)
-    V[f"{L}x_PUT_shortATMput_real_hedgedW"] = C(leverage=L, index_legs=(("PUT", -1, 1.0),), **base)
-    V[f"{L}x_ATM/5pctOTM_putspread_real(PUT+PPUT)_unhedged"] = C(leverage=L, index_legs=(("PUT", -1, 1.0), ("PPUT", -1, 1.0)), hedge_freq=None, **base)
-    V[f"{L}x_ATM/5pctOTM_putspread_real_hedgedW"] = C(leverage=L, index_legs=(("PUT", -1, 1.0), ("PPUT", -1, 1.0)), **base)
-    # short 25d put = -(RXM - cash) + long 25d call ~ -(RXM-cash) - (BXMD - TR)  [30d call proxies the 25d]
-    V[f"{L}x_25d/5pctOTM_putspread_real(RXM,BXMD,PPUT)_unhedged"] = C(leverage=L, index_legs=(("RXM", +1, 1.0), ("BXMD", +1, 1.0), ("PPUT", -1, 1.0)), hedge_freq=None, **base)
-    V[f"{L}x_25d/5pctOTM_putspread_real_hedgedW"] = C(leverage=L, index_legs=(("RXM", +1, 1.0), ("BXMD", +1, 1.0), ("PPUT", -1, 1.0)), **base)
-    V[f"{L}x_CNDR_20/5_ironcondor_real"] = C(leverage=L, index_legs=(("CNDR", -1, 1.0),), hedge_freq=None, **base)
-    V[f"{L}x_RXM_riskreversal_real(short25dput+long25dcall)"] = C(leverage=L, index_legs=(("RXM", -1, 1.0),), hedge_freq=None, **base)
+    # engine convention: sign +1 = hold the option position exactly as the Cboe index does
+    V[f"{L}x_PUT_shortATMput_real_unhedged"] = C(leverage=L, index_legs=(("PUT", +1, 1.0),), hedge_freq=None, **base)
+    V[f"{L}x_PUT_shortATMput_real_hedgedW"] = C(leverage=L, index_legs=(("PUT", +1, 1.0),), **base)
+    V[f"{L}x_ATM/5pctOTM_putspread_real(PUT+PPUT)_unhedged"] = C(leverage=L, index_legs=(("PUT", +1, 1.0), ("PPUT", +1, 1.0)), hedge_freq=None, **base)
+    V[f"{L}x_ATM/5pctOTM_putspread_real_hedgedW"] = C(leverage=L, index_legs=(("PUT", +1, 1.0), ("PPUT", +1, 1.0)), **base)
+    # short 25d put ~ RXM (short 25d put + long 25d call) + BXMD (short 30d call cancels the long call); + PPUT (long 5% OTM put)
+    V[f"{L}x_25d/5pctOTM_putspread_real(RXM,BXMD,PPUT)_unhedged"] = C(leverage=L, index_legs=(("RXM", +1, 1.0), ("BXMD", +1, 1.0), ("PPUT", +1, 1.0)), hedge_freq=None, **base)
+    V[f"{L}x_25d/5pctOTM_putspread_real_hedgedW"] = C(leverage=L, index_legs=(("RXM", +1, 1.0), ("BXMD", +1, 1.0), ("PPUT", +1, 1.0)), **base)
+    V[f"{L}x_short25dput_real(RXM+BXMD)_hedgedW"] = C(leverage=L, index_legs=(("RXM", +1, 1.0), ("BXMD", +1, 1.0)), **base)
+    V[f"{L}x_CNDR_20/5_ironcondor_real"] = C(leverage=L, index_legs=(("CNDR", +1, 1.0),), hedge_freq=None, **base)
+    V[f"{L}x_RXM_riskreversal_real(short25dput+long25dcall)"] = C(leverage=L, index_legs=(("RXM", +1, 1.0),), hedge_freq=None, **base)
+    V[f"{L}x_shortATMcall_long30dcall_real(BXM,-BXMD)_hedgedW"] = C(leverage=L, index_legs=(("BXM", +1, 1.0), ("BXMD", -1, 1.0)), **base)
+    V[f"{L}x_shortATMcall_long30dcall_real_unhedged"] = C(leverage=L, index_legs=(("BXM", +1, 1.0), ("BXMD", -1, 1.0)), hedge_freq=None, **base)
     V[f"{L}x_MODEL_25d/5d_putspread_skew(1.16,1.73)_unhedged"] = C(leverage=L, index_notional_scale=0.0, short_put_delta=25, short_put_iv_mult=1.16, put_delta=5, put_iv_mult=1.73, hedge_freq=None, **base)
     V[f"{L}x_MODEL_25d/5d_putspread_skew(1.16,1.73)_hedgedW"] = C(leverage=L, index_notional_scale=0.0, short_put_delta=25, short_put_iv_mult=1.16, put_delta=5, put_iv_mult=1.73, **base)
     V[f"{L}x_MODEL_25d/5d_putspread_flatIV_unhedged(upper bound)"] = C(leverage=L, index_notional_scale=0.0, short_put_delta=25, short_put_iv_mult=1.0, put_delta=5, put_iv_mult=1.0, hedge_freq=None, **base)
