@@ -252,6 +252,47 @@ is a term-structure proxy rather than an earnings calendar, and single-name
 straddles are undefined-risk shorts that need a margin plan; but it is real
 in the data.
 
+### Two-wing dispersion: short index straddle, long single-name straddles (`results/dispersion_straddles_VOLVUE.csv`)
+
+Short SPX ATM straddle from real settlements (BXM + PUT), long ATM straddles
+on the 30 names at VolVue's ATM IV (validated within 5-10% on the live
+chain), notional-matched, 3rd-Friday cycle, realistic costs, cash yield
+(~1.9%/yr) included. Hedging scopes: net book via SPY, both sides separately
+(each single with its own stock, index with SPY), one side, none.
+
+| variant | 1x CAGR / Sharpe / maxDD / 2008 / 2020 / 2022 | 3x CAGR / Sharpe / maxDD | hedge turnover/mo (1x) | cost/yr (1x) |
+|---|---|---|---|---|
+| net book hedge, weekly | +0.3% / 0.08 / -36% / -0.2% / +2.8% / -8.0% | -3.1% / -0.09 / -74% | 0.5x | 1.8% |
+| both sides hedged separately, weekly | +1.2% / 0.25 / -31% / +5.9% / +4.3% / -4.7% | -0.1% / 0.08 / -69% | 1.8x | 1.7% |
+| both sides, daily | +0.0% / 0.04 / -28% | -3.4% / -0.14 / -68% | 4.3x | 1.8% |
+| singles hedged only (own stock) | -1.1% / -0.06 / -48% / -11.9% | -9.4% / -0.17 / -92% | 0.9x | |
+| index hedged only (SPY) | +1.1% / 0.16 / -45% / +4.6% | -2.0% / 0.07 / -84% | 0.9x | |
+| no hedge | -0.8% / -0.08 / -37% / -12.2% | -6.5% / -0.25 / -83% | 0 | |
+| vega-matched index, both sides hedged | +2.1% / 0.32 / -34% / +7.7% | +1.7% / 0.20 / -74% | 2.3x | |
+| both sides hedged, event names excluded from the long side | +1.9% / 0.42 / -24% / +9.3% / +1.9% / -3.1% | +2.3% / 0.24 / -58% | 1.5x | 1.4% |
+| reversed (short singles, long index), both sides hedged | -2.4% / -0.40 / -48% | -10.7% / -0.58 / -92% | | |
+| component: short index straddle only, SPY-hedged | +3.8% / 0.64 / -14% / +1.6% / -2.6% / -8.1% | +7.3% / 0.48 / -41% | 0.9x | 0.2% |
+| component: long single straddles only, own-stock hedged | -1.1% / -0.17 / -43% / +6.2% | -6.9% / -0.36 / -85% | 0.9x | 1.5% |
+
+Reading: the book is the sum of its components. The short index straddle
+earns the index variance premium (+3.8%/yr hedged at 1x, Sharpe 0.64), the
+long single straddles pay the single-name variance premium (-1.1%/yr hedged),
+and the two cancel: the implied-correlation premium that classic dispersion
+harvests is not measurably positive here after 1.5-1.8%/yr of single-name
+ATM spread cost per turn. Hedging both sides separately is the right
+mechanics (it turns 2008 from -12% unhedged to +6%, Covid +4%), daily
+hedging only adds turnover, vega-matching adds return with proportionally
+more vol, and excluding earnings names from the long side is the best
+version (Sharpe 0.42 at 1x, 2008 +9%, Covid +2%, 2022 -3%) but still under
+its cash yield. The reversed book loses on both wings. This confirms the
+earlier finding from the other direction: the single-name wing is fairly
+priced against the index wing on this data; the edge is in the index
+premium (crash risk) and in single-name event selling, not in the spread
+between them. The previous run of this suite had two engine bugs (a stale
+reference price in the per-name stock hedge and a zero index notional under
+the straddle structure); both are fixed and this table is from the corrected
+engine.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
