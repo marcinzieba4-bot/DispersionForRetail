@@ -129,6 +129,11 @@ class StrategyConfig:
     # single-name structure: "vertical" (30-10 call spread) | "straddle" (ATM call + ATM put, same IV)
     singles_structure: str = "vertical"
     straddle_iv_mult: float = 1.0
+    # hedging scope: "book" (net dollar-delta of everything -> SPY), "split" (each single hedged with its
+    # own stock, index legs with SPY), "singles" (per-name stock only), "index" (SPY for index legs only)
+    hedge_scope: str = "book"
+    # index sizing: "notional" (= singles notional x index_notional_scale) or "vega" (x median single IV / SPY IV)
+    index_notional_mode: str = "notional"
 
 
 REFERENCE = {

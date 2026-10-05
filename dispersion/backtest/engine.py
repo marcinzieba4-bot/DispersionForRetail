@@ -241,7 +241,11 @@ class Backtest:
         S0 = float(self.spy.loc[t0])
         iv_s = float(ivs.get("SPY", np.nan))
         if deployed > 0 and np.isfinite(iv_s):
-            units = self._round_units(deployed * cfg.index_notional_scale / S0, S0, deployed, True)
+            vscale = 1.0
+            if cfg.index_notional_mode == "vega":
+                sv = np.nanmedian([l.iv for l in rec.legs if not l.is_index]) if any(not l.is_index for l in rec.legs) else iv_s
+                vscale = float(sv / iv_s) if np.isfinite(sv) and iv_s > 0 else 1.0
+            units = self._round_units(deployed * cfg.index_notional_scale * vscale / S0, S0, deployed, True)
             lot = 100.0 if cfg.index_instrument == "SPY" else (MES_MULT if deployed < config.MES_MAX_SHORT_NOTIONAL else ES_MULT) * SPX_PER_SPY
             n_idx = units * S0 / (lot * self.uni.raw_price("SPY", t0))
             is_es = cfg.index_instrument == "ES"
@@ -330,8 +334,14 @@ class Backtest:
                 units = np.array([l.units for l in opt]); K = np.array([l.K for l in opt]); ivv = np.array([l.iv for l in opt])
                 qq = np.array([l.q for l in opt]); bb = np.array([l.beta for l in opt])
                 is_put = np.array([l.kind == "put" for l in opt])
+                is_idx = np.array([l.is_index for l in opt])
                 cols = [l.ticker for l in opt]
                 path = pd.concat([self.uni.close_adj, self.spy.rename("SPY")], axis=1)[cols].loc[t0:t1].ffill()
+                single_names = sorted({l.ticker for l in opt if not l.is_index})
+                name_idx = {n: np.array([c == n for c in cols]) for n in single_names}
+                name_px = self.uni.close_adj[single_names].loc[t0:t1].ffill() if single_names else None
+            stock_h: dict[str, float] = {}
+            S_name_prev = {n: float(name_px[n].loc[t0]) for n in single_names} if opt and single_names else {}
             if cbo:
                 cbs = [(self.cboe[l.ticker].loc[t0:t1], -l.units * l.S0) for l in cbo]   # notional >0 when short the call
                 cbs = [(c, float(c["idx"].loc[t0]), float(c["tr"].loc[t0]), n) for c, n in cbs]
@@ -345,6 +355,12 @@ class Backtest:
                 S_spy = float(self.spy.loc[d])
                 cash *= 1 + float(self.rf.loc[d]) / 252.0
                 cash += hedge_sh * (S_spy - S_prev)
+                if stock_h:
+                    row = name_px.loc[d]
+                    for n, h in stock_h.items():
+                        Sn = float(row[n])
+                        if np.isfinite(Sn):
+                            cash += h * (Sn - S_name_prev[n]); S_name_prev[n] = Sn
                 mark, dollar_delta = 0.0, 0.0
                 T_rem = (t1 - d).days / 365.0
                 if opt:
@@ -354,11 +370,27 @@ class Backtest:
                     mark += float(np.sum(units * px))
                     if d < t1 and k % hedge_every == 0:
                         dl = np.where(is_put, bs.put_delta(S, K, T_rem, ivv, r, qq), bs.call_delta(S, K, T_rem, ivv, r, qq))
-                        dollar_delta += float(np.sum(units * dl * S * bb))
+                        dd_leg = units * dl * S
+                        scope = cfg.hedge_scope
+                        if scope in ("split", "singles"):
+                            # per-name stock hedge of each single's own delta
+                            for n in single_names:
+                                m_ = name_idx[n]; Sn = float(S[m_][0]) if m_.any() else np.nan
+                                if not np.isfinite(Sn) or Sn <= 0:
+                                    continue
+                                tgt = -float(np.sum(dd_leg[m_])) / Sn
+                                trn = abs(tgt - stock_h.get(n, 0.0)) * Sn
+                                cash -= trn * cfg.costs.hedge_bp; turnover.loc[d] += trn
+                                stock_h[n] = tgt
+                            dollar_delta += float(np.sum(dd_leg[is_idx] * bb[is_idx])) if scope == "split" else 0.0
+                        elif scope == "index":
+                            dollar_delta += float(np.sum(dd_leg[is_idx] * bb[is_idx]))
+                        else:
+                            dollar_delta += float(np.sum(dd_leg * bb))
                 if cbo:
                     for c, bi, bt, n in cbs:
                         mark += n * (float(c["idx"].loc[d]) / bi - float(c["tr"].loc[d]) / bt)
-                    if d < t1 and k % hedge_every == 0:
+                    if d < t1 and k % hedge_every == 0 and cfg.hedge_scope != "singles":
                         for l, ks in zip(cbo, cb_strikes):
                             dd = 0.0
                             for (kind, kk, sg_), Kk in zip(CBOE_LEGS[l.ticker], ks):
@@ -374,6 +406,13 @@ class Backtest:
                     hedge_sh = target
                 if d == t1:
                     cash += mark
+                    if stock_h:   # flatten per-name stock hedges
+                        row = name_px.loc[d]
+                        for n, h in stock_h.items():
+                            Sn = float(row[n])
+                            if np.isfinite(Sn):
+                                cash -= abs(h) * Sn * cfg.costs.hedge_bp
+                        stock_h = {}
                     mark, hedge_sh = 0.0, 0.0
                 equity.loc[d] = cash + mark
                 S_prev = S_spy
