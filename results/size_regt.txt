@@ -1,0 +1,32 @@
+=== (a) regime book at 3.75x, whole contracts, by account size (P&L as % of equity, ex cash) ===
+continuous   cagr=+4.01% vol=6.3% sharpe=0.66 maxdd=-17.4% worst_m=-12.3% | names traded/cycle: PW 29.8 CO 29.9 EV 99.7 | 2008=+2.2% 2020=+10.0% 2022=+4.0%
+$100k        cagr=+3.67% vol=5.8% sharpe=0.66 maxdd=-15.6% worst_m=-9.5% | names traded/cycle: PW 27.2 CO 21.9 EV 92.6 | 2008=+5.8% 2020=+10.3% 2022=+1.7%
+$250k        cagr=+3.83% vol=6.4% sharpe=0.62 maxdd=-17.8% worst_m=-12.5% | names traded/cycle: PW 29.5 CO 28.6 EV 97.0 | 2008=+2.0% 2020=+10.3% 2022=+3.2%
+$500k        cagr=+3.95% vol=6.4% sharpe=0.64 maxdd=-17.9% worst_m=-12.7% | names traded/cycle: PW 29.8 CO 29.9 EV 98.7 | 2008=+1.6% 2020=+9.2% 2022=+4.7%
+$1000k       cagr=+4.01% vol=6.3% sharpe=0.66 maxdd=-17.3% worst_m=-12.3% | names traded/cycle: PW 29.8 CO 29.9 EV 99.6 | 2008=+2.4% 2020=+10.0% 2022=+3.9%
+$3000k       cagr=+4.11% vol=6.2% sharpe=0.68 maxdd=-17.3% worst_m=-12.3% | names traded/cycle: PW 29.8 CO 29.9 EV 99.7 | 2008=+2.4% 2020=+10.1% 2022=+4.0%
+
+book Reg-T per 1x by cycle: median=40% p95=56% max=89%
+
+=== (b) Reg-T (no portfolio margin): mom w + book L + TLT w, usage = Reg-T requirement / equity ===
+-- TLT shares (50%)
+mom 30% book 0.50x TLT 15%: cagr=+5.9% vol=5.9% sharpe=1.02 maxdd=-8.2% calmar=0.72 worst_m=-5.8% | 2008=+0% 2020=+10% 2022=+1% | RegT usage median=38% p95=49% max=67% OK
+mom 45% book 0.75x TLT 22%: cagr=+8.0% vol=8.8% sharpe=0.93 maxdd=-12.2% calmar=0.66 worst_m=-8.7% | 2008=-1% 2020=+15% 2022=+0% | RegT usage median=57% p95=74% max=103% CALL
+mom 60% book 1.00x TLT 30%: cagr=+10.0% vol=11.8% sharpe=0.88 maxdd=-16.0% calmar=0.63 worst_m=-11.6% | 2008=-2% 2020=+20% 2022=-0% | RegT usage median=77% p95=99% max=142% CALL
+mom 75% book 1.25x TLT 38%: cagr=+12.0% vol=14.7% sharpe=0.85 maxdd=-19.7% calmar=0.61 worst_m=-14.5% | 2008=-3% 2020=+25% 2022=-1% | RegT usage median=96% p95=124% max=183% CALL
+mom 90% book 1.50x TLT 45%: cagr=+13.9% vol=17.6% sharpe=0.84 maxdd=-23.4% calmar=0.59 worst_m=-17.3% | 2008=-4% 2020=+30% 2022=-1% | RegT usage median=115% p95=149% max=225% CALL
+mom 100% book 1.00x TLT 50%: cagr=+14.0% vol=19.5% sharpe=0.78 maxdd=-25.8% calmar=0.54 worst_m=-19.5% | 2008=-5% 2020=+30% 2022=-3% | RegT usage median=96% p95=130% max=186% CALL
+mom 100% book 2.00x TLT 50%: cagr=+15.7% vol=19.7% sharpe=0.85 maxdd=-25.8% calmar=0.61 worst_m=-19.0% | 2008=-5% 2020=+35% 2022=-1% | RegT usage median=143% p95=183% max=290% CALL
+mom 75% book 3.75x TLT 38%: cagr=+16.0% vol=16.5% sharpe=0.99 maxdd=-21.6% calmar=0.74 worst_m=-13.8% | 2008=-2% 2020=+38% 2022=+4% | RegT usage median=203% p95=258% max=444% CALL
+mom 100% book 5.00x TLT 50%: cagr=+20.5% vol=22.0% sharpe=0.97 maxdd=-28.3% calmar=0.73 worst_m=-18.2% | 2008=-3% 2020=+51% 2022=+5% | RegT usage median=269% p95=348% max=635% CALL
+-- TLT via /ZB futures (4%)
+mom 30% book 0.50x TLT 15%: cagr=+5.9% vol=5.9% sharpe=1.02 maxdd=-8.2% calmar=0.72 worst_m=-5.8% | 2008=+0% 2020=+10% 2022=+1% | RegT usage median=36% p95=43% max=60% OK
+mom 45% book 0.75x TLT 22%: cagr=+8.0% vol=8.8% sharpe=0.93 maxdd=-12.2% calmar=0.66 worst_m=-8.7% | 2008=-1% 2020=+15% 2022=+0% | RegT usage median=53% p95=64% max=92% OK
+mom 60% book 1.00x TLT 30%: cagr=+10.0% vol=11.8% sharpe=0.88 maxdd=-16.0% calmar=0.63 worst_m=-11.6% | 2008=-2% 2020=+20% 2022=-0% | RegT usage median=71% p95=86% max=127% CALL
+mom 75% book 1.25x TLT 38%: cagr=+12.0% vol=14.7% sharpe=0.85 maxdd=-19.7% calmar=0.61 worst_m=-14.5% | 2008=-3% 2020=+25% 2022=-1% | RegT usage median=89% p95=108% max=163% CALL
+mom 90% book 1.50x TLT 45%: cagr=+13.9% vol=17.6% sharpe=0.84 maxdd=-23.4% calmar=0.59 worst_m=-17.3% | 2008=-4% 2020=+30% 2022=-1% | RegT usage median=106% p95=130% max=201% CALL
+mom 100% book 1.00x TLT 50%: cagr=+14.0% vol=19.5% sharpe=0.78 maxdd=-25.8% calmar=0.54 worst_m=-19.5% | 2008=-5% 2020=+30% 2022=-3% | RegT usage median=91% p95=108% max=159% CALL
+mom 100% book 2.00x TLT 50%: cagr=+15.7% vol=19.7% sharpe=0.85 maxdd=-25.8% calmar=0.61 worst_m=-19.0% | 2008=-5% 2020=+35% 2022=-1% | RegT usage median=131% p95=163% max=263% CALL
+mom 75% book 3.75x TLT 38%: cagr=+16.0% vol=16.5% sharpe=0.99 maxdd=-21.6% calmar=0.74 worst_m=-13.8% | 2008=-2% 2020=+38% 2022=+4% | RegT usage median=189% p95=246% max=423% CALL
+mom 100% book 5.00x TLT 50%: cagr=+20.5% vol=22.0% sharpe=0.97 maxdd=-28.3% calmar=0.73 worst_m=-18.2% | 2008=-3% 2020=+51% 2022=+5% | RegT usage median=251% p95=330% max=606% CALL
+DONE

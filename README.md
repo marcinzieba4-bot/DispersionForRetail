@@ -1649,6 +1649,55 @@ maxDD -22%, worst month -14%); momentum 100% + book 5x + TLT 50% gives
 2013 +59, 2014 +4, 2015 +7, 2016 +20, 2017 +42, 2018 -8, 2019 +17, 2020
 +65, 2021 0, 2022 +5, 2023 +53, 2024 +40, 2025 +29, 2026 +73.
 
+### Account size, and life without portfolio margin (`results/size_granularity_VOLVUE.csv`, `regt_ladder_VOLVUE.csv`)
+
+`scripts/run_size_regt.py`. (a) The regime book at 3.75x with whole-contract
+rounding (one contract minimum, a name is skipped when one contract exceeds
+twice its target notional), P&L as % of equity, ex cash:
+
+| equity | CAGR | vol | Sharpe | maxDD | worst m | names traded per cycle (put-wing / call wing / event list) |
+|---|---|---|---|---|---|---|
+| continuous | +4.01% | 6.3% | 0.66 | -17.4% | -12.3% | 29.8 / 29.9 / 99.7 |
+| $100k | +3.67% | 5.8% | 0.66 | -15.6% | -9.5% | 27.2 / 21.9 / 92.6 |
+| $250k | +3.83% | 6.4% | 0.62 | -17.8% | -12.5% | 29.5 / 28.6 / 97.0 |
+| $500k | +3.95% | 6.4% | 0.64 | -17.9% | -12.7% | 29.8 / 29.9 / 98.7 |
+| $1M | +4.01% | 6.3% | 0.66 | -17.3% | -12.3% | 29.8 / 29.9 / 99.6 |
+| $3M | +4.11% | 6.2% | 0.68 | -17.3% | -12.3% | 29.8 / 29.9 / 99.7 |
+
+Granularity is not what limits size: at $250k the book is within 0.2
+points of the continuous model and at $100k it still runs, with a quarter
+of the call-wing names dropped and single-contract positions that are up
+to twice their target. The binding constraint is the margin account type.
+Tastytrade lists options on TLT (liquid) and offers /ZB and /UB Treasury
+futures, so the TLT leg can be held as shares (Reg-T 50%, PM about 12%),
+as deep-ITM calls (premium only) or as futures (about 4%).
+
+(b) Without portfolio margin the book's Reg-T requirement is 40% of
+notional per 1x in a median cycle (p95 56%, max 89%), stocks 50%, TLT
+shares 50%. Reg-T ladder (usage = requirement / daily equity, no cash
+added):
+
+| mix | TLT held as | CAGR | vol | Sharpe | maxDD | Calmar | worst m | 2008 | 2020 | 2022 | Reg-T usage median / p95 / max |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| mom 30% + book 0.5x + TLT 15% | shares | +5.9% | 5.9% | 1.02 | -8.2% | 0.72 | -5.8% | 0% | +10% | +1% | 38 / 49 / 67% |
+| mom 45% + book 0.75x + TLT 22% | shares | +8.0% | 8.8% | 0.93 | -12.2% | 0.66 | -8.7% | -1% | +15% | 0% | 57 / 74 / 103% |
+| mom 45% + book 0.75x + TLT 22% | /ZB futures | +8.0% | 8.8% | 0.93 | -12.2% | 0.66 | -8.7% | -1% | +15% | 0% | 53 / 64 / 92% |
+| mom 60% + book 1x + TLT 30% | /ZB futures | +10.0% | 11.8% | 0.88 | -16.0% | 0.63 | -11.6% | -2% | +20% | 0% | 71 / 86 / 127% |
+| mom 75% + book 1.25x + TLT 38% | /ZB futures | +12.0% | 14.7% | 0.85 | -19.7% | 0.61 | -14.5% | -3% | +25% | -1% | 89 / 108 / 163% |
+| mom 75% + book 3.75x + TLT 38% (the PM line) | shares | +16.0% | 16.5% | 0.99 | -21.6% | 0.74 | -13.8% | -2% | +38% | +4% | 203 / 258 / 444% |
+| mom 100% + book 5x + TLT 50% | shares | +20.5% | 22.0% | 0.97 | -28.3% | 0.73 | -18.2% | -3% | +51% | +5% | 269 / 348 / 635% |
+
+Under Reg-T the book is capped near 0.75x and the whole mix near 8%/yr
+(Sharpe 0.93, maxDD -12%) with TLT in futures, or 6%/yr with TLT in
+shares. The 16-20% lines need 2-6x the account under Reg-T: they exist
+only in a portfolio-margin account. Tastytrade's portfolio-margin minimum
+is a six-figure net liquidation value (it has been quoted in the
+$125k-$175k range; check the current figure), and the spec's own
+small-account rule (`SMALL_ACCOUNT_EQUITY` = $276k x L/5) says the same:
+below roughly $250k at 3.75x the book is coarse, below the PM minimum it
+cannot be levered at all. So the practical floor for the levered mix is
+the PM minimum, and the comfortable size is $250k and above.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
