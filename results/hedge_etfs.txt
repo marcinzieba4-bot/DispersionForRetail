@@ -1,0 +1,77 @@
+=== hedge sleeves alone, 100% of equity, with cash ===
+TLT buy & hold                                       cagr=+3.7% vol=14.0% sharpe=0.32 sortino=0.36 maxdd=-46.0% calmar=0.08 worst_m=-13.1% worst_12m=-33.2% beta=-0.07 sh2h=0.10 | 2008=+36% 2020=+18% 2022=-30% covid=+14% | stopped 0/236 cycles
+TLT trail 10%                                        cagr=+3.8% vol=14.1% sharpe=0.33 sortino=0.38 maxdd=-45.1% calmar=0.09 worst_m=-13.1% worst_12m=-32.0% beta=-0.07 sh2h=0.14 | 2008=+36% 2020=+21% 2022=-29% covid=+17% | stopped 4/236 cycles
+TLT trail 15%                                        cagr=+3.3% vol=14.0% sharpe=0.29 sortino=0.33 maxdd=-49.5% calmar=0.07 worst_m=-13.1% worst_12m=-33.2% beta=-0.05 sh2h=0.05 | 2008=+36% 2020=+10% 2022=-30% covid=+6% | stopped 1/236 cycles
+TLT trend 200d                                       cagr=+4.0% vol=11.3% sharpe=0.39 sortino=0.40 maxdd=-23.2% calmar=0.17 worst_m=-13.1% worst_12m=-16.9% beta=-0.16 sh2h=0.35 | 2008=+30% 2020=+21% 2022=-1% covid=+14% | stopped 0/137 cycles
+TLT trend 200d + trail 15%                           cagr=+3.6% vol=11.2% sharpe=0.36 sortino=0.37 maxdd=-23.2% calmar=0.16 worst_m=-13.1% worst_12m=-16.9% beta=-0.14 sh2h=0.27 | 2008=+30% 2020=+12% 2022=-1% covid=+6% | stopped 1/137 cycles
+TLT trend 200d + trail 10%                           cagr=+4.1% vol=11.4% sharpe=0.40 sortino=0.41 maxdd=-24.1% calmar=0.17 worst_m=-13.1% worst_12m=-18.0% beta=-0.16 sh2h=0.38 | 2008=+30% 2020=+24% 2022=-1% covid=+17% | stopped 2/137 cycles
+GLD buy & hold                                       cagr=+10.5% vol=17.6% sharpe=0.66 sortino=0.75 maxdd=-46.4% calmar=0.23 worst_m=-16.1% worst_12m=-28.6% beta=0.10 sh2h=1.03 | 2008=+6% 2020=+25% 2022=+0% covid=-2% | stopped 0/236 cycles
+GLD trail 10%                                        cagr=+8.9% vol=17.3% sharpe=0.58 sortino=0.64 maxdd=-48.1% calmar=0.18 worst_m=-16.1% worst_12m=-30.0% beta=0.13 sh2h=0.98 | 2008=-11% 2020=+28% 2022=+0% covid=-0% | stopped 12/236 cycles
+GLD trail 15%                                        cagr=+10.7% vol=17.5% sharpe=0.67 sortino=0.77 maxdd=-47.5% calmar=0.23 worst_m=-16.1% worst_12m=-30.0% beta=0.10 sh2h=1.03 | 2008=+12% 2020=+25% 2022=+0% covid=-2% | stopped 2/236 cycles
+GLD trend 200d                                       cagr=+7.1% vol=14.4% sharpe=0.54 sortino=0.55 maxdd=-42.5% calmar=0.17 worst_m=-13.7% worst_12m=-22.6% beta=0.07 sh2h=0.81 | 2008=-4% 2020=+10% 2022=+2% covid=-8% | stopped 0/158 cycles
+GLD trend 200d + trail 15%                           cagr=+7.3% vol=14.2% sharpe=0.57 sortino=0.59 maxdd=-42.5% calmar=0.17 worst_m=-11.1% worst_12m=-18.7% beta=0.07 sh2h=0.81 | 2008=+1% 2020=+10% 2022=+2% covid=-8% | stopped 1/158 cycles
+GLD trend 200d + trail 10%                           cagr=+6.7% vol=14.1% sharpe=0.53 sortino=0.55 maxdd=-43.2% calmar=0.16 worst_m=-10.8% worst_12m=-19.2% beta=0.06 sh2h=0.76 | 2008=+0% 2020=+13% 2022=+2% covid=-5% | stopped 8/158 cycles
+
+cycle-P&L correlations:
+                 mom10  book    ES  TLT trail15  GLD trail15  TLT trend+trail  GLD trend+trail
+mom10             1.00  0.04  0.48        -0.13        -0.01            -0.21            -0.01
+book              0.04  1.00  0.14        -0.16         0.09            -0.17             0.04
+ES                0.48  0.14  1.00        -0.07         0.06            -0.13            -0.02
+TLT trail15      -0.13 -0.16 -0.07         1.00         0.18             0.77             0.19
+GLD trail15      -0.01  0.09  0.06         0.18         1.00             0.22             0.78
+TLT trend+trail  -0.21 -0.17 -0.13         0.77         0.22             1.00             0.25
+GLD trend+trail  -0.01  0.04 -0.02         0.19         0.78             0.25             1.00
+
+=== core: mom10 100% + book base 5x, plus TLT / GLD sleeves at w of equity (full cash yield, realistic) ===
+core: mom10 100% + book 5x                           cagr=+18.5% vol=22.2% sharpe=0.89 sortino=0.89 maxdd=-34.7% calmar=0.53 worst_m=-19.2% worst_12m=-16.5% beta=0.66 sh2h=1.02 | 2008=-17% 2020=+37% 2022=+6% covid=-20%
+core + TLT trail 15% 30% + GLD trail 15% 0%          cagr=+19.6% vol=22.3% sharpe=0.92 sortino=0.98 maxdd=-30.2% calmar=0.65 worst_m=-19.0% worst_12m=-13.5% beta=0.65 sh2h=0.96 | 2008=-8% 2020=+41% 2022=-4% covid=-19%
+core + TLT trail 15% 0% + GLD trail 15% 30%          cagr=+21.9% vol=22.8% sharpe=1.00 sortino=1.03 maxdd=-30.9% calmar=0.71 worst_m=-17.7% worst_12m=-13.2% beta=0.69 sh2h=1.14 | 2008=-13% 2020=+44% 2022=+6% covid=-21%
+core + TLT trail 15% 30% + GLD trail 15% 30%         cagr=+22.9% vol=23.1% sharpe=1.02 sortino=1.10 maxdd=-29.4% calmar=0.78 worst_m=-18.5% worst_12m=-15.4% beta=0.68 sh2h=1.08 | 2008=-4% 2020=+48% 2022=-5% covid=-20%
+core + TLT trail 15% 50% + GLD trail 15% 50%         cagr=+25.6% vol=25.0% sharpe=1.05 sortino=1.21 maxdd=-29.1% calmar=0.88 worst_m=-18.6% worst_12m=-18.6% beta=0.69 sh2h=1.08 | 2008=+5% 2020=+56% 2022=-12% covid=-20%
+core + TLT trail 15% 0% + GLD trail 15% 50%          cagr=+24.0% vol=23.8% sharpe=1.04 sortino=1.13 maxdd=-30.4% calmar=0.79 worst_m=-17.3% worst_12m=-15.0% beta=0.71 sh2h=1.20 | 2008=-11% 2020=+50% 2022=+6% covid=-22%
+core + TLT trail 15% 50% + GLD trail 15% 0%          cagr=+20.1% vol=22.8% sharpe=0.93 sortino=0.98 maxdd=-28.8% calmar=0.70 worst_m=-19.6% worst_12m=-15.5% beta=0.64 sh2h=0.92 | 2008=-1% 2020=+43% 2022=-11% covid=-18%
+core + TLT trail 15% 100% + GLD trail 15% 100%       cagr=+31.1% vol=32.9% sharpe=0.99 sortino=1.19 maxdd=-49.7% calmar=0.63 worst_m=-22.0% worst_12m=-33.2% beta=0.72 sh2h=1.01 | 2008=+27% 2020=+75% 2022=-28% covid=-20%
+core + TLT trend 200d + trail 15% 30% + GLD trend 200d + trail 15% 0% cagr=+19.6% vol=21.9% sharpe=0.94 sortino=0.97 maxdd=-30.2% calmar=0.65 worst_m=-18.2% worst_12m=-12.5% beta=0.62 sh2h=1.02 | 2008=-9% 2020=+41% 2022=+5% covid=-19%
+core + TLT trend 200d + trail 15% 0% + GLD trend 200d + trail 15% 30% cagr=+20.7% vol=22.6% sharpe=0.96 sortino=0.99 maxdd=-33.0% calmar=0.63 worst_m=-19.2% worst_12m=-16.3% beta=0.68 sh2h=1.09 | 2008=-16% 2020=+40% 2022=+6% covid=-23%
+core + TLT trend 200d + trail 15% 30% + GLD trend 200d + trail 15% 30% cagr=+21.7% vol=22.5% sharpe=1.00 sortino=1.05 maxdd=-31.6% calmar=0.69 worst_m=-18.2% worst_12m=-14.2% beta=0.64 sh2h=1.08 | 2008=-9% 2020=+44% 2022=+5% covid=-21%
+core + TLT trend 200d + trail 15% 50% + GLD trend 200d + trail 15% 50% cagr=+23.7% vol=23.5% sharpe=1.03 sortino=1.15 maxdd=-32.3% calmar=0.73 worst_m=-18.2% worst_12m=-16.5% beta=0.63 sh2h=1.10 | 2008=-3% 2020=+49% 2022=+5% covid=-22%
+core + TLT trend 200d + trail 15% 0% + GLD trend 200d + trail 15% 50% cagr=+22.1% vol=23.3% sharpe=0.98 sortino=1.06 maxdd=-33.9% calmar=0.65 worst_m=-19.2% worst_12m=-19.0% beta=0.70 sh2h=1.12 | 2008=-16% 2020=+41% 2022=+6% covid=-24%
+core + TLT trend 200d + trail 15% 50% + GLD trend 200d + trail 15% 0% cagr=+20.2% vol=22.0% sharpe=0.96 sortino=0.99 maxdd=-28.8% calmar=0.70 worst_m=-18.2% worst_12m=-12.1% beta=0.60 sh2h=1.01 | 2008=-3% 2020=+45% 2022=+5% covid=-18%
+core + TLT trend 200d + trail 15% 100% + GLD trend 200d + trail 15% 100% cagr=+27.8% vol=28.4% sharpe=1.01 sortino=1.19 maxdd=-34.3% calmar=0.81 worst_m=-19.9% worst_12m=-22.1% beta=0.61 sh2h=1.08 | 2008=+9% 2020=+61% 2022=+3% covid=-24%
+core + TLT trail 10% 30% + GLD trail 10% 0%          cagr=+19.8% vol=22.3% sharpe=0.93 sortino=0.99 maxdd=-29.3% calmar=0.68 worst_m=-19.0% worst_12m=-13.5% beta=0.64 sh2h=0.98 | 2008=-8% 2020=+46% 2022=-4% covid=-16%
+core + TLT trail 10% 0% + GLD trail 10% 30%          cagr=+21.3% vol=22.9% sharpe=0.97 sortino=1.01 maxdd=-30.3% calmar=0.70 worst_m=-18.6% worst_12m=-18.9% beta=0.70 sh2h=1.13 | 2008=-19% 2020=+46% 2022=+6% covid=-21%
+core + TLT trail 10% 30% + GLD trail 10% 30%         cagr=+22.6% vol=23.2% sharpe=1.00 sortino=1.08 maxdd=-28.5% calmar=0.79 worst_m=-18.5% worst_12m=-15.4% beta=0.68 sh2h=1.08 | 2008=-10% 2020=+56% 2022=-4% covid=-16%
+core + TLT trail 10% 50% + GLD trail 10% 50%         cagr=+25.0% vol=25.2% sharpe=1.02 sortino=1.18 maxdd=-29.1% calmar=0.86 worst_m=-18.6% worst_12m=-18.6% beta=0.69 sh2h=1.09 | 2008=-6% 2020=+69% 2022=-11% covid=-13%
+core + TLT trail 10% 0% + GLD trail 10% 50%          cagr=+23.0% vol=24.0% sharpe=0.99 sortino=1.08 maxdd=-32.8% calmar=0.70 worst_m=-18.2% worst_12m=-20.7% beta=0.73 sh2h=1.18 | 2008=-21% 2020=+52% 2022=+6% covid=-21%
+core + TLT trail 10% 50% + GLD trail 10% 0%          cagr=+20.5% vol=22.8% sharpe=0.94 sortino=0.99 maxdd=-28.3% calmar=0.73 worst_m=-19.6% worst_12m=-15.5% beta=0.62 sh2h=0.95 | 2008=-1% 2020=+52% 2022=-10% covid=-13%
+core + TLT trail 10% 100% + GLD trail 10% 100%       cagr=+30.0% vol=33.0% sharpe=0.96 sortino=1.16 maxdd=-48.8% calmar=0.61 worst_m=-22.0% worst_12m=-31.9% beta=0.72 sh2h=1.04 | 2008=+2% 2020=+106% 2022=-27% covid=-6%
+core + TLT trend 200d + trail 10% 30% + GLD trend 200d + trail 10% 0% cagr=+19.8% vol=21.9% sharpe=0.95 sortino=0.98 maxdd=-29.3% calmar=0.68 worst_m=-18.2% worst_12m=-12.8% beta=0.61 sh2h=1.03 | 2008=-9% 2020=+47% 2022=+5% covid=-16%
+core + TLT trend 200d + trail 10% 0% + GLD trend 200d + trail 10% 30% cagr=+20.5% vol=22.6% sharpe=0.95 sortino=0.99 maxdd=-32.5% calmar=0.63 worst_m=-19.2% worst_12m=-16.4% beta=0.68 sh2h=1.08 | 2008=-16% 2020=+41% 2022=+6% covid=-22%
+core + TLT trend 200d + trail 10% 30% + GLD trend 200d + trail 10% 30% cagr=+21.7% vol=22.4% sharpe=1.00 sortino=1.05 maxdd=-28.5% calmar=0.76 worst_m=-18.2% worst_12m=-14.2% beta=0.63 sh2h=1.09 | 2008=-9% 2020=+51% 2022=+5% covid=-17%
+core + TLT trend 200d + trail 10% 50% + GLD trend 200d + trail 10% 50% cagr=+23.7% vol=23.4% sharpe=1.04 sortino=1.15 maxdd=-28.4% calmar=0.83 worst_m=-18.2% worst_12m=-16.5% beta=0.61 sh2h=1.11 | 2008=-3% 2020=+62% 2022=+5% covid=-15%
+core + TLT trend 200d + trail 10% 0% + GLD trend 200d + trail 10% 50% cagr=+21.7% vol=23.4% sharpe=0.97 sortino=1.05 maxdd=-33.0% calmar=0.66 worst_m=-19.2% worst_12m=-19.2% beta=0.69 sh2h=1.10 | 2008=-17% 2020=+43% 2022=+6% covid=-23%
+core + TLT trend 200d + trail 10% 50% + GLD trend 200d + trail 10% 0% cagr=+20.6% vol=22.0% sharpe=0.97 sortino=1.00 maxdd=-28.3% calmar=0.73 worst_m=-18.2% worst_12m=-12.1% beta=0.58 sh2h=1.04 | 2008=-3% 2020=+54% 2022=+5% covid=-13%
+core + TLT trend 200d + trail 10% 100% + GLD trend 200d + trail 10% 100% cagr=+27.9% vol=28.3% sharpe=1.02 sortino=1.19 maxdd=-39.0% calmar=0.72 worst_m=-19.9% worst_12m=-22.1% beta=0.56 sh2h=1.10 | 2008=+9% 2020=+90% 2022=+3% covid=-10%
+
+=== lower-leverage core: mom10 60% + book 3x ===
+core2: mom10 60% + book 3x                           cagr=+12.2% vol=13.3% sharpe=0.94 sortino=0.95 maxdd=-20.9% calmar=0.58 worst_m=-11.8% worst_12m=-9.4% beta=0.39 sh2h=1.08 | 2008=-9% 2020=+22% 2022=+5% covid=-12%
+core2 + TLT trail 15% 30% + GLD trail 15% 30%        cagr=+16.3% vol=15.0% sharpe=1.09 sortino=1.25 maxdd=-17.7% calmar=0.92 worst_m=-11.3% worst_12m=-10.9% beta=0.41 sh2h=1.13 | 2008=+4% 2020=+34% 2022=-6% covid=-12%
+core2 + TLT trail 15% 50% + GLD trail 15% 50%        cagr=+18.7% vol=17.9% sharpe=1.06 sortino=1.25 maxdd=-27.0% calmar=0.69 worst_m=-12.0% worst_12m=-16.4% beta=0.42 sh2h=1.09 | 2008=+13% 2020=+41% 2022=-13% covid=-11%
+core2 + TLT trail 15% 0% + GLD trail 15% 50%         cagr=+17.4% vol=15.9% sharpe=1.10 sortino=1.28 maxdd=-19.4% calmar=0.90 worst_m=-10.1% worst_12m=-11.2% beta=0.44 sh2h=1.31 | 2008=-4% 2020=+35% 2022=+4% covid=-14%
+core2 + TLT trail 15% 50% + GLD trail 15% 0%         cagr=+13.5% vol=14.6% sharpe=0.95 sortino=1.05 maxdd=-21.3% calmar=0.64 worst_m=-12.5% worst_12m=-12.8% beta=0.37 sh2h=0.89 | 2008=+7% 2020=+28% 2022=-13% covid=-10%
+core2 + TLT trend 200d + trail 15% 30% + GLD trend 200d + trail 15% 30% cagr=+15.1% vol=14.1% sharpe=1.08 sortino=1.18 maxdd=-20.1% calmar=0.75 worst_m=-11.1% worst_12m=-9.6% beta=0.38 sh2h=1.17 | 2008=-1% 2020=+30% 2022=+4% covid=-13%
+core2 + TLT trend 200d + trail 15% 50% + GLD trend 200d + trail 15% 50% cagr=+16.9% vol=15.8% sharpe=1.07 sortino=1.23 maxdd=-20.8% calmar=0.81 worst_m=-11.1% worst_12m=-12.1% beta=0.36 sh2h=1.15 | 2008=+4% 2020=+35% 2022=+3% covid=-14%
+core2 + TLT trend 200d + trail 15% 0% + GLD trend 200d + trail 15% 50% cagr=+15.5% vol=15.1% sharpe=1.04 sortino=1.17 maxdd=-22.6% calmar=0.69 worst_m=-11.8% worst_12m=-14.3% beta=0.43 sh2h=1.20 | 2008=-9% 2020=+28% 2022=+5% covid=-16%
+core2 + TLT trend 200d + trail 15% 50% + GLD trend 200d + trail 15% 0% cagr=+13.6% vol=13.6% sharpe=1.02 sortino=1.10 maxdd=-17.2% calmar=0.79 worst_m=-11.1% worst_12m=-7.5% beta=0.33 sh2h=1.06 | 2008=+4% 2020=+30% 2022=+3% covid=-10%
+
+best by Calmar:
+                    core                   hedge  w_tlt  w_gld   cagr  sharpe  maxdd  calmar  worst_month
+28   mom10 60% + book 3x               trail 15%    0.3    0.3  0.163   1.091 -0.177   0.921       -0.113
+30   mom10 60% + book 3x               trail 15%    0.0    0.5  0.174   1.103 -0.194   0.900       -0.101
+3   mom10 100% + book 5x               trail 15%    0.5    0.5  0.256   1.046 -0.291   0.878       -0.186
+17  mom10 100% + book 5x               trail 10%    0.5    0.5  0.250   1.022 -0.291   0.859       -0.186
+24  mom10 100% + book 5x  trend 200d + trail 10%    0.5    0.5  0.237   1.036 -0.284   0.834       -0.182
+33   mom10 60% + book 3x  trend 200d + trail 15%    0.5    0.5  0.169   1.075 -0.208   0.814       -0.111
+13  mom10 100% + book 5x  trend 200d + trail 15%    1.0    1.0  0.278   1.013 -0.343   0.811       -0.199
+16  mom10 100% + book 5x               trail 10%    0.3    0.3  0.226   1.004 -0.285   0.793       -0.185
+DONE

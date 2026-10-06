@@ -1565,6 +1565,54 @@ regime book at 5x: 18.5%/yr, Sharpe 0.89, maxDD -35%, worst month -19%,
 in a portfolio-margin account with about 60% of equity in margin in a
 normal month and 1.5x the account at the peak.
 
+### TLT and GLD with stops as hedges on the core (`results/hedge_etf_mix_VOLVUE.csv`)
+
+`scripts/run_hedge_etfs.py`. Long TLT and GLD sleeves, fixed notional per
+third-Friday cycle, trailing stop from the running high since the cycle
+entry (signal on the close, exit at the next close, cash until the next
+cycle), optional 200d trend filter, 2 bp per side, added at w of equity
+to the core (100% 10-name momentum with trend filter and 15% trailing stop
++ base regime book at 5x) and to a lower-leverage core (60% momentum +
+book 3x). Full cash yield, realistic costs.
+
+Sleeves alone, 100% of equity with cash, 2007-2026: TLT buy & hold 3.7%/yr
+Sharpe 0.32 maxDD -46% (2022 -30%); TLT trail 15% 3.3% / 0.29 / -50%
+(the stop fires in 1 of 236 cycles: a 15% fall inside one month is rare
+for TLT, so the per-cycle stop does little); TLT trend 200d 4.0% / 0.39 /
+-23% (2022 -1%); GLD buy & hold 10.5% / 0.66 / -46%; GLD trail 15% 10.7%
+/ 0.67 / -48% (2 stops); GLD trend 200d 7.1% / 0.54 / -43% (the filter
+misses too much of gold). Cycle-P&L correlations: TLT vs momentum -0.13
+(-0.21 with trend filter), TLT vs book -0.16, GLD vs both about 0.
+
+| core | hedge | TLT w | GLD w | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | worst 12m | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| mom10 100% + book 5x | none | 0 | 0 | +18.5% | 22.2% | 0.89 | 0.89 | -34.7% | 0.53 | -19.2% | -16.5% | 0.66 | -17% | +37% | +6% |
+| mom10 100% + book 5x | trail 15% | 30% | 0 | +19.6% | 22.3% | 0.92 | 0.98 | -30.2% | 0.65 | -19.0% | -13.5% | 0.65 | -8% | +41% | -4% |
+| mom10 100% + book 5x | trail 15% | 0 | 30% | +21.9% | 22.8% | 1.00 | 1.03 | -30.9% | 0.71 | -17.7% | -13.2% | 0.69 | -13% | +44% | +6% |
+| mom10 100% + book 5x | trail 15% | 30% | 30% | +22.9% | 23.1% | 1.02 | 1.10 | -29.4% | 0.78 | -18.5% | -15.4% | 0.68 | -4% | +48% | -5% |
+| mom10 100% + book 5x | trail 15% | 50% | 50% | +25.6% | 25.0% | 1.05 | 1.21 | -29.1% | 0.88 | -18.6% | -18.6% | 0.69 | +5% | +56% | -12% |
+| mom10 100% + book 5x | trend + trail 15% | 50% | 50% | +23.7% | 23.5% | 1.03 | 1.15 | -32.3% | 0.73 | -18.2% | -16.5% | 0.63 | -3% | +49% | +5% |
+| mom10 100% + book 5x | trend + trail 10% | 50% | 50% | +23.7% | 23.4% | 1.04 | 1.15 | -28.4% | 0.83 | -18.2% | -16.5% | 0.61 | -3% | +62% | +5% |
+| mom10 100% + book 5x | trail 15% | 100% | 100% | +31.1% | 32.9% | 0.99 | 1.19 | -49.7% | 0.63 | -22.0% | -33.2% | 0.72 | +27% | +75% | -28% |
+| mom10 60% + book 3x | none | 0 | 0 | +12.2% | 13.3% | 0.94 | 0.95 | -20.9% | 0.58 | -11.8% | -9.4% | 0.39 | -9% | +22% | +5% |
+| mom10 60% + book 3x | trail 15% | 30% | 30% | +16.3% | 15.0% | 1.09 | 1.25 | -17.7% | 0.92 | -11.3% | -10.9% | 0.41 | +4% | +34% | -6% |
+| mom10 60% + book 3x | trail 15% | 0 | 50% | +17.4% | 15.9% | 1.10 | 1.28 | -19.4% | 0.90 | -10.1% | -11.2% | 0.44 | -4% | +35% | +4% |
+| mom10 60% + book 3x | trail 15% | 50% | 50% | +18.7% | 17.9% | 1.06 | 1.25 | -27.0% | 0.69 | -12.0% | -16.4% | 0.42 | +13% | +41% | -13% |
+| mom10 60% + book 3x | trend + trail 15% | 50% | 50% | +16.9% | 15.8% | 1.07 | 1.23 | -20.8% | 0.81 | -11.1% | -12.1% | 0.36 | +4% | +35% | +3% |
+
+The two ETFs are the first additions in the project that raise Calmar at
+a given return: TLT is negatively correlated with both momentum and the
+book and pays in 2008 and 2020, GLD is uncorrelated and compounds. At
+30% each with a 15% trailing stop the full core goes from 18.5% / Calmar
+0.53 to 22.9% / 0.78 with a 5-point smaller drawdown; the lower-leverage
+core goes to 16.3% / 0.92 with maxDD -17.7%. The stop itself is nearly
+inert on a monthly cycle; the trend filter is what protects TLT in 2022
+(-1% vs -30%) at the cost of some 2008 and 2020 gain, and it hurts GLD.
+Caveats: gold's 2004-2026 return (10.5%/yr) is a strong sample and
+2024-2026 alone contribute a large share; TLT's 2022 is the risk the
+trend filter is for; both ETFs on margin add about 10-15% of equity to
+the portfolio-margin need per 100% of exposure.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
