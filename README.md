@@ -1155,6 +1155,53 @@ the ES line on Sharpe (0.96 vs 1.16) with a smaller drawdown (-15% vs -20%)
 and beta 0.12; the stock sleeve with trend filter and trailing stop still
 dominates on Calmar.
 
+### Momentum stocks + trailing stop + short SPY 20-delta call (`results/momentum_callwrite_VOLVUE.csv`)
+
+`scripts/run_momentum_callwrite.py`. The income overlay is a short 1-month
+SPY 20-delta call on the sleeve's notional (x1.0) or half of it (x0.5),
+unhedged, rolled each third Friday. No Cboe index writes a 20-delta call,
+so it is the model at the skew-adjusted VolVue SPY IV
+(`index_skew_coeff=0.39`); the model 30-delta call under the same settings
+realises 1/0.70 of the real BXMD overlay, so the 20-delta numbers below are
+still a little generous. BXMD (real 30-delta) is shown as the real-price
+alternative. Premium collected: 20d about 3.1% of notional per year, 30d
+6.3%; the overlay alone loses 1.4%/yr (20d) and 2.7%/yr (BXMD) over
+2007-2026 because the index rose 10%/yr and the calls were run over.
+
+Standalone, 100% of equity compounded, ex cash:
+
+| sleeve | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| mom5 trail 15% | +12.6% | 27.0% | 0.59 | -62.0% | 0.20 | -29.7% | 1.00 | -52% | +30% | -1% |
+| + short SPY 20d x1.0 | +11.4% | 26.0% | 0.56 | -59.5% | 0.19 | -29.4% | 0.92 | -49% | +24% | +1% |
+| + short SPY 20d x0.5 | +12.0% | 26.5% | 0.57 | -60.7% | 0.20 | -29.5% | 0.96 | -51% | +27% | 0% |
+| + short SPY BXMD 30d x1.0 | +10.2% | 25.3% | 0.52 | -58.8% | 0.17 | -28.4% | 0.83 | -49% | +18% | +2% |
+| mom5 trend + trail 15% | +11.1% | 22.3% | 0.60 | -34.9% | 0.32 | -24.8% | 0.64 | -19% | +8% | -3% |
+| + short SPY 20d x1.0 | +9.7% | 21.9% | 0.55 | -42.6% | 0.23 | -24.6% | 0.55 | -14% | +1% | -2% |
+| + short SPY 20d x0.5 | +10.4% | 22.0% | 0.57 | -38.8% | 0.27 | -24.7% | 0.59 | -17% | +4% | -3% |
+| + short SPY BXMD 30d x1.0 | +8.4% | 21.4% | 0.50 | -45.6% | 0.18 | -24.4% | 0.45 | -13% | -5% | -2% |
+
+Inside the combo (30% sleeve, 70% of equity in the honest regime book at 3x, cash on all equity):
+
+| sleeve | CAGR | vol | Sharpe | maxDD | Calmar | worst m | beta | 2008 | 2020 |
+|---|---|---|---|---|---|---|---|---|---|
+| ES (reference) | +8.0% | 6.8% | 1.16 | -20.3% | 0.39 | -9.8% | 0.31 | -9% | +17% |
+| mom5 trail 15% | +9.5% | 9.8% | 0.98 | -27.5% | 0.34 | -10.9% | 0.31 | -16% | +20% |
+| mom5 trail 15% + short SPY 20d x1.0 | +9.1% | 9.5% | 0.97 | -26.5% | 0.34 | -11.4% | 0.29 | -15% | +18% |
+| mom5 trend + trail 15% | +8.8% | 8.4% | 1.06 | -16.0% | 0.55 | -8.4% | 0.20 | -3% | +13% |
+| mom5 trend + trail 15% + short SPY 20d x1.0 | +8.3% | 8.3% | 1.02 | -17.3% | 0.48 | -8.9% | 0.18 | -1% | +11% |
+| mom5 trend + trail 15% + short SPY 20d x0.5 | +8.5% | 8.3% | 1.04 | -16.7% | 0.51 | -8.6% | 0.19 | -2% | +12% |
+| mom5 trend + trail 15% + short SPY BXMD 30d x1.0 | +7.9% | 8.3% | 0.97 | -18.0% | 0.44 | -9.7% | 0.15 | -1% | +9% |
+
+The call does not add income, it subtracts it: a short SPY 20-delta call
+has had negative carry over this sample (the same finding as the index leg
+of the spec book), so the overlay costs 0.6-1.4 points of CAGR, lowers the
+Sharpe by 0.02-0.05 and barely moves the drawdown, because the momentum
+names fall with the index in 2008 and 2020 while the call only pays its
+small premium. The trend-filtered sleeve is hurt most (maxDD -35% to -43%)
+because the trend filter already removes the months the call would have
+protected, leaving only the months where the call caps the rebound.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
