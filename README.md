@@ -1437,6 +1437,44 @@ Sharpe 1.13 / maxDD -17.9%), this dip-only version earns 2 points less
 for the same Sharpe but a 7-point smaller drawdown at 30% / 5x, because
 the base sleeves of the regime book are not carried between dips.
 
+### Scaling to a 20%/yr target (`results/target20_VOLVUE.csv`)
+
+`scripts/run_target20.py`. The three mixes scaled up, cash yield on all
+equity. PM = portfolio margin need as % of equity (stocks 25%, option
+sleeves at the TIMS-style stress x1.5 house factor, both dip tranches in);
+"typical" is the median cycle, "peak" the worst cycle with every add fired.
+
+| mix | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | worst 12m | CVaR95 | beta | 2008 | 2020 | 2022 | PM typical / peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A: mom 30% + dips 5x | +7.7% | 7.6% | 1.02 | 1.09 | -10.7% | 0.72 | -7.7% | -4.9% | -4.1% | 0.14 | -3% | +11% | +5% | 8% / 52% |
+| A: mom 50% + dips 10x | +12.2% | 13.4% | 0.94 | 1.03 | -19.5% | 0.63 | -12.7% | -9.0% | -7.1% | 0.22 | -6% | +21% | +8% | 12% / 102% |
+| A: mom 90% + dips 15x | +18.6% | 22.7% | 0.88 | 0.92 | -31.3% | 0.59 | -22.4% | -16.7% | -12.6% | 0.43 | -13% | +33% | +10% | 22% / 158% |
+| A: mom 100% + dips 15x | +19.6% | 24.6% | 0.86 | 0.89 | -33.1% | 0.59 | -24.7% | -19.2% | -13.9% | 0.49 | -15% | +33% | +10% | 25% / 160% |
+| A: mom 120% + dips 20x | +23.3% | 30.1% | 0.86 | 0.90 | -40.3% | 0.58 | -29.2% | -23.6% | -16.7% | 0.58 | -20% | +43% | +13% | 30% / 210% |
+| A: mom 150% + dips 25x | +27.4% | 37.6% | 0.84 | 0.89 | -48.5% | 0.57 | -35.6% | -30.4% | -20.8% | 0.73 | -26% | +52% | +16% | 38% / 262% |
+| C: mom 100% + dips 20x | +21.5% | 26.5% | 0.87 | 0.95 | -37.0% | 0.58 | -24.7% | -18.6% | -14.4% | 0.45 | -16% | +42% | +14% | 25% / 205% |
+| C: mom 70% + dips 20x | +18.3% | 21.7% | 0.89 | 1.07 | -31.9% | 0.57 | -17.6% | -14.8% | -11.0% | 0.25 | -10% | +40% | +15% | 18% / 198% |
+| C: mom 50% + dips 30x | +19.0% | 26.1% | 0.79 | 1.21 | -44.1% | 0.43 | -18.5% | -15.8% | -10.6% | 0.02 | -9% | +54% | +24% | 12% / 282% |
+| B: mom 30% + book 2.1x (adds) | +9.7% | 8.6% | 1.13 | 1.16 | -17.9% | 0.54 | -7.9% | -7.3% | -4.9% | 0.18 | -3% | +16% | +6% | 21% / 86% |
+| B: mom 60% + book 4.2x | +17.5% | 17.1% | 1.04 | 1.05 | -34.1% | 0.51 | -15.6% | -15.2% | -9.9% | 0.37 | -8% | +32% | +11% | 43% / 172% |
+| B: mom 90% + book 6.3x | +24.8% | 25.7% | 1.01 | 1.01 | -47.8% | 0.52 | -22.9% | -23.4% | -14.9% | 0.56 | -14% | +48% | +16% | 64% / 258% |
+| B: mom 100% + book 7.0x | +27.2% | 28.6% | 1.00 | 1.00 | -51.8% | 0.52 | -25.3% | -26.1% | -16.5% | 0.62 | -16% | +53% | +17% | 71% / 287% |
+
+Yearly, A at 100% / 15x: 2007 +15, 2008 -15, 2009 +13, 2010 -1, 2011 +1,
+2012 +17, 2013 +61, 2014 +3, 2015 +59, 2016 +16, 2017 +9, 2018 +18, 2019
++8, 2020 +33, 2021 -2, 2022 +10, 2023 +24, 2024 +47, 2025 +42, 2026 +64.
+Leverage scales return and drawdown together: Sharpe stays 0.85-1.05 and
+Calmar 0.5-0.6 across the whole ladder, so 20%/yr costs a 33-37% max
+drawdown and a 25% worst month in every mix. Calmar cannot be raised by
+leverage; it is set by the sleeves. The cheapest 20% in drawdown terms is
+C at 70-100% momentum with dips at 20x (Calmar 0.57-0.58, zero-ish beta,
+Covid window flat); the highest Sharpe 20% is B at 60-90% momentum with
+the regime book at 4-6x (Sharpe 1.0+), which needs 2-3x the account in
+margin at the peak. Momentum on margin above 100% is Reg-T stock leverage
+(50% initial), the dip and book sleeves need a portfolio-margin account
+and the willingness to post 1-2x the account as additional collateral in
+a stress month.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
