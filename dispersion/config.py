@@ -143,6 +143,10 @@ class StrategyConfig:
     weight_cap: float = 1.0          # max weight per name under mcap weighting (e.g. 0.10)
     select: str = "liquidity"        # universe ranking: "liquidity" (spec) | "mcap" (largest caps)
     trade_mask: object = None        # optional daily bool Series: when False as of the entry date the cycle stays in cash
+    cycle_stop: float | None = None  # close the whole cycle (to cash until expiry) when its P&L <= -cycle_stop x book notional
+    overhedge_trigger: float | None = None  # when SPY closes this far below the cycle entry, add an extra SPY short...
+    overhedge_size: float = 0.5      # ...of overhedge_size x index-leg notional; removed when SPY closes back above entry
+    index_hedge_mult: float = 1.0    # hedge the index leg at this multiple of its model delta (1.25 = 25% overhedged)
 
 
 REFERENCE = {

@@ -407,10 +407,13 @@ class Backtest:
             window = days[(days > t0) & (days <= t1)]
             hedge_sh, S_prev = 0.0, float(self.spy.loc[t0])
             r = float(self.rf.loc[t0])
+            dead, over_sh, S0_cyc = False, 0.0, float(self.spy.loc[t0])
+            book_n = cfg.book_fraction * cfg.leverage * ((cfg.equity or 1_000_000.0) if cfg.fixed_notional else E)
+            idx_notional = sum(abs(l.units) * l.S0 for l in rec.legs if l.is_index)
             for k, d in enumerate(window, start=1):
                 S_spy = float(self.spy.loc[d])
                 cash *= 1 + float(self.rf.loc[d]) / 252.0
-                cash += hedge_sh * (S_spy - S_prev)
+                cash += (hedge_sh + over_sh) * (S_spy - S_prev)
                 if S_name_prev:
                     row = name_px.loc[d]
                     for n in single_names:
@@ -421,7 +424,7 @@ class Backtest:
                             S_name_prev[n] = Sn          # reference price advances every day for every name
                 mark, dollar_delta = 0.0, 0.0
                 T_rem = (t1 - d).days / 365.0
-                if opt:
+                if opt and not dead:
                     S = path.loc[d].to_numpy(dtype=float)
                     S = np.where(np.isfinite(S), S, K)
                     px = np.where(is_put, bs.put_price(S, K, T_rem, ivv, r, qq), bs.call_price(S, K, T_rem, ivv, r, qq))
@@ -440,12 +443,12 @@ class Backtest:
                                 trn = abs(tgt - stock_h.get(n, 0.0)) * Sn
                                 cash -= trn * cfg.costs.hedge_bp; turnover.loc[d] += trn
                                 stock_h[n] = tgt
-                            dollar_delta += float(np.sum(dd_leg[is_idx] * bb[is_idx])) if scope == "split" else 0.0
+                            dollar_delta += float(np.sum(dd_leg[is_idx] * bb[is_idx])) * cfg.index_hedge_mult if scope == "split" else 0.0
                         elif scope == "index":
-                            dollar_delta += float(np.sum(dd_leg[is_idx] * bb[is_idx]))
+                            dollar_delta += float(np.sum(dd_leg[is_idx] * bb[is_idx])) * cfg.index_hedge_mult
                         else:
                             dollar_delta += float(np.sum(dd_leg * bb))
-                if cbo:
+                if cbo and not dead:
                     for c, bi, bt, n in cbs:
                         mark += n * (float(c["idx"].loc[d]) / bi - float(c["tr"].loc[d]) / bt)
                     if d < t1 and k % hedge_every == 0 and cfg.hedge_scope != "singles":
@@ -455,14 +458,28 @@ class Backtest:
                                 dl = float(bs.put_delta(S_spy, Kk, T_rem, l.iv, r, l.q)) if kind == "put" else float(bs.call_delta(S_spy, Kk, T_rem, l.iv * 0.9, r, l.q))
                                 dd += sg_ * dl
                             # l.units = -sign*units: a short index position (sign=-1 -> units>0) holds the index's legs short
-                            dollar_delta += (-l.units) * dd * S_spy
-                if d < t1 and k % hedge_every == 0:
+                            dollar_delta += (-l.units) * dd * S_spy * cfg.index_hedge_mult
+                if d < t1 and k % hedge_every == 0 and not dead:
                     target = -dollar_delta / S_spy
                     trn = abs(target - hedge_sh) * S_spy
                     cash -= trn * cfg.costs.hedge_bp
                     turnover.loc[d] += trn
                     hedge_sh = target
+                if cfg.cycle_stop is not None and not dead and d < t1 and (cash + mark - rec.equity_in) <= -cfg.cycle_stop * book_n:
+                    # stop: liquidate the cycle at this close (half-spread on the remaining option value, 1bp on hedges)
+                    exit_cost = abs(mark) * cfg.costs.single_30d + (abs(hedge_sh) + abs(over_sh)) * S_spy * cfg.costs.hedge_bp
+                    exit_cost += sum(abs(h) * S_name_prev.get(n, 0.0) for n, h in stock_h.items()) * cfg.costs.hedge_bp
+                    cash += mark - exit_cost; mark = 0.0; dead = True; hedge_sh = 0.0; over_sh = 0.0; stock_h = {}
+                    rec.skipped.append(f"STOP@{d.date()}")
+                if cfg.overhedge_trigger is not None and not dead and d < t1 and idx_notional > 0:
+                    if over_sh == 0.0 and S_spy < S0_cyc * (1.0 - cfg.overhedge_trigger):
+                        over_sh = -cfg.overhedge_size * idx_notional / S_spy
+                        cash -= abs(over_sh) * S_spy * cfg.costs.hedge_bp; turnover.loc[d] += abs(over_sh) * S_spy
+                    elif over_sh != 0.0 and S_spy >= S0_cyc:
+                        cash -= abs(over_sh) * S_spy * cfg.costs.hedge_bp; turnover.loc[d] += abs(over_sh) * S_spy; over_sh = 0.0
                 if d == t1:
+                    if over_sh != 0.0:
+                        cash -= abs(over_sh) * S_spy * cfg.costs.hedge_bp; over_sh = 0.0
                     cash += mark
                     if stock_h:   # flatten per-name stock hedges
                         row = name_px.loc[d]

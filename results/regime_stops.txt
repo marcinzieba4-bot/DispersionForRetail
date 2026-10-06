@@ -1,0 +1,39 @@
+=== sleeves with stops / overhedge, 1x, ex cash, fixed notional (stop = % of book notional lost within the cycle) ===
+PW base                                              cagr=+0.55% vol=1.6% sharpe=0.35 maxdd=-5.8% calmar=0.09 worst_m=-3.4% sh2h=0.68 | 2008=-0.7% 2020=+3.7% 2022=+0.5% covid=+0.9% | stopped 0/59 cycles
+PW stop 1%                                           cagr=+0.29% vol=1.7% sharpe=0.18 maxdd=-5.1% calmar=0.06 worst_m=-4.1% sh2h=0.20 | 2008=-0.1% 2020=+3.8% 2022=+0.1% covid=+0.9% | stopped 9/59 cycles
+PW stop 2%                                           cagr=+0.42% vol=1.7% sharpe=0.25 maxdd=-6.0% calmar=0.07 worst_m=-4.3% sh2h=0.68 | 2008=-0.9% 2020=+3.8% 2022=+0.5% covid=+0.9% | stopped 3/59 cycles
+PW stop 3%                                           cagr=+0.55% vol=1.6% sharpe=0.35 maxdd=-5.8% calmar=0.09 worst_m=-3.4% sh2h=0.68 | 2008=-0.7% 2020=+3.7% 2022=+0.5% covid=+0.9% | stopped 0/59 cycles
+PW band overhedge -2% x0.5                           cagr=-4.35% vol=7.8% sharpe=-0.53 maxdd=-64.1% calmar=-0.07 worst_m=-12.3% sh2h=-0.51 | 2008=+8.0% 2020=-20.6% 2022=-8.2% covid=-12.3% | stopped 0/59 cycles
+PW band overhedge -4% x0.25                          cagr=+0.07% vol=2.5% sharpe=0.04 maxdd=-11.3% calmar=0.01 worst_m=-4.4% sh2h=0.26 | 2008=+1.0% 2020=+1.6% 2022=-1.6% covid=+1.0% | stopped 0/59 cycles
+PW delta overhedge 1.25x                             cagr=+0.32% vol=1.7% sharpe=0.19 maxdd=-6.0% calmar=0.05 worst_m=-2.6% sh2h=0.45 | 2008=-0.3% 2020=+3.5% 2022=-0.6% covid=+0.9% | stopped 0/59 cycles
+PW delta overhedge 1.5x                              cagr=+0.08% vol=2.1% sharpe=0.05 maxdd=-7.5% calmar=0.01 worst_m=-2.6% sh2h=0.25 | 2008=+0.1% 2020=+3.3% 2022=-1.8% covid=+1.0% | stopped 0/59 cycles
+PW delta overhedge 1.5x, daily                       cagr=-0.53% vol=2.4% sharpe=-0.21 maxdd=-14.0% calmar=-0.04 worst_m=-3.4% sh2h=0.08 | 2008=-4.3% 2020=+4.0% 2022=-4.6% covid=+0.9% | stopped 0/59 cycles
+PW delta hedge daily (1.0x)                          cagr=+0.22% vol=1.6% sharpe=0.15 maxdd=-7.4% calmar=0.03 worst_m=-3.3% sh2h=0.57 | 2008=-4.2% 2020=+5.1% 2022=-1.2% covid=+2.0% | stopped 0/59 cycles
+CO base                                              cagr=+0.35% vol=1.2% sharpe=0.30 maxdd=-4.0% calmar=0.09 worst_m=-1.6% sh2h=0.43 | 2008=+0.0% 2020=-0.3% 2022=+0.0% covid=-0.2% | stopped 0/80 cycles
+CO stop 1%                                           cagr=+0.30% vol=1.2% sharpe=0.26 maxdd=-4.3% calmar=0.07 worst_m=-1.6% sh2h=0.36 | 2008=+0.0% 2020=-0.3% 2022=+0.0% covid=-0.2% | stopped 2/80 cycles
+CO stop 2%                                           cagr=+0.35% vol=1.2% sharpe=0.30 maxdd=-4.0% calmar=0.09 worst_m=-1.6% sh2h=0.43 | 2008=+0.0% 2020=-0.3% 2022=+0.0% covid=-0.2% | stopped 0/80 cycles
+CO stop 3%                                           cagr=+0.35% vol=1.2% sharpe=0.30 maxdd=-4.0% calmar=0.09 worst_m=-1.6% sh2h=0.43 | 2008=+0.0% 2020=-0.3% 2022=+0.0% covid=-0.2% | stopped 0/80 cycles
+EV base                                              cagr=+0.56% vol=0.9% sharpe=0.59 maxdd=-3.9% calmar=0.14 worst_m=-1.1% sh2h=0.22 | 2008=+1.2% 2020=+0.7% 2022=+1.2% covid=-0.8% | stopped 0/225 cycles
+EV stop 0.5%                                         cagr=+0.34% vol=1.0% sharpe=0.35 maxdd=-4.0% calmar=0.08 worst_m=-1.2% sh2h=-0.07 | 2008=+0.0% 2020=-0.5% 2022=+0.8% covid=-1.4% | stopped 19/225 cycles
+EV stop 1%                                           cagr=+0.33% vol=1.1% sharpe=0.30 maxdd=-4.4% calmar=0.07 worst_m=-2.4% sh2h=-0.12 | 2008=+0.1% 2020=-1.9% 2022=+1.3% covid=-2.9% | stopped 7/225 cycles
+EV stop 2%                                           cagr=+0.43% vol=1.1% sharpe=0.40 maxdd=-4.2% calmar=0.10 worst_m=-2.3% sh2h=-0.05 | 2008=+1.2% 2020=-1.9% 2022=+1.3% covid=-2.8% | stopped 1/225 cycles
+
+=== combo: 30% momentum (trend + trail 15%) + 70% of equity in the regime book at L x, cash on all equity ===
+book base L=3                                        cagr=+8.76% vol=8.4% sharpe=1.06 maxdd=-16.0% calmar=0.55 worst_m=-8.4% sh2h=1.13 | 2008=-3.2% 2020=+12.6% 2022=+4.6% covid=-5.8%
+book base L=4                                        cagr=+9.83% vol=9.4% sharpe=1.05 maxdd=-19.2% calmar=0.51 worst_m=-11.1% sh2h=1.14 | 2008=-3.0% 2020=+15.8% 2022=+5.9% covid=-5.9%
+book PW stop 2% L=3                                  cagr=+8.46% vol=8.6% sharpe=1.00 maxdd=-16.0% calmar=0.53 worst_m=-10.2% sh2h=1.13 | 2008=-3.5% 2020=+12.6% 2022=+4.6% covid=-5.8%
+book PW stop 2% L=4                                  cagr=+9.43% vol=9.8% sharpe=0.98 maxdd=-19.2% calmar=0.49 worst_m=-13.4% sh2h=1.14 | 2008=-3.4% 2020=+15.8% 2022=+5.9% covid=-5.9%
+book PW delta overhedge 1.25x L=3                    cagr=+8.20% vol=8.4% sharpe=0.99 maxdd=-16.4% calmar=0.50 worst_m=-8.4% sh2h=1.07 | 2008=-2.3% 2020=+11.9% 2022=+2.1% covid=-5.8%
+book PW delta overhedge 1.25x L=4                    cagr=+9.08% vol=9.5% sharpe=0.97 maxdd=-19.7% calmar=0.46 worst_m=-9.1% sh2h=1.07 | 2008=-1.9% 2020=+14.7% 2022=+2.5% covid=-5.9%
+book PW delta overhedge 1.5x L=3                     cagr=+7.63% vol=8.6% sharpe=0.91 maxdd=-16.9% calmar=0.45 worst_m=-8.9% sh2h=1.00 | 2008=-1.6% 2020=+11.1% 2022=-0.4% covid=-5.7%
+book PW delta overhedge 1.5x L=4                     cagr=+8.31% vol=9.9% sharpe=0.87 maxdd=-20.1% calmar=0.41 worst_m=-9.3% sh2h=0.97 | 2008=-1.0% 2020=+13.7% 2022=-0.8% covid=-5.9%
+book PW daily hedge 1.0x L=3                         cagr=+7.96% vol=8.3% sharpe=0.97 maxdd=-14.3% calmar=0.56 worst_m=-8.4% sh2h=1.08 | 2008=-9.8% 2020=+15.4% 2022=+0.8% covid=-3.6%
+book PW daily hedge 1.0x L=4                         cagr=+8.75% vol=9.3% sharpe=0.96 maxdd=-18.7% calmar=0.47 worst_m=-10.6% sh2h=1.09 | 2008=-11.9% 2020=+19.6% 2022=+0.8% covid=-3.1%
+book PW band overhedge -4% x0.25 L=3                 cagr=+7.57% vol=9.1% sharpe=0.86 maxdd=-16.0% calmar=0.47 worst_m=-10.2% sh2h=1.00 | 2008=+0.4% 2020=+7.3% 2022=+0.1% covid=-5.8%
+book PW band overhedge -4% x0.25 L=4                 cagr=+8.21% vol=10.5% sharpe=0.81 maxdd=-19.2% calmar=0.43 worst_m=-11.3% sh2h=0.97 | 2008=+1.6% 2020=+8.5% 2022=-0.1% covid=-5.9%
+book all stops (PW 2%, CO 2%, EV 1%) L=3             cagr=+7.90% vol=8.6% sharpe=0.94 maxdd=-16.8% calmar=0.47 worst_m=-10.4% sh2h=1.05 | 2008=-5.9% 2020=+6.4% 2022=+4.6% covid=-10.1%
+book all stops (PW 2%, CO 2%, EV 1%) L=4             cagr=+8.67% vol=9.8% sharpe=0.91 maxdd=-20.3% calmar=0.43 worst_m=-13.7% sh2h=1.05 | 2008=-6.8% 2020=+7.4% 2022=+5.9% covid=-11.6%
+book CO stop 2% + EV stop 1% L=3                     cagr=+8.20% vol=8.4% sharpe=0.99 maxdd=-16.8% calmar=0.49 worst_m=-8.6% sh2h=1.05 | 2008=-5.7% 2020=+6.4% 2022=+4.6% covid=-10.1%
+book CO stop 2% + EV stop 1% L=4                     cagr=+9.07% vol=9.5% sharpe=0.97 maxdd=-20.3% calmar=0.45 worst_m=-11.3% sh2h=1.05 | 2008=-6.4% 2020=+7.4% 2022=+5.9% covid=-11.6%
+ref: 30% ES + book base L=3                          cagr=+7.97% vol=6.8% sharpe=1.16 maxdd=-20.3% calmar=0.39 worst_m=-9.8% sh2h=1.43 | 2008=-9.5% 2020=+16.8% 2022=-0.5% covid=-6.6%
+DONE

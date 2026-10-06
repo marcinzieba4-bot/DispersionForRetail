@@ -1266,6 +1266,59 @@ the 60% margin rail (PM 53%). The hand table was set after seeing the cell
 table, so its full-sample Sharpe is optimistic; the equal Sharpe in both
 halves is the only defence.
 
+### Stop-losses and SPY overhedging inside the regime book (`results/regime_stops*.csv`)
+
+`scripts/run_regime_stops.py`; engine knobs `cycle_stop` (liquidate the
+cycle to cash when its mark-to-market loss reaches that fraction of book
+notional, half-spread on the remaining option value), `overhedge_trigger` /
+`overhedge_size` (band: add an extra SPY short of size x index-leg notional
+when SPY closes that far below the cycle entry, remove when it closes back
+above entry), `index_hedge_mult` (hedge the index leg at a multiple of its
+model delta), and `hedge_freq="D"`. Sleeves at 1x, ex cash, fixed notional:
+
+| sleeve variant | CAGR | Sharpe | maxDD | worst m | 2008 | 2020 | Covid | stopped cycles |
+|---|---|---|---|---|---|---|---|---|
+| put-wing (corr-hi) base | +0.55% | 0.35 | -5.8% | -3.4% | -0.7% | +3.7% | +0.9% | 0/59 |
+| put-wing stop 1% | +0.29% | 0.18 | -5.1% | -4.1% | -0.1% | +3.8% | +0.9% | 9/59 |
+| put-wing stop 2% | +0.42% | 0.25 | -6.0% | -4.3% | -0.9% | +3.8% | +0.9% | 3/59 |
+| put-wing band overhedge -2% x0.5 | -4.35% | -0.53 | -64.1% | -12.3% | +8.0% | -20.6% | -12.3% | |
+| put-wing band overhedge -4% x0.25 | +0.07% | 0.04 | -11.3% | -4.4% | +1.0% | +1.6% | +1.0% | |
+| put-wing delta overhedge 1.25x | +0.32% | 0.19 | -6.0% | -2.6% | -0.3% | +3.5% | +0.9% | |
+| put-wing delta overhedge 1.5x | +0.08% | 0.05 | -7.5% | -2.6% | +0.1% | +3.3% | +1.0% | |
+| put-wing daily hedge 1.0x | +0.22% | 0.15 | -7.4% | -3.3% | -4.2% | +5.1% | +2.0% | |
+| call dispersion (corr-lo) base | +0.35% | 0.30 | -4.0% | -1.6% | 0% | -0.3% | -0.2% | 0/80 |
+| call dispersion stop 1% | +0.30% | 0.26 | -4.3% | -1.6% | 0% | -0.3% | -0.2% | 2/80 |
+| event selling base | +0.56% | 0.59 | -3.9% | -1.1% | +1.2% | +0.7% | -0.8% | 0/225 |
+| event selling stop 0.5% | +0.34% | 0.35 | -4.0% | -1.2% | 0.0% | -0.5% | -1.4% | 19/225 |
+| event selling stop 1% | +0.33% | 0.30 | -4.4% | -2.4% | +0.1% | -1.9% | -2.9% | 7/225 |
+| event selling stop 2% | +0.43% | 0.40 | -4.2% | -2.3% | +1.2% | -1.9% | -2.8% | 1/225 |
+
+Combo (30% momentum with 200d trend filter and 15% trailing stop, 70% of equity in the regime book at L x, cash on all equity):
+
+| book | L | CAGR | vol | Sharpe | maxDD | Calmar | worst m | 2008 | 2020 | 2022 | Covid |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| base | 3x | +8.8% | 8.4% | 1.06 | -16.0% | 0.55 | -8.4% | -3% | +13% | +5% | -6% |
+| base | 4x | +9.8% | 9.4% | 1.05 | -19.2% | 0.51 | -11.1% | -3% | +16% | +6% | -6% |
+| put-wing stop 2% | 3x | +8.5% | 8.6% | 1.00 | -16.0% | 0.53 | -10.2% | -4% | +13% | +5% | -6% |
+| put-wing delta overhedge 1.25x | 3x | +8.2% | 8.4% | 0.99 | -16.4% | 0.50 | -8.4% | -2% | +12% | +2% | -6% |
+| put-wing delta overhedge 1.5x | 3x | +7.6% | 8.6% | 0.91 | -16.9% | 0.45 | -8.9% | -2% | +11% | 0% | -6% |
+| put-wing daily hedge 1.0x | 3x | +8.0% | 8.3% | 0.97 | -14.3% | 0.56 | -8.4% | -10% | +15% | +1% | -4% |
+| put-wing band overhedge -4% x0.25 | 3x | +7.6% | 9.1% | 0.86 | -16.0% | 0.47 | -10.2% | 0% | +7% | 0% | -6% |
+| all stops (PW 2%, CO 2%, EV 1%) | 3x | +7.9% | 8.6% | 0.94 | -16.8% | 0.47 | -10.4% | -6% | +6% | +5% | -10% |
+| ref: 30% ES + base book | 3x | +8.0% | 6.8% | 1.16 | -20.3% | 0.39 | -9.8% | -9% | +17% | 0% | -7% |
+
+Nothing helps. Cycle stops fire on mark-to-model losses of hedged positions
+that mostly recover by expiry, so every stop lowers the Sharpe (put-wing
+0.35 -> 0.18-0.25, event selling 0.59 -> 0.30-0.40) and the stopped months
+are the ones that would have paid. Overhedging the index leg is directional
+noise on a sleeve whose signal switches on after the selloff: with the
+lagged signal the put wing is entered in rebound months, so a band that
+shorts SPY on a 2% dip is whipsawed (24 Mar 2020 cost 8% of the sleeve) and
+a 1.25-1.5x delta multiple just adds beta to a book that was crisis-neutral.
+Daily hedging lowers the drawdown (-14%) at a lower Sharpe and a worse 2008.
+The regime book's risk is not inside the cycle, it is which months are on,
+and that is already the signal's job.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
