@@ -1475,6 +1475,49 @@ margin at the peak. Momentum on margin above 100% is Reg-T stock leverage
 and the willingness to post 1-2x the account as additional collateral in
 a stress month.
 
+### 10-name momentum, book vs dips vs both, and tastytrade-realistic haircuts (`results/final_mix_VOLVUE.csv`)
+
+`scripts/run_final_mix.py`. (1) Momentum with 10 names instead of 5 (same
+12-1 signal, 200d trend filter, 15% trailing stop): alone 10.6%/yr, vol
+19.4%, Sharpe 0.63, maxDD -28.8%, worst month -19.1% vs 12.9% / 22.3% /
+0.67 / -32.8% / -24.7% for 5 names. In the mixes 10 names cut 2-3 points
+of CAGR and 5 points of worst month at the same Sharpe and Calmar.
+
+(2) Which option leg to pair with momentum. Cycle-P&L correlations: base
+book vs dip tranches 0.32, momentum vs either about 0. Each alone at 10%
+vol: book + adds Sharpe 0.92 / Calmar 0.41, base book 0.82 / 0.35, dips
+only 0.71 / 0.30. Next to 100% 10-name momentum at the leverage that
+gives about 20%: book + adds 5x 20.8% / Sharpe 0.97 / maxDD -37.5% /
+Calmar 0.56; base book 7x 21.5% / 0.92 / -41.2% / 0.52; dips only 20x
+18.9% / 0.85 / -34.4% / 0.55. Connecting them (the book with dip adds) is
+the best of the three on Sharpe and Calmar; dips alone has the mildest
+crisis path (Covid -4% vs -17%) and the lightest margin in normal months.
+
+(3) Haircuts for tastytrade reality: dip-tranche P&L x0.5 (mid-cycle
+fills at entry IV are optimistic in a selloff), +0.5%/yr of extra option
+spread per 1x of option notional carried (single-name puts and event
+straddles in stressed markets), cash yield x0.5 (tastytrade cash interest
+is below fed funds unless T-bills are held). Commissions, hedge costs and
+the spec half-spreads are already in the model.
+
+| mix | model CAGR | Sharpe | maxDD | Calmar | haircut CAGR | Sharpe | maxDD | Calmar | worst m |
+|---|---|---|---|---|---|---|---|---|---|
+| mom10 100% + dips 20x | +18.9% | 0.85 | -34.4% | 0.55 | +8.7% | 0.52 | -34.4% | 0.25 | -19.7% |
+| mom10 70% + dips 20x | +16.4% | 0.86 | -30.9% | 0.53 | +6.4% | 0.49 | -26.8% | 0.24 | -14.1% |
+| mom5 100% + dips 20x | +21.5% | 0.87 | -37.0% | 0.58 | +11.0% | 0.58 | -38.4% | 0.29 | -25.1% |
+| mom10 100% + book + adds 5x | +20.8% | 0.97 | -37.5% | 0.56 | +15.9% | 0.79 | -37.6% | 0.42 | -18.5% |
+| mom10 60% + book + adds 4.2x | +15.9% | 1.05 | -29.6% | 0.54 | +11.7% | 0.82 | -29.3% | 0.40 | -15.7% |
+
+The dip-only mixes do not survive the haircut: their edge is 0.5% of
+notional per year carried on 20x notional, so half a point of extra spread
+per turn removes most of it (18.9% -> 8.7%). The book-with-adds mixes
+lose 4-5 points and keep Sharpe about 0.8, because most of their return is
+the base book's carry, which the haircut touches less. Realistic at
+tastytrade: 12-16%/yr at Sharpe 0.8 with a 30-38% drawdown from 60-100%
+10-name momentum plus the regime book with dip adds at 4-5x, in a
+portfolio-margin account, with 1.5-2.5x the account needed as collateral
+at the peak. 20%/yr is a model number.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

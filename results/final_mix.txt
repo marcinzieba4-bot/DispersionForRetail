@@ -1,0 +1,47 @@
+=== (1) momentum sleeve alone, 100% of equity, with cash ===
+mom5 trend+trail                                     cagr=+12.9% vol=22.3% sharpe=0.67 sortino=0.65 maxdd=-32.8% calmar=0.39 worst_m=-24.7% worst_12m=-23.9% beta=0.64 sh2h=0.66 | 2008=-17% 2020=+8% 2022=-2% covid=-18%
+mom10 trend+trail                                    cagr=+10.6% vol=19.4% sharpe=0.63 sortino=0.60 maxdd=-28.8% calmar=0.37 worst_m=-19.1% worst_12m=-23.3% beta=0.63 sh2h=0.72 | 2008=-18% 2020=+13% 2022=-3% covid=-19%
+mom10 trail only                                     cagr=+13.8% vol=23.3% sharpe=0.68 sortino=0.70 maxdd=-53.2% calmar=0.26 worst_m=-22.6% worst_12m=-47.9% beta=0.98 sh2h=0.85 | 2008=-36% 2020=+36% 2022=+7% covid=-3%
+
+=== (1b) scaled mixes with 10 names vs 5 names ===
+mom5 30% + dips 5x                                   cagr=+7.7% vol=7.6% sharpe=1.02 sortino=1.09 maxdd=-10.7% calmar=0.72 worst_m=-7.7% worst_12m=-4.9% beta=0.14 sh2h=1.12 | 2008=-3% 2020=+11% 2022=+5% covid=-1%
+mom5 70% + dips 20x                                  cagr=+18.3% vol=21.7% sharpe=0.89 sortino=1.07 maxdd=-31.9% calmar=0.57 worst_m=-17.6% worst_12m=-14.8% beta=0.25 sh2h=1.02 | 2008=-10% 2020=+40% 2022=+15% covid=+4%
+mom5 100% + dips 15x                                 cagr=+19.6% vol=24.6% sharpe=0.86 sortino=0.89 maxdd=-33.1% calmar=0.59 worst_m=-24.7% worst_12m=-19.2% beta=0.49 sh2h=0.92 | 2008=-15% 2020=+33% 2022=+10% covid=-6%
+mom5 100% + dips 20x                                 cagr=+21.5% vol=26.5% sharpe=0.87 sortino=0.95 maxdd=-37.0% calmar=0.58 worst_m=-24.7% worst_12m=-18.6% beta=0.45 sh2h=0.96 | 2008=-16% 2020=+42% 2022=+14% covid=-2%
+mom5 120% + dips 20x                                 cagr=+23.3% vol=30.1% sharpe=0.86 sortino=0.90 maxdd=-40.3% calmar=0.58 worst_m=-29.2% worst_12m=-23.6% beta=0.58 sh2h=0.93 | 2008=-20% 2020=+43% 2022=+13% covid=-6%
+mom5 60% + book+adds 4.2x                            cagr=+17.5% vol=17.1% sharpe=1.04 sortino=1.05 maxdd=-34.1% calmar=0.51 worst_m=-15.6% worst_12m=-15.2% beta=0.37 sh2h=1.10 | 2008=-8% 2020=+32% 2022=+11% covid=-8%
+mom5 90% + book+adds 6.3x                            cagr=+24.8% vol=25.7% sharpe=1.01 sortino=1.01 maxdd=-47.8% calmar=0.52 worst_m=-22.9% worst_12m=-23.4% beta=0.56 sh2h=1.06 | 2008=-14% 2020=+48% 2022=+16% covid=-13%
+mom10 30% + dips 5x                                  cagr=+6.9% vol=6.8% sharpe=1.02 sortino=1.10 maxdd=-10.3% calmar=0.67 worst_m=-5.8% worst_12m=-3.9% beta=0.14 sh2h=1.24 | 2008=-3% 2020=+13% 2022=+4% covid=-1%
+mom10 70% + dips 20x                                 cagr=+16.4% vol=20.2% sharpe=0.86 sortino=1.05 maxdd=-30.9% calmar=0.53 worst_m=-13.5% worst_12m=-11.2% beta=0.24 sh2h=1.10 | 2008=-10% 2020=+44% 2022=+14% covid=+3%
+mom10 100% + dips 15x                                cagr=+17.1% vol=21.9% sharpe=0.84 sortino=0.88 maxdd=-30.5% calmar=0.56 worst_m=-19.1% worst_12m=-19.5% beta=0.48 sh2h=1.01 | 2008=-16% 2020=+39% 2022=+9% covid=-8%
+mom10 100% + dips 20x                                cagr=+18.9% vol=24.0% sharpe=0.85 sortino=0.94 maxdd=-34.4% calmar=0.55 worst_m=-19.1% worst_12m=-18.9% beta=0.43 sh2h=1.04 | 2008=-16% 2020=+48% 2022=+13% covid=-4%
+mom10 120% + dips 20x                                cagr=+20.4% vol=27.0% sharpe=0.83 sortino=0.88 maxdd=-37.3% calmar=0.55 worst_m=-22.7% worst_12m=-23.9% beta=0.56 sh2h=1.01 | 2008=-20% 2020=+50% 2022=+12% covid=-8%
+mom10 60% + book+adds 4.2x                           cagr=+15.9% vol=15.4% sharpe=1.05 sortino=1.07 maxdd=-29.6% calmar=0.54 worst_m=-14.8% worst_12m=-13.8% beta=0.36 sh2h=1.22 | 2008=-8% 2020=+36% 2022=+10% covid=-9%
+mom10 90% + book+adds 6.3x                           cagr=+22.5% vol=23.0% sharpe=1.01 sortino=1.02 maxdd=-42.2% calmar=0.53 worst_m=-22.0% worst_12m=-21.4% beta=0.55 sh2h=1.17 | 2008=-14% 2020=+54% 2022=+15% covid=-14%
+
+=== (2) book vs dips vs both, each next to mom10 100%, option leverage chosen for ~20% CAGR; and alone at matched 10% vol ===
+cycle-P&L correlations:
+           book  dips  book+adds  mom10
+book       1.00  0.32       0.93   0.04
+dips       0.32  1.00       0.64  -0.03
+book+adds  0.93  0.64       1.00   0.02
+mom10      0.04 -0.03       0.02   1.00
+mom10 100% + book base 7x                            cagr=+21.5% vol=24.9% sharpe=0.92 sortino=0.94 maxdd=-41.2% calmar=0.52 worst_m=-26.2% worst_12m=-22.7% beta=0.68 sh2h=1.06 | 2008=-17% 2020=+47% 2022=+10% covid=-21%
+mom10 100% + dips only 20x                           cagr=+18.9% vol=24.0% sharpe=0.85 sortino=0.94 maxdd=-34.4% calmar=0.55 worst_m=-19.1% worst_12m=-18.9% beta=0.43 sh2h=1.04 | 2008=-16% 2020=+48% 2022=+13% covid=-4%
+mom10 100% + book + adds 5x                          cagr=+20.8% vol=22.5% sharpe=0.97 sortino=0.95 maxdd=-37.5% calmar=0.56 worst_m=-18.2% worst_12m=-16.4% beta=0.61 sh2h=1.11 | 2008=-16% 2020=+46% 2022=+11% covid=-17%
+book base alone at 10% vol (L=4.1)                   cagr=+7.8% vol=9.7% sharpe=0.82 sortino=0.83 maxdd=-22.3% calmar=0.35 worst_m=-16.0% worst_12m=-14.2% beta=0.03 sh2h=0.98 | 2008=+3% 2020=+19% 2022=+10% covid=-1%
+dips only alone at 10% vol (L=10.0)                  cagr=+5.7% vol=8.3% sharpe=0.71 sortino=0.59 maxdd=-19.1% calmar=0.30 worst_m=-5.8% worst_12m=-5.6% beta=-0.10 sh2h=1.04 | 2008=+4% 2020=+16% 2022=+10% covid=+9%
+book + adds alone at 10% vol (L=3.8)                 cagr=+8.9% vol=9.8% sharpe=0.92 sortino=0.98 maxdd=-21.6% calmar=0.41 worst_m=-13.3% worst_12m=-13.1% beta=-0.01 sh2h=1.10 | 2008=+4% 2020=+23% 2022=+12% covid=+3%
+
+=== (3) tastytrade-realistic haircuts: dip tranches x0.5 (entry-IV fills), option spreads +0.5%/yr per 1x of option notional, cash yield x0.5 ===
+mom10 100% + dips 20x (model)                        cagr=+18.9% vol=24.0% sharpe=0.85 sortino=0.94 maxdd=-34.4% calmar=0.55 worst_m=-19.1% worst_12m=-18.9% beta=0.43 sh2h=1.04 | 2008=-16% 2020=+48% 2022=+13% covid=-4%
+mom10 100% + dips 20x (haircut)                      cagr=+8.7% vol=20.3% sharpe=0.52 sortino=0.57 maxdd=-34.4% calmar=0.25 worst_m=-19.7% worst_12m=-25.7% beta=0.53 sh2h=0.67 | 2008=-21% 2020=+24% 2022=-1% covid=-12%
+mom10 70% + dips 20x (model)                         cagr=+16.4% vol=20.2% sharpe=0.86 sortino=1.05 maxdd=-30.9% calmar=0.53 worst_m=-13.5% worst_12m=-11.2% beta=0.24 sh2h=1.10 | 2008=-10% 2020=+44% 2022=+14% covid=+3%
+mom10 70% + dips 20x (haircut)                       cagr=+6.4% vol=15.1% sharpe=0.49 sortino=0.56 maxdd=-26.8% calmar=0.24 worst_m=-14.1% worst_12m=-18.5% beta=0.34 sh2h=0.68 | 2008=-15% 2020=+20% 2022=+0% covid=-6%
+mom10 100% + book+adds 5x (model)                    cagr=+20.8% vol=22.5% sharpe=0.97 sortino=0.95 maxdd=-37.5% calmar=0.56 worst_m=-18.2% worst_12m=-16.4% beta=0.61 sh2h=1.11 | 2008=-16% 2020=+46% 2022=+11% covid=-17%
+mom10 100% + book+adds 5x (haircut)                  cagr=+15.9% vol=22.3% sharpe=0.79 sortino=0.78 maxdd=-37.6% calmar=0.42 worst_m=-18.5% worst_12m=-19.1% beta=0.64 sh2h=0.91 | 2008=-19% 2020=+38% 2022=+5% covid=-19%
+mom10 60% + book+adds 4.2x (model)                   cagr=+15.9% vol=15.4% sharpe=1.05 sortino=1.07 maxdd=-29.6% calmar=0.54 worst_m=-14.8% worst_12m=-13.8% beta=0.36 sh2h=1.22 | 2008=-8% 2020=+36% 2022=+10% covid=-9%
+mom10 60% + book+adds 4.2x (haircut)                 cagr=+11.7% vol=15.0% sharpe=0.82 sortino=0.81 maxdd=-29.3% calmar=0.40 worst_m=-15.7% worst_12m=-15.5% beta=0.38 sh2h=0.97 | 2008=-11% 2020=+29% 2022=+5% covid=-11%
+mom5 100% + dips 20x (model)                         cagr=+21.5% vol=26.5% sharpe=0.87 sortino=0.95 maxdd=-37.0% calmar=0.58 worst_m=-24.7% worst_12m=-18.6% beta=0.45 sh2h=0.96 | 2008=-16% 2020=+42% 2022=+14% covid=-2%
+mom5 100% + dips 20x (haircut)                       cagr=+11.0% vol=23.1% sharpe=0.58 sortino=0.62 maxdd=-38.4% calmar=0.29 worst_m=-25.1% worst_12m=-25.4% beta=0.54 sh2h=0.63 | 2008=-20% 2020=+18% 2022=-0% covid=-11%
+DONE
