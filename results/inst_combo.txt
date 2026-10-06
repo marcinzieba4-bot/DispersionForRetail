@@ -1,0 +1,20 @@
+=== regime book (1x, ex cash, vol-path marks) by cost model ===
+retail (tastytrade)        cagr=+1.25% sharpe=0.54 maxdd=-6.3% worst_m=-4.8%
+institutional 1.5% flat    cagr=+1.48% sharpe=0.65 maxdd=-6.1% worst_m=-4.7%
+institutional 0.75% flat   cagr=+1.64% sharpe=0.72 maxdd=-5.9% worst_m=-4.6%
+zero                       cagr=+1.84% sharpe=0.82 maxdd=-5.8% worst_m=-4.5%
+TLT straddle retail (tastytrade)        cagr=+1.82% sharpe=0.63
+TLT straddle institutional 1.5% flat    cagr=+1.85% sharpe=0.64
+TLT straddle institutional 0.75% flat   cagr=+1.96% sharpe=0.68
+TLT straddle zero                       cagr=+2.10% sharpe=0.74
+
+=== combo: sector top3 100% + book 3.75x + TLT 38% + straddle 75%, by cost model (k=1 and k=1.25) ===
+retail (tastytrade) k=1.0            cagr=+18.7% vol=14.6% sharpe=1.25 sortino=1.28 maxdd=-25.4% calmar=0.74 worst_m=-14.9% worst_12m=-8.4% cvar=-8.1% sh2h=1.52 | 2008=+7% 2020=+46% 2022=+5% covid=-10%
+retail (tastytrade) k=1.25           cagr=+23.0% vol=18.2% sharpe=1.23 sortino=1.27 maxdd=-31.7% calmar=0.73 worst_m=-18.4% worst_12m=-10.7% cvar=-10.2% sh2h=1.48 | 2008=+8% 2020=+59% 2022=+6% covid=-13%
+institutional 1.5% flat k=1.0        cagr=+20.0% vol=14.6% sharpe=1.33 sortino=1.38 maxdd=-25.2% calmar=0.79 worst_m=-14.5% worst_12m=-7.4% cvar=-8.0% sh2h=1.60 | 2008=+8% 2020=+48% 2022=+6% covid=-10%
+institutional 1.5% flat k=1.25       cagr=+24.8% vol=18.2% sharpe=1.31 sortino=1.37 maxdd=-31.5% calmar=0.78 worst_m=-17.9% worst_12m=-9.4% cvar=-10.0% sh2h=1.56 | 2008=+10% 2020=+61% 2022=+7% covid=-13%
+institutional 0.75% flat k=1.0       cagr=+21.1% vol=14.5% sharpe=1.39 sortino=1.45 maxdd=-25.2% calmar=0.84 worst_m=-14.2% worst_12m=-6.7% cvar=-7.9% sh2h=1.68 | 2008=+10% 2020=+50% 2022=+8% covid=-10%
+institutional 0.75% flat k=1.25      cagr=+26.2% vol=18.2% sharpe=1.37 sortino=1.43 maxdd=-31.4% calmar=0.83 worst_m=-17.5% worst_12m=-8.5% cvar=-9.8% sh2h=1.64 | 2008=+12% 2020=+63% 2022=+9% covid=-12%
+zero k=1.0                           cagr=+22.6% vol=14.5% sharpe=1.48 sortino=1.56 maxdd=-25.0% calmar=0.90 worst_m=-13.8% worst_12m=-5.7% cvar=-7.7% sh2h=1.78 | 2008=+13% 2020=+52% 2022=+9% covid=-9%
+zero k=1.25                          cagr=+28.0% vol=18.2% sharpe=1.45 sortino=1.54 maxdd=-31.3% calmar=0.90 worst_m=-17.0% worst_12m=-7.3% cvar=-9.7% sh2h=1.73 | 2008=+15% 2020=+67% 2022=+11% covid=-12%
+DONE

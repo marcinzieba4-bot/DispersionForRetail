@@ -2048,6 +2048,34 @@ option fills, intraday margin in a vol spike, and the in-sample origin of
 the correlation thresholds. Realistic live expectation for line S: CAGR
 14-16% at Sharpe 0.9-1.1 with a drawdown near 25-30%.
 
+### Institutional execution on the sector-ETF combo (`results/inst_combo_VOLVUE.csv`)
+
+`scripts/run_inst_combo.py`. The regime book sleeves and the TLT straddle
+re-run with vol-path marks under: retail (tastytrade: spec half-spreads,
+capped commissions, 1 bp hedges), institutional 1.5% flat half-spread on
+single-name legs (0.3% index, 0.5 bp hedges, no commissions),
+institutional 0.75% flat, and zero. ETF legs already pay 2 bp.
+
+| cost model | book 1x ex cash: CAGR / Sharpe | straddle 1x: CAGR / Sharpe | combo k=1: CAGR / vol / Sharpe / Sortino / maxDD / Calmar / worst m / worst 12m | combo k=1.25: CAGR / maxDD / Calmar |
+|---|---|---|---|---|
+| retail (tastytrade) | +1.25% / 0.54 | +1.82% / 0.63 | +18.7% / 14.6% / 1.25 / 1.28 / -25.4% / 0.74 / -14.9% / -8.4% | +23.0% / -31.7% / 0.73 |
+| institutional 1.5% flat | +1.48% / 0.65 | +1.85% / 0.64 | +20.0% / 14.6% / 1.33 / 1.38 / -25.2% / 0.79 / -14.5% / -7.4% | +24.8% / -31.5% / 0.78 |
+| institutional 0.75% flat | +1.64% / 0.72 | +1.96% / 0.68 | +21.1% / 14.5% / 1.39 / 1.45 / -25.2% / 0.84 / -14.2% / -6.7% | +26.2% / -31.4% / 0.83 |
+| zero | +1.84% / 0.82 | +2.10% / 0.74 | +22.6% / 14.5% / 1.48 / 1.56 / -25.0% / 0.90 / -13.8% / -5.7% | +28.0% / -31.3% / 0.90 |
+
+Institutional costs add 1.3-2.4 points of CAGR and 0.08-0.14 of Sharpe
+at k=1, all of it through the book (3.75x of a sleeve whose retail cost
+is about 0.4%/yr per turn) and a little through the straddle; the
+max drawdown does not move because it is the Nov 2008 and Feb 2020
+months, which are P&L, not cost. Calmar rises from 0.74 to 0.79-0.84
+because the numerator rises. Not modelled, and larger than the spread
+saving: a prime-broker margin model would lower the book's requirement
+and let k rise, and institutional desks can work single-name fills in
+stress that a retail account cannot. Also not modelled: the costs above
+assume mid-based fills on normal days for both; the institutional
+advantage is mainly in stress months, which is where the model already
+charges double spreads on dip fills only.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
