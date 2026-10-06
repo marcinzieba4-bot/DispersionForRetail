@@ -1,0 +1,23 @@
+=== (a) walk-forward refit allocator, 2012-2026 (weights only from past data), cash yield on all equity ===
+walk-forward L=1x                  cagr=+6.3% vol=8.1% sharpe=1.04 sortino=0.86 maxdd=-18.0% calmar=0.35 worst_m=-12.3% cvar=-5.3% beta=0.37 sh2h=1.09 | 2008=+nan% 2020=+13% 2022=+1% covid=-12% | PM peak=36% p95=34%
+walk-forward L=3x                  cagr=+14.9% vol=24.6% sharpe=0.88 sortino=0.73 maxdd=-54.0% calmar=0.28 worst_m=-37.0% cvar=-16.3% beta=1.14 sh2h=0.87 | 2008=+nan% 2020=+20% 2022=-3% covid=-40% | PM peak=107% p95=102%
+walk-forward L=5x                  cagr=+19.2% vol=42.5% sharpe=0.79 sortino=0.64 maxdd=-89.1% calmar=0.22 worst_m=-61.6% cvar=-29.4% beta=2.05 sh2h=0.74 | 2008=+nan% 2020=-26% 2022=-14% covid=-75% | PM peak=178% p95=170%
+ref: 30% ES only, 2012-26          cagr=+4.3% vol=4.1% sharpe=1.38 sortino=1.32 maxdd=-10.3% calmar=0.42 worst_m=-2.7% cvar=-2.3% beta=0.29 sh2h=1.49 | 2008=+nan% 2020=+8% 2022=-4% covid=-6% | PM peak=2% p95=2%
+ref: 30% ES + book 3x, 2012-26     cagr=+8.9% vol=6.3% sharpe=1.38 sortino=1.51 maxdd=-12.3% calmar=0.72 worst_m=-5.3% cvar=-3.2% beta=0.32 sh2h=1.41 | 2008=+nan% 2020=+17% 2022=-0% covid=-7% | PM peak=41% p95=41%
+
+=== (b) hand-set table (6 cells, weights fixed by hand), full sample 2007-2026 ===
+   lo/up     PW=0.0 CO=1.0 IP=0.0 EV=1.0 MOM=0.3 ES=0.3  gross=2.6
+   lo/down   PW=0.0 CO=0.0 IP=0.0 EV=1.0 MOM=0.0 ES=0.0  gross=1.0
+   mid/up    PW=0.0 CO=0.0 IP=0.5 EV=1.5 MOM=0.3 ES=0.3  gross=2.6
+   mid/down  PW=0.5 CO=0.0 IP=0.5 EV=1.5 MOM=0.0 ES=0.0  gross=2.5
+   hi/up     PW=1.0 CO=0.0 IP=0.5 EV=1.5 MOM=0.0 ES=0.3  gross=3.3
+   hi/down   PW=1.0 CO=0.0 IP=0.5 EV=1.5 MOM=0.0 ES=0.0  gross=3.0
+hand table L=1x                    cagr=+10.3% vol=9.3% sharpe=1.12 sortino=1.13 maxdd=-19.4% calmar=0.53 worst_m=-9.4% cvar=-5.3% beta=0.33 sh2h=1.14 | 2008=+5% 2020=+6% 2022=+4% covid=-16% | PM peak=27% p95=27%
+   yearly: 2007=+4% 2008=+5% 2009=+15% 2010=+7% 2011=+3% 2012=+9% 2013=+29% 2014=+4% 2015=+2% 2016=+8% 2017=+14% 2018=+2% 2019=+10% 2020=+6% 2021=+7% 2022=+4% 2023=+16% 2024=+22% 2025=+15% 2026=+24%
+hand table L=2x                    cagr=+18.4% vol=18.7% sharpe=1.02 sortino=1.01 maxdd=-37.6% calmar=0.49 worst_m=-19.2% cvar=-11.0% beta=0.67 sh2h=1.01 | 2008=+8% 2020=+7% 2022=+6% covid=-32% | PM peak=53% p95=53%
+hand table L=3x                    cagr=+25.6% vol=28.4% sharpe=0.97 sortino=0.96 maxdd=-54.4% calmar=0.47 worst_m=-29.4% cvar=-17.0% beta=1.03 sh2h=0.95 | 2008=+11% 2020=+0% 2022=+7% covid=-49% | PM peak=80% p95=80%
+hand table L=5x                    cagr=+34.5% vol=49.2% sharpe=0.88 sortino=0.84 maxdd=-86.6% calmar=0.40 worst_m=-51.6% cvar=-30.7% beta=1.82 sh2h=0.84 | 2008=+16% 2020=-45% 2022=+9% covid=-81% | PM peak=133% p95=133%
+   yearly: 2007=-2% 2008=+16% 2009=+93% 2010=+20% 2011=-7% 2012=+42% 2013=+209% 2014=+8% 2015=+5% 2016=+41% 2017=+71% 2018=-6% 2019=+45% 2020=-45% 2021=+36% 2022=+9% 2023=+58% 2024=+95% 2025=+47% 2026=+127%
+   hand table 1x by half: 2007-16 cagr=+8.5% sharpe=1.12 maxdd=-11.5% | 2017-26 cagr=+12.1% sharpe=1.12 maxdd=-19.4%
+ref: 30% ES + book 3x, 2007-26     cagr=+8.0% vol=6.8% sharpe=1.16 sortino=1.11 maxdd=-20.3% calmar=0.39 worst_m=-9.8% cvar=-4.0% beta=0.31 sh2h=1.43 | 2008=-9% 2020=+17% 2022=-0% covid=-7% | PM peak=41% p95=41%
+DONE

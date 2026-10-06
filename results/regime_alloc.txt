@@ -1,0 +1,51 @@
+=== cycle P&L by regime cell (corr tercile / SPY vs 200d): annualised mean [Sharpe] (n) per atom, 1x notional ===
+lo/up     n= 92 | PW -1.3% [-0.60]  CO +0.6% [+0.34]  IP +0.9% [+0.30]  EV -0.3% [-0.27]  MOM +9.1% [+0.32]  ES +7.4% [+0.63]
+lo/down   n=  5 | PW -3.1% [-1.41]  CO -0.7% [-0.18]  IP -13.2% [-1.47]  EV +3.5% [+2.26]  MOM -38.1% [-0.91]  ES -68.9% [-1.62]
+mid/up    n= 64 | PW +0.3% [+0.15]  CO -0.2% [-0.09]  IP +1.7% [+0.48]  EV +0.7% [+1.05]  MOM +33.0% [+1.50]  ES +7.8% [+0.42]
+mid/down  n= 16 | PW +5.1% [+1.12]  CO +1.0% [+0.23]  IP +5.2% [+1.05]  EV +1.4% [+2.05]  MOM +5.9% [+0.22]  ES +18.4% [+0.84]
+hi/up     n= 25 | PW +1.0% [+0.51]  CO -3.2% [-1.90]  IP +2.3% [+0.82]  EV +0.4% [+0.68]  MOM +11.6% [+0.48]  ES +21.2% [+1.62]
+hi/down   n= 34 | PW +3.2% [+0.91]  CO -7.5% [-2.02]  IP +5.4% [+1.03]  EV +2.1% [+1.36]  MOM +17.6% [+0.44]  ES +24.1% [+0.89]
+
+--- same, by VIX bucket x trend (check) ---
+vix<20/up    n=143 | PW -0.4% [-0.20]  CO +0.3% [+0.16]  IP +0.3% [+0.09]  EV +0.1% [+0.10]  MOM +12.8% [+0.50]  ES +4.7% [+0.32]
+vix<20/down  n=  7 | PW -0.8% [-0.27]  CO -4.7% [-1.96]  IP -4.2% [-0.73]  EV +1.7% [+1.27]  MOM +29.4% [+1.10]  ES -10.5% [-0.45]
+vix>=20/up   n= 38 | PW -0.3% [-0.13]  CO -2.0% [-0.93]  IP +5.3% [+2.37]  EV +0.4% [+0.49]  MOM +37.2% [+1.46]  ES +27.1% [+2.24]
+vix>=20/down n= 48 | PW +3.8% [+0.98]  CO -4.4% [-1.04]  IP +4.8% [+0.85]  EV +2.0% [+1.53]  MOM +6.2% [+0.16]  ES +17.6% [+0.62]
+
+=== out-of-sample check: fit weights on one half, apply to the other (cycle P&L, 1x, ex cash) ===
+fit 2007-16 -> test 2017-26: in-sample ann=+10.0% sharpe=1.38 maxdd=-8.0% | OUT-OF-SAMPLE ann=+4.8% sharpe=0.58 maxdd=-13.9% worst=-13.9%
+   lo/up     PW=0.00 CO=0.00 IP=0.00 EV=0.00 MOM=0.00 ES=0.00
+   lo/down   PW=0.00 CO=0.00 IP=0.00 EV=0.00 MOM=0.00 ES=0.00
+   mid/up    PW=0.00 CO=0.00 IP=0.72 EV=1.50 MOM=0.27 ES=0.21
+   mid/down  PW=0.94 CO=0.67 IP=1.50 EV=1.50 MOM=0.00 ES=0.12
+   hi/up     PW=1.42 CO=0.00 IP=1.50 EV=1.50 MOM=0.08 ES=0.22
+   hi/down   PW=0.00 CO=0.00 IP=0.78 EV=1.50 MOM=0.06 ES=0.13
+fit 2017-26 -> test 2007-16: in-sample ann=+14.0% sharpe=1.50 maxdd=-9.0% | OUT-OF-SAMPLE ann=+5.4% sharpe=0.53 maxdd=-16.7% worst=-13.7%
+   lo/up     PW=0.00 CO=1.35 IP=1.36 EV=0.00 MOM=0.08 ES=0.62
+   lo/down   PW=0.00 CO=0.00 IP=0.00 EV=0.00 MOM=0.00 ES=0.00
+   mid/up    PW=1.50 CO=0.84 IP=0.38 EV=1.50 MOM=0.26 ES=0.00
+   mid/down  PW=0.00 CO=0.00 IP=0.00 EV=0.00 MOM=0.00 ES=0.00
+   hi/up     PW=0.35 CO=0.00 IP=0.00 EV=0.00 MOM=0.04 ES=0.92
+   hi/down   PW=1.50 CO=0.00 IP=0.49 EV=1.41 MOM=0.02 ES=0.08
+
+=== static references (cycle P&L, 1x atoms, ex cash) ===
+honest regime book (PW hi, CO lo, EV)    ann=+1.5% sharpe=0.74 maxdd=-4.0% worst=-2.8%
+MOM alone                                ann=+15.9% sharpe=0.56 maxdd=-60.2% worst=-21.4%
+ES alone                                 ann=+10.5% sharpe=0.57 maxdd=-50.2% worst=-31.1%
+EV alone                                 ann=+0.6% sharpe=0.57 maxdd=-3.3% worst=-1.1%
+
+=== full-sample regime weight table (per 1x; the deployable table) ===
+lo/up     (n= 92) PW=0.00 CO=1.50 IP=0.00 EV=0.00 MOM=0.12 ES=0.58   gross=2.20  PM/1x=15%
+lo/down   (n=  5) PW=0.00 CO=0.00 IP=0.00 EV=0.00 MOM=0.00 ES=0.00   gross=0.00  PM/1x=0%
+mid/up    (n= 64) PW=0.00 CO=0.00 IP=0.53 EV=1.50 MOM=0.26 ES=0.09   gross=2.38  PM/1x=14%
+mid/down  (n= 16) PW=0.87 CO=0.00 IP=0.74 EV=1.50 MOM=0.00 ES=0.14   gross=3.25  PM/1x=14%
+hi/up     (n= 25) PW=0.97 CO=0.00 IP=1.11 EV=1.50 MOM=0.08 ES=0.47   gross=4.12  PM/1x=21%
+hi/down   (n= 34) PW=0.90 CO=0.00 IP=0.68 EV=1.50 MOM=0.04 ES=0.12   gross=3.23  PM/1x=15%
+
+=== regime allocator, daily equity, cash yield on all equity ===
+L=1x cagr=+11.6% vol=8.5% sharpe=1.36 sortino=1.35 maxdd=-14.5% calmar=0.80 worst_m=-7.9% cvar=-4.8% beta=0.35 sh2h=1.45 | 2008=+9% 2020=+21% 2022=-0% covid=-6% | PM peak=29% p95=29%
+L=2x cagr=+21.6% vol=17.0% sharpe=1.25 sortino=1.23 maxdd=-27.8% calmar=0.78 worst_m=-15.6% cvar=-9.9% beta=0.70 sh2h=1.32 | 2008=+16% 2020=+41% 2022=-3% covid=-13% | PM peak=59% p95=59%
+L=3x cagr=+31.3% vol=25.7% sharpe=1.21 sortino=1.19 maxdd=-39.5% calmar=0.79 worst_m=-23.1% cvar=-15.0% beta=1.07 sh2h=1.27 | 2008=+23% 2020=+61% 2022=-5% covid=-21% | PM peak=88% p95=88%
+L=5x cagr=+48.9% vol=43.7% sharpe=1.16 sortino=1.14 maxdd=-59.7% calmar=0.82 worst_m=-37.0% cvar=-25.5% beta=1.82 sh2h=1.23 | 2008=+35% 2020=+91% 2022=-13% covid=-38% | PM peak=147% p95=147%
+   yearly: 2007=-4% 2008=+35% 2009=+127% 2010=+16% 2011=+28% 2012=+20% 2013=+167% 2014=+7% 2015=+34% 2016=+26% 2017=+105% 2018=-6% 2019=+43% 2020=+91% 2021=+64% 2022=-13% 2023=+68% 2024=+109% 2025=+61% 2026=+129%
+DONE

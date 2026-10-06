@@ -1202,6 +1202,70 @@ small premium. The trend-filtered sleeve is hurt most (maxDD -35% to -43%)
 because the trend filter already removes the months the call would have
 protected, leaving only the months where the call caps the rebound.
 
+### Regime allocator: shuffling weights across sleeves by regime (`results/regime_alloc*.txt`, `alloc_*_VOLVUE.csv`)
+
+`scripts/run_regime_alloc.py`, `run_regime_alloc2.py`. Atoms, each at 1x
+notional per third-Friday cycle, retail costs, ex cash: PW put-wing
+dispersion (unconditional), CO outright-call dispersion (unconditional), IP
+short SPY 25d put hedged weekly, EV event selling, MOM top-5 momentum with
+15% trailing stop (no trend filter), ES. Regime cells at entry (5-day
+smoothed, lagged one day): implied-correlation tercile (lo < 0.33, mid,
+hi > 0.75 of the trailing-2y rank) x SPY above/below its 200-day average.
+
+Cycle P&L by cell, annualised mean [Sharpe], 1x notional:
+
+| cell | n | PW | CO | IP | EV | MOM | ES |
+|---|---|---|---|---|---|---|---|
+| lo / up | 92 | -1.3% [-0.60] | +0.6% [+0.34] | +0.9% [+0.30] | -0.3% [-0.27] | +9.1% [+0.32] | +7.4% [+0.63] |
+| lo / down | 5 | -3.1% | -0.7% | -13.2% | +3.5% | -38.1% | -68.9% |
+| mid / up | 64 | +0.3% [+0.15] | -0.2% [-0.09] | +1.7% [+0.48] | +0.7% [+1.05] | +33.0% [+1.50] | +7.8% [+0.42] |
+| mid / down | 16 | +5.1% [+1.12] | +1.0% [+0.23] | +5.2% [+1.05] | +1.4% [+2.05] | +5.9% [+0.22] | +18.4% [+0.84] |
+| hi / up | 25 | +1.0% [+0.51] | -3.2% [-1.90] | +2.3% [+0.82] | +0.4% [+0.68] | +11.6% [+0.48] | +21.2% [+1.62] |
+| hi / down | 34 | +3.2% [+0.91] | -7.5% [-2.02] | +5.4% [+1.03] | +2.1% [+1.36] | +17.6% [+0.44] | +24.1% [+0.89] |
+
+Three allocators:
+
+1. **Fitted table** (per cell, weight = Sharpe/vol for atoms with cell Sharpe
+   > 0.3, scaled to 10% cell vol, cap 1.5x): full-sample 1x gives CAGR
+   11.6%, Sharpe 1.36, maxDD -14.5%, and 48.9%/yr at 5x. It is overfit:
+   fitted on 2007-16 and applied to 2017-26 the Sharpe is 0.58 (in-sample
+   1.38); fitted on 2017-26 and applied to 2007-16 it is 0.53 (in-sample
+   1.50), and the two halves pick different atoms in the same cells.
+2. **Walk-forward** (weights for each year fitted only on earlier data,
+   2012-2026): 1x CAGR 6.3%, Sharpe 1.04, maxDD -18%; 3x 14.9% / 0.88 /
+   -54%; 5x 19.2% / 0.79 / -89%, PM peak 178%. Over the same 2012-2026
+   window the static 30% ES + regime book 3x gives 8.9% / 1.38 / -12%.
+   Learned regime weights add nothing out of sample.
+3. **Hand-set table** (six cells, weights fixed by hand, low parameter count):
+
+| cell | PW | CO | IP | EV | MOM | ES | gross |
+|---|---|---|---|---|---|---|---|
+| hi / up | 1.0 | 0 | 0.5 | 1.5 | 0 | 0.3 | 3.3 |
+| hi / down | 1.0 | 0 | 0.5 | 1.5 | 0 | 0 | 3.0 |
+| mid / up | 0 | 0 | 0.5 | 1.5 | 0.3 | 0.3 | 2.6 |
+| mid / down | 0.5 | 0 | 0.5 | 1.5 | 0 | 0 | 2.5 |
+| lo / up | 0 | 1.0 | 0 | 1.0 | 0.3 | 0.3 | 2.6 |
+| lo / down | 0 | 0 | 0 | 1.0 | 0 | 0 | 1.0 |
+
+| | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | CVaR95 | beta | 2008 | 2020 | 2022 | Covid | PM peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| hand table 1x | +10.3% | 9.3% | 1.12 | 1.13 | -19.4% | 0.53 | -9.4% | -5.3% | 0.33 | +5% | +6% | +4% | -16% | 27% |
+| hand table 2x | +18.4% | 18.7% | 1.02 | 1.01 | -37.6% | 0.49 | -19.2% | -11.0% | 0.67 | +8% | +7% | +6% | -32% | 53% |
+| hand table 3x | +25.6% | 28.4% | 0.97 | 0.96 | -54.4% | 0.47 | -29.4% | -17.0% | 1.03 | +11% | 0% | +7% | -49% | 80% |
+| hand table 5x | +34.5% | 49.2% | 0.88 | 0.84 | -86.6% | 0.40 | -51.6% | -30.7% | 1.82 | +16% | -45% | +9% | -81% | 133% |
+| ref: 30% ES + regime book 3x | +8.0% | 6.8% | 1.16 | 1.11 | -20.3% | 0.39 | -9.8% | -4.0% | 0.31 | -9% | +17% | 0% | -7% | 41% |
+
+Hand table 1x by half: 2007-16 CAGR 8.5% Sharpe 1.12 maxDD -11.5%; 2017-26
+12.1% / 1.12 / -19.4%. Yearly 1x: 2007 +4, 2008 +5, 2009 +15, 2010 +7, 2011
++3, 2012 +9, 2013 +29, 2014 +4, 2015 +2, 2016 +8, 2017 +14, 2018 +2, 2019
++10, 2020 +6, 2021 +7, 2022 +4, 2023 +16, 2024 +22, 2025 +15, 2026 +24. The
+hand table's gross is already 2.5-3.3x equity at "1x", so 5x is 13-16x
+gross: PM 133% of equity, a -52% month and -81% in the Covid window
+(short index puts in the hi cells into the crash). 2x is the most that fits
+the 60% margin rail (PM 53%). The hand table was set after seeing the cell
+table, so its full-sample Sharpe is optimistic; the equal Sharpe in both
+halves is the only defence.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
