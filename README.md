@@ -1613,6 +1613,42 @@ Caveats: gold's 2004-2026 return (10.5%/yr) is a strong sample and
 trend filter is for; both ETFs on margin add about 10-15% of equity to
 the portfolio-margin need per 100% of exposure.
 
+### Momentum + regime book + TLT (200d) at the highest leverage that survives tastytrade portfolio margin (`results/tlt_maxlev_VOLVUE.csv`)
+
+`scripts/run_tlt_maxlev.py`. Mix = 10-name momentum (trend + trail 15%)
++ base regime book + TLT with the 200d trend filter, scaled by k. Survival
+= portfolio-margin requirement never above daily equity (no margin call,
+no cash added): stocks 25% of notional (TIMS +/-15% plus concentration),
+TLT 12%, book at its per-cycle TIMS-style stress x1.5 house factor. Full
+cash yield, realistic costs, 2007-2026.
+
+| mix | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | worst 12m | beta | 2008 | 2020 | 2022 | PM usage median / p95 / max |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| mom 30% + book 1.5x + TLT 15% | +7.5% | 6.6% | 1.14 | 1.19 | -8.7% | 0.87 | -5.5% | -3.2% | 0.17 | +1% | +15% | +3% | 18 / 28 / 37% |
+| mom 45% + book 2.2x + TLT 22% (60% rail) | +10.4% | 9.9% | 1.06 | 1.09 | -13.2% | 0.79 | -8.3% | -5.0% | 0.26 | 0% | +22% | +3% | 27 / 41 / 56% |
+| mom 60% + book 3x + TLT 30% | +13.2% | 13.2% | 1.02 | 1.05 | -17.5% | 0.76 | -11.1% | -6.9% | 0.35 | -1% | +30% | +4% | 36 / 55 / 76% |
+| **mom 75% + book 3.75x + TLT 38% (survives, max 99%)** | +16.0% | 16.5% | 0.99 | 1.02 | -21.7% | 0.74 | -13.8% | -8.8% | 0.44 | -2% | +38% | +4% | 45 / 69 / 99% |
+| mom 100% + book 3x + TLT 50% (survives, max 96%) | +17.3% | 20.2% | 0.90 | 0.94 | -26.1% | 0.66 | -18.5% | -11.0% | 0.57 | -4% | +40% | +1% | 47 / 67 / 96% |
+| mom 90% + book 4.5x + TLT 45% | +18.7% | 19.8% | 0.98 | 1.01 | -25.7% | 0.73 | -16.5% | -10.8% | 0.52 | -3% | +46% | +4% | 54 / 83 / 124% |
+| mom 100% + book 5x + TLT 50% | +20.5% | 22.0% | 0.97 | 1.00 | -28.3% | 0.73 | -18.2% | -12.1% | 0.58 | -3% | +51% | +5% | 60 / 92 / 142% |
+| mom 125% + book 6.25x + TLT 62% | +24.8% | 27.6% | 0.95 | 0.98 | -34.5% | 0.72 | -22.5% | -15.7% | 0.73 | -5% | +65% | +5% | 75 / 116 / 192% |
+| mom 150% + book 7.5x + TLT 75% | +28.8% | 33.1% | 0.94 | 0.98 | -40.2% | 0.72 | -26.8% | -19.3% | 0.89 | -7% | +79% | +5% | 90 / 140 / 250% |
+| mom 200% + book 10x + TLT 100% | +36.1% | 44.4% | 0.93 | 0.97 | -50.7% | 0.71 | -34.9% | -27.0% | 1.20 | -11% | +107% | +6% | 119 / 189 / 403% |
+
+TLT at 100% of the momentum weight instead of 50% (mix C in the file) adds
+1.5 points of CAGR and turns 2008 positive (+10% at mom 100% / book 5x)
+at the same Calmar, but survives only at half the scale. Sharpe and Calmar
+are flat in k (0.93-1.0 and 0.72-0.74 from k=0.75 to 2), so the leverage
+decision is purely a margin and drawdown decision: the highest scale that
+never needs a margin call is momentum 75% + book 3.75x + TLT 38% (16%/yr,
+maxDD -22%, worst month -14%); momentum 100% + book 5x + TLT 50% gives
+20.5%/yr with a 28% drawdown but runs at 60% median usage and needs about
+40% of equity added in the worst cycle (2008 and March 2020); 2x that
+(36%/yr) needs 3x the account at the peak. Yearly, mom 125% / book 6.25x
+/ TLT 62%: 2007 +22, 2008 -5, 2009 +15, 2010 +18, 2011 +37, 2012 +33,
+2013 +59, 2014 +4, 2015 +7, 2016 +20, 2017 +42, 2018 -8, 2019 +17, 2020
++65, 2021 0, 2022 +5, 2023 +53, 2024 +40, 2025 +29, 2026 +73.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

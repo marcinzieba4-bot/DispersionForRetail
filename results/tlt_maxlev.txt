@@ -1,0 +1,63 @@
+
+=== A: mom 100% + book 5x + TLT 50%, scaled by k ===
+k=0.50: mom 50% book 2.5x TLT 25%        cagr=+11.3% vol=11.0% sharpe=1.04 sortino=1.07 maxdd=-14.6% calmar=0.78 worst_m=-9.2% worst_12m=-5.6% beta=0.29 sh2h=1.13 | 2008=-0% 2020=+25% 2022=+3% covid=-7% | PM usage median=30% p95=46% max=62%
+k=0.75: mom 75% book 3.8x TLT 38%        cagr=+16.0% vol=16.5% sharpe=0.99 sortino=1.02 maxdd=-21.7% calmar=0.74 worst_m=-13.8% worst_12m=-8.8% beta=0.44 sh2h=1.07 | 2008=-2% 2020=+38% 2022=+4% covid=-11% | PM usage median=45% p95=69% max=99%
+k=1.00: mom 100% book 5.0x TLT 50%       cagr=+20.5% vol=22.0% sharpe=0.97 sortino=1.00 maxdd=-28.3% calmar=0.73 worst_m=-18.2% worst_12m=-12.1% beta=0.58 sh2h=1.03 | 2008=-3% 2020=+51% 2022=+5% covid=-14% | PM usage median=60% p95=92% max=142%
+k=1.25: mom 125% book 6.2x TLT 62%       cagr=+24.8% vol=27.6% sharpe=0.95 sortino=0.98 maxdd=-34.5% calmar=0.72 worst_m=-22.5% worst_12m=-15.7% beta=0.73 sh2h=1.01 | 2008=-5% 2020=+65% 2022=+5% covid=-18% | PM usage median=75% p95=116% max=192%
+k=1.50: mom 150% book 7.5x TLT 75%       cagr=+28.8% vol=33.1% sharpe=0.94 sortino=0.98 maxdd=-40.2% calmar=0.72 worst_m=-26.8% worst_12m=-19.3% beta=0.89 sh2h=1.00 | 2008=-7% 2020=+79% 2022=+5% covid=-21% | PM usage median=90% p95=140% max=250%
+k=1.75: mom 175% book 8.8x TLT 88%       cagr=+32.6% vol=38.8% sharpe=0.93 sortino=0.97 maxdd=-45.7% calmar=0.71 worst_m=-30.9% worst_12m=-23.1% beta=1.04 sh2h=0.99 | 2008=-9% 2020=+93% 2022=+6% covid=-25% | PM usage median=104% p95=164% max=319%
+k=2.00: mom 200% book 10.0x TLT 100%     cagr=+36.1% vol=44.4% sharpe=0.93 sortino=0.97 maxdd=-50.7% calmar=0.71 worst_m=-34.9% worst_12m=-27.0% beta=1.20 sh2h=0.98 | 2008=-11% 2020=+107% 2022=+6% covid=-28% | PM usage median=119% p95=189% max=403%
+k=2.50: mom 250% book 12.5x TLT 125%     cagr=+42.0% vol=55.9% sharpe=0.92 sortino=0.97 maxdd=-63.2% calmar=0.66 worst_m=-42.5% worst_12m=-34.9% beta=1.52 sh2h=0.97 | 2008=-15% 2020=+133% 2022=+6% covid=-36% | PM usage median=147% p95=242% max=636%
+k=3.00: mom 300% book 15.0x TLT 150%     cagr=+46.2% vol=67.5% sharpe=0.91 sortino=0.97 maxdd=-75.8% calmar=0.61 worst_m=-49.7% worst_12m=-43.0% beta=1.85 sh2h=0.97 | 2008=-20% 2020=+155% 2022=+5% covid=-43% | PM usage median=174% p95=296% max=1035%
+   highest k with PM usage always <= 100%: 0.75   | always <= 60% rail: None
+
+=== B: mom 60% + book 3x + TLT 30%, scaled by k ===
+k=0.50: mom 30% book 1.5x TLT 15%        cagr=+7.5% vol=6.6% sharpe=1.14 sortino=1.19 maxdd=-8.7% calmar=0.87 worst_m=-5.5% worst_12m=-3.2% beta=0.17 sh2h=1.27 | 2008=+1% 2020=+15% 2022=+3% covid=-4% | PM usage median=18% p95=28% max=37%
+k=0.75: mom 45% book 2.2x TLT 22%        cagr=+10.4% vol=9.9% sharpe=1.06 sortino=1.09 maxdd=-13.2% calmar=0.79 worst_m=-8.3% worst_12m=-5.0% beta=0.26 sh2h=1.16 | 2008=-0% 2020=+22% 2022=+3% covid=-6% | PM usage median=27% p95=41% max=56%
+k=1.00: mom 60% book 3.0x TLT 30%        cagr=+13.2% vol=13.2% sharpe=1.02 sortino=1.05 maxdd=-17.5% calmar=0.76 worst_m=-11.1% worst_12m=-6.9% beta=0.35 sh2h=1.10 | 2008=-1% 2020=+30% 2022=+4% covid=-8% | PM usage median=36% p95=55% max=76%
+k=1.25: mom 75% book 3.8x TLT 38%        cagr=+16.0% vol=16.5% sharpe=0.99 sortino=1.02 maxdd=-21.7% calmar=0.74 worst_m=-13.8% worst_12m=-8.8% beta=0.44 sh2h=1.07 | 2008=-2% 2020=+38% 2022=+4% covid=-11% | PM usage median=45% p95=69% max=99%
+k=1.50: mom 90% book 4.5x TLT 45%        cagr=+18.7% vol=19.8% sharpe=0.98 sortino=1.01 maxdd=-25.7% calmar=0.73 worst_m=-16.5% worst_12m=-10.8% beta=0.52 sh2h=1.04 | 2008=-3% 2020=+46% 2022=+4% covid=-13% | PM usage median=54% p95=83% max=124%
+k=1.75: mom 105% book 5.2x TLT 52%       cagr=+21.4% vol=23.1% sharpe=0.96 sortino=0.99 maxdd=-29.5% calmar=0.72 worst_m=-19.1% worst_12m=-12.8% beta=0.61 sh2h=1.03 | 2008=-4% 2020=+54% 2022=+5% covid=-15% | PM usage median=63% p95=97% max=151%
+k=2.00: mom 120% book 6.0x TLT 60%       cagr=+23.9% vol=26.4% sharpe=0.96 sortino=0.98 maxdd=-33.3% calmar=0.72 worst_m=-21.7% worst_12m=-15.0% beta=0.70 sh2h=1.02 | 2008=-5% 2020=+62% 2022=+5% covid=-17% | PM usage median=72% p95=111% max=181%
+k=2.50: mom 150% book 7.5x TLT 75%       cagr=+28.8% vol=33.1% sharpe=0.94 sortino=0.98 maxdd=-40.2% calmar=0.72 worst_m=-26.8% worst_12m=-19.3% beta=0.89 sh2h=1.00 | 2008=-7% 2020=+79% 2022=+5% covid=-21% | PM usage median=90% p95=140% max=250%
+k=3.00: mom 180% book 9.0x TLT 90%       cagr=+33.3% vol=39.9% sharpe=0.93 sortino=0.97 maxdd=-46.7% calmar=0.71 worst_m=-31.7% worst_12m=-23.9% beta=1.07 sh2h=0.99 | 2008=-9% 2020=+96% 2022=+6% covid=-26% | PM usage median=107% p95=169% max=335%
+   highest k with PM usage always <= 100%: 1.25   | always <= 60% rail: 0.75
+
+=== C: mom 100% + book 5x + TLT 100%, scaled by k ===
+k=0.50: mom 50% book 2.5x TLT 50%        cagr=+12.1% vol=11.6% sharpe=1.05 sortino=1.14 maxdd=-14.7% calmar=0.82 worst_m=-9.3% worst_12m=-6.4% beta=0.25 sh2h=1.11 | 2008=+6% 2020=+31% 2022=+2% covid=-4% | PM usage median=32% p95=48% max=66%
+k=0.75: mom 75% book 3.8x TLT 75%        cagr=+17.2% vol=17.4% sharpe=1.01 sortino=1.09 maxdd=-21.6% calmar=0.80 worst_m=-13.8% worst_12m=-10.0% beta=0.38 sh2h=1.05 | 2008=+8% 2020=+48% 2022=+3% covid=-6% | PM usage median=48% p95=72% max=104%
+k=1.00: mom 100% book 5.0x TLT 100%      cagr=+22.1% vol=23.3% sharpe=0.98 sortino=1.07 maxdd=-28.1% calmar=0.79 worst_m=-18.3% worst_12m=-13.7% beta=0.51 sh2h=1.02 | 2008=+10% 2020=+67% 2022=+3% covid=-8% | PM usage median=63% p95=97% max=149%
+k=1.25: mom 125% book 6.2x TLT 125%      cagr=+26.9% vol=29.2% sharpe=0.97 sortino=1.05 maxdd=-34.2% calmar=0.79 worst_m=-22.6% worst_12m=-17.5% beta=0.64 sh2h=1.00 | 2008=+12% 2020=+86% 2022=+3% covid=-10% | PM usage median=78% p95=121% max=200%
+k=1.50: mom 150% book 7.5x TLT 150%      cagr=+31.4% vol=35.1% sharpe=0.96 sortino=1.06 maxdd=-39.9% calmar=0.79 worst_m=-26.8% worst_12m=-21.5% beta=0.77 sh2h=0.99 | 2008=+13% 2020=+107% 2022=+2% covid=-12% | PM usage median=93% p95=146% max=260%
+k=1.75: mom 175% book 8.8x TLT 175%      cagr=+35.6% vol=41.1% sharpe=0.95 sortino=1.05 maxdd=-45.3% calmar=0.79 worst_m=-30.9% worst_12m=-25.6% beta=0.90 sh2h=0.98 | 2008=+14% 2020=+129% 2022=+2% covid=-14% | PM usage median=108% p95=171% max=330%
+k=2.00: mom 200% book 10.0x TLT 200%     cagr=+39.5% vol=47.2% sharpe=0.95 sortino=1.04 maxdd=-51.6% calmar=0.77 worst_m=-34.9% worst_12m=-29.7% beta=1.04 sh2h=0.97 | 2008=+16% 2020=+152% 2022=+2% covid=-16% | PM usage median=123% p95=198% max=415%
+k=2.50: mom 250% book 12.5x TLT 250%     cagr=+46.4% vol=59.5% sharpe=0.94 sortino=1.04 maxdd=-63.9% calmar=0.73 worst_m=-42.5% worst_12m=-38.0% beta=1.32 sh2h=0.97 | 2008=+17% 2020=+200% 2022=+0% covid=-21% | PM usage median=153% p95=254% max=646%
+k=3.00: mom 300% book 15.0x TLT 300%     cagr=+51.5% vol=72.1% sharpe=0.93 sortino=1.05 maxdd=-75.7% calmar=0.68 worst_m=-49.7% worst_12m=-46.3% beta=1.61 sh2h=0.96 | 2008=+18% 2020=+251% 2022=-2% covid=-25% | PM usage median=182% p95=313% max=1027%
+   highest k with PM usage always <= 100%: 0.5   | always <= 60% rail: None
+
+=== D: mom 100% + book 3x + TLT 50%, scaled by k ===
+k=0.50: mom 50% book 1.5x TLT 25%        cagr=+9.8% vol=10.1% sharpe=0.98 sortino=1.01 maxdd=-13.7% calmar=0.71 worst_m=-9.3% worst_12m=-4.9% beta=0.28 sh2h=1.05 | 2008=-1% 2020=+20% 2022=+1% covid=-7% | PM usage median=24% p95=34% max=44%
+k=0.75: mom 75% book 2.2x TLT 38%        cagr=+13.6% vol=15.2% sharpe=0.93 sortino=0.96 maxdd=-20.0% calmar=0.68 worst_m=-14.0% worst_12m=-7.6% beta=0.42 sh2h=0.98 | 2008=-2% 2020=+30% 2022=+1% covid=-10% | PM usage median=36% p95=50% max=68%
+k=1.00: mom 100% book 3.0x TLT 50%       cagr=+17.3% vol=20.2% sharpe=0.90 sortino=0.94 maxdd=-26.1% calmar=0.66 worst_m=-18.5% worst_12m=-11.0% beta=0.57 sh2h=0.94 | 2008=-4% 2020=+40% 2022=+1% covid=-14% | PM usage median=47% p95=67% max=96%
+k=1.25: mom 125% book 3.8x TLT 62%       cagr=+20.8% vol=25.3% sharpe=0.88 sortino=0.92 maxdd=-31.8% calmar=0.65 worst_m=-22.8% worst_12m=-14.7% beta=0.71 sh2h=0.92 | 2008=-6% 2020=+51% 2022=+1% covid=-17% | PM usage median=59% p95=84% max=128%
+k=1.50: mom 150% book 4.5x TLT 75%       cagr=+24.1% vol=30.4% sharpe=0.87 sortino=0.90 maxdd=-37.3% calmar=0.65 worst_m=-27.0% worst_12m=-18.4% beta=0.86 sh2h=0.91 | 2008=-8% 2020=+61% 2022=+0% covid=-20% | PM usage median=70% p95=101% max=164%
+k=1.75: mom 175% book 5.2x TLT 88%       cagr=+27.1% vol=35.6% sharpe=0.86 sortino=0.90 maxdd=-42.5% calmar=0.64 worst_m=-31.1% worst_12m=-22.2% beta=1.01 sh2h=0.90 | 2008=-10% 2020=+72% 2022=+0% covid=-24% | PM usage median=81% p95=119% max=204%
+k=2.00: mom 200% book 6.0x TLT 100%      cagr=+29.9% vol=40.8% sharpe=0.86 sortino=0.89 maxdd=-47.4% calmar=0.63 worst_m=-35.1% worst_12m=-26.1% beta=1.16 sh2h=0.89 | 2008=-12% 2020=+82% 2022=-0% covid=-27% | PM usage median=92% p95=138% max=251%
+k=2.50: mom 250% book 7.5x TLT 125%      cagr=+34.5% vol=51.3% sharpe=0.84 sortino=0.89 maxdd=-56.5% calmar=0.61 worst_m=-42.6% worst_12m=-34.2% beta=1.47 sh2h=0.88 | 2008=-16% 2020=+101% 2022=-1% covid=-34% | PM usage median=115% p95=177% max=369%
+k=3.00: mom 300% book 9.0x TLT 150%      cagr=+37.8% vol=61.9% sharpe=0.84 sortino=0.90 maxdd=-67.6% calmar=0.56 worst_m=-49.7% worst_12m=-44.9% beta=1.79 sh2h=0.88 | 2008=-21% 2020=+117% 2022=-3% covid=-41% | PM usage median=137% p95=218% max=539%
+   highest k with PM usage always <= 100%: 1.0   | always <= 60% rail: 0.5
+
+=== the survivor lines in detail ===
+A at k=1.25                              cagr=+24.8% vol=27.6% sharpe=0.95 sortino=0.98 maxdd=-34.5% calmar=0.72 worst_m=-22.5% worst_12m=-15.7% beta=0.73 sh2h=1.01 | 2008=-5% 2020=+65% 2022=+5% covid=-18% | PM usage median=75% p95=116% max=192%
+   yearly: 2007=+22% 2008=-5% 2009=+15% 2010=+18% 2011=+37% 2012=+33% 2013=+59% 2014=+4% 2015=+7% 2016=+20% 2017=+42% 2018=-8% 2019=+17% 2020=+65% 2021=+0% 2022=+5% 2023=+53% 2024=+40% 2025=+29% 2026=+73%
+   usage: cycles with usage > 60%: 172 months, > 80%: 141 months, > 100%: 78 months
+A at k=1.5                               cagr=+28.8% vol=33.1% sharpe=0.94 sortino=0.98 maxdd=-40.2% calmar=0.72 worst_m=-26.8% worst_12m=-19.3% beta=0.89 sh2h=1.00 | 2008=-7% 2020=+79% 2022=+5% covid=-21% | PM usage median=90% p95=140% max=250%
+   yearly: 2007=+23% 2008=-7% 2009=+18% 2010=+21% 2011=+45% 2012=+40% 2013=+72% 2014=+4% 2015=+9% 2016=+23% 2017=+51% 2018=-11% 2019=+20% 2020=+79% 2021=-1% 2022=+5% 2023=+64% 2024=+47% 2025=+33% 2026=+88%
+   usage: cycles with usage > 60%: 188 months, > 80%: 167 months, > 100%: 133 months
+A at k=1.5, TLT trend + trail 10%        cagr=+29.0% vol=33.2% sharpe=0.94 sortino=0.98 maxdd=-40.2% calmar=0.72 worst_m=-26.8% worst_12m=-19.3% beta=0.88 sh2h=1.01 | 2008=-7% 2020=+84% 2022=+5% covid=-19% | PM usage median=90% p95=140% max=250%
+   yearly: 2007=+23% 2008=-7% 2009=+17% 2010=+21% 2011=+45% 2012=+40% 2013=+72% 2014=+4% 2015=+9% 2016=+23% 2017=+51% 2018=-11% 2019=+20% 2020=+84% 2021=-1% 2022=+5% 2023=+64% 2024=+47% 2025=+33% 2026=+88%
+   usage: cycles with usage > 60%: 188 months, > 80%: 167 months, > 100%: 133 months
+B at k=2                                 cagr=+23.9% vol=26.4% sharpe=0.96 sortino=0.98 maxdd=-33.3% calmar=0.72 worst_m=-21.7% worst_12m=-15.0% beta=0.70 sh2h=1.02 | 2008=-5% 2020=+62% 2022=+5% covid=-17% | PM usage median=72% p95=111% max=181%
+   yearly: 2007=+21% 2008=-5% 2009=+15% 2010=+17% 2011=+36% 2012=+31% 2013=+56% 2014=+4% 2015=+7% 2016=+19% 2017=+40% 2018=-7% 2019=+17% 2020=+62% 2021=+0% 2022=+5% 2023=+51% 2024=+39% 2025=+28% 2026=+70%
+   usage: cycles with usage > 60%: 170 months, > 80%: 133 months, > 100%: 66 months
+DONE
