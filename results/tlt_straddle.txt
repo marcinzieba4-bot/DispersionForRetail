@@ -1,0 +1,54 @@
+=== TLT option sleeves, 100% of equity notional, with cash (ex-cash per-1x numbers in the diag) ===
+short straddle, unhedged                               cagr=+3.1% vol=9.3% sharpe=0.38 sortino=0.31 maxdd=-23.3% calmar=0.13 worst_m=-12.5% beta=0.19 sh2h=0.58 | 2008=-12% 2020=+12% 2022=-13% covid=-5% | cycles 236, prem 39.0%/yr, IV-RV +0.5 pts, ex-cash +1.91%/yr
+short straddle, hedge W                                cagr=+3.9% vol=4.4% sharpe=0.90 sortino=0.90 maxdd=-10.1% calmar=0.39 worst_m=-5.8% beta=0.09 sh2h=1.19 | 2008=+4% 2020=+7% 2022=-1% covid=-3% | cycles 236, prem 39.0%/yr, IV-RV +0.5 pts, ex-cash +2.35%/yr
+short straddle, hedge D                                cagr=+2.0% vol=3.4% sharpe=0.59 sortino=0.46 maxdd=-12.5% calmar=0.16 worst_m=-10.2% beta=0.08 sh2h=0.72 | 2008=+3% 2020=-3% 2022=+0% covid=-11% | cycles 236, prem 39.0%/yr, IV-RV +0.5 pts, ex-cash +0.43%/yr
+short straddle, band +/-1%                             cagr=+1.0% vol=7.5% sharpe=0.17 sortino=0.15 maxdd=-30.1% calmar=0.03 worst_m=-11.9% beta=0.01 sh2h=0.42 | 2008=+3% 2020=+1% 2022=+12% covid=-11% | cycles 236, prem 39.0%/yr, IV-RV +0.5 pts, ex-cash -0.39%/yr
+short straddle, band +/-2%                             cagr=+0.6% vol=6.8% sharpe=0.12 sortino=0.10 maxdd=-35.0% calmar=0.02 worst_m=-12.0% beta=0.04 sh2h=0.30 | 2008=+8% 2020=-8% 2022=+20% covid=-11% | cycles 236, prem 39.0%/yr, IV-RV +0.5 pts, ex-cash -0.83%/yr
+short 25d strangle, hedge W                            cagr=+3.1% vol=3.2% sharpe=0.96 sortino=0.86 maxdd=-9.6% calmar=0.32 worst_m=-3.8% beta=0.07 sh2h=1.51 | 2008=-1% 2020=+2% 2022=+5% covid=-3% | cycles 236, prem 14.6%/yr, IV-RV +0.5 pts, ex-cash +1.50%/yr
+short 25d strangle, unhedged                           cagr=+2.8% vol=7.1% sharpe=0.43 sortino=0.26 maxdd=-18.5% calmar=0.15 worst_m=-11.7% beta=0.14 sh2h=0.67 | 2008=-8% 2020=+6% 2022=-6% covid=-5% | cycles 236, prem 14.6%/yr, IV-RV +0.5 pts, ex-cash +1.45%/yr
+short straddle W, only IV pct > 50%                    cagr=+3.9% vol=3.3% sharpe=1.18 sortino=0.85 maxdd=-8.4% calmar=0.47 worst_m=-3.9% beta=0.07 sh2h=1.58 | 2008=+3% 2020=+7% 2022=-0% covid=-3% | cycles 105, prem 45.6%/yr, IV-RV +1.0 pts, ex-cash +2.33%/yr
+short straddle W, only IV pct > 70%                    cagr=+2.8% vol=3.0% sharpe=0.93 sortino=0.55 maxdd=-8.4% calmar=0.33 worst_m=-3.9% beta=0.05 sh2h=1.46 | 2008=+1% 2020=+4% 2022=+0% covid=-3% | cycles 71, prem 47.8%/yr, IV-RV +0.4 pts, ex-cash +1.20%/yr
+short straddle W, only TLT > 200d                      cagr=+2.8% vol=3.5% sharpe=0.81 sortino=0.68 maxdd=-10.1% calmar=0.28 worst_m=-3.9% beta=0.06 sh2h=1.28 | 2008=+3% 2020=+6% 2022=+1% covid=-3% | cycles 127, prem 39.4%/yr, IV-RV +0.2 pts, ex-cash +1.22%/yr
+long straddle, hedge W                                 cagr=-2.6% vol=4.4% sharpe=-0.57 sortino=-0.54 maxdd=-47.4% calmar=-0.05 worst_m=-5.2% beta=-0.09 sh2h=-0.47 | 2008=-2% 2020=-8% 2022=+2% covid=+2% | cycles 236, prem 39.0%/yr, IV-RV +0.5 pts, ex-cash -4.11%/yr
+long straddle, hedge D                                 cagr=-1.1% vol=3.4% sharpe=-0.31 sortino=-0.40 maxdd=-26.0% calmar=-0.04 worst_m=-3.6% beta=-0.07 sh2h=-0.07 | 2008=-2% 2020=+0% 2022=+0% covid=+10% | cycles 236, prem 39.0%/yr, IV-RV +0.5 pts, ex-cash -2.65%/yr
+long straddle W, only IV pct < 30%                     cagr=+1.6% vol=2.9% sharpe=0.56 sortino=0.57 maxdd=-8.6% calmar=0.18 worst_m=-2.4% beta=-0.02 sh2h=0.85 | 2008=+2% 2020=-0% 2022=+2% covid=+0% | cycles 93, prem 31.5%/yr, IV-RV -0.1 pts, ex-cash -0.02%/yr
+short straddle W, IV paid x0.9 (fill 10% under VolVue) cagr=+0.1% vol=4.4% sharpe=0.03 sortino=0.03 maxdd=-23.3% calmar=0.00 worst_m=-6.5% beta=0.09 sh2h=0.35 | 2008=+0% 2020=+2% 2022=-6% covid=-3% | cycles 236, prem 35.1%/yr, IV-RV -1.0 pts, ex-cash -1.46%/yr
+
+cycle-P&L correlations:
+                 mom10  book  TLT trend  short str W  short str band1  long str W
+mom10             1.00  0.04      -0.24         0.11             0.06       -0.11
+book              0.04  1.00      -0.18         0.16             0.07       -0.16
+TLT trend        -0.24 -0.18       1.00        -0.13            -0.11        0.12
+short str W       0.11  0.16      -0.13         1.00             0.16       -1.00
+short str band1   0.06  0.07      -0.11         0.16             1.00       -0.16
+long str W       -0.11 -0.16       0.12        -1.00            -0.16        1.00
+
+=== inside the core: mom 75% + book 3.75x + TLT(200d) 38%, plus a TLT option sleeve at w of equity ===
+core                                                   cagr=+16.0% vol=16.5% sharpe=0.99 sortino=1.02 maxdd=-21.7% calmar=0.74 worst_m=-13.8% beta=0.44 sh2h=1.07 | 2008=-2% 2020=+38% 2022=+4% covid=-11%
+core + short straddle, hedge W 0.5x                    cagr=+17.3% vol=16.8% sharpe=1.04 sortino=1.13 maxdd=-23.3% calmar=0.74 worst_m=-14.6% beta=0.48 sh2h=1.12 | 2008=-1% 2020=+42% 2022=+3% covid=-12%
+core + short straddle, hedge W 1.0x                    cagr=+18.5% vol=17.4% sharpe=1.07 sortino=1.16 maxdd=-28.2% calmar=0.65 worst_m=-15.5% beta=0.53 sh2h=1.15 | 2008=-0% 2020=+45% 2022=+1% covid=-13%
+core + short straddle, hedge W 2.0x                    cagr=+20.7% vol=19.3% sharpe=1.08 sortino=1.18 maxdd=-37.9% calmar=0.55 worst_m=-17.2% beta=0.62 sh2h=1.17 | 2008=+1% 2020=+52% 2022=-1% covid=-16%
+core + short straddle, hedge D 0.5x                    cagr=+16.1% vol=16.7% sharpe=0.99 sortino=1.03 maxdd=-24.7% calmar=0.65 worst_m=-14.0% beta=0.48 sh2h=1.06 | 2008=-1% 2020=+34% 2022=+3% covid=-16%
+core + short straddle, hedge D 1.0x                    cagr=+16.2% vol=17.1% sharpe=0.97 sortino=1.03 maxdd=-30.2% calmar=0.54 worst_m=-14.3% beta=0.52 sh2h=1.03 | 2008=-1% 2020=+30% 2022=+3% covid=-21%
+core + short straddle, hedge D 2.0x                    cagr=+16.2% vol=18.5% sharpe=0.92 sortino=0.91 maxdd=-41.2% calmar=0.39 worst_m=-22.1% beta=0.60 sh2h=0.95 | 2008=+0% 2020=+20% 2022=+1% covid=-32%
+core + short straddle, band +/-1% 0.5x                 cagr=+15.7% vol=17.1% sharpe=0.95 sortino=0.98 maxdd=-26.7% calmar=0.59 worst_m=-14.1% beta=0.44 sh2h=1.04 | 2008=-1% 2020=+37% 2022=+9% covid=-16%
+core + short straddle, band +/-1% 1.0x                 cagr=+15.2% vol=18.5% sharpe=0.87 sortino=0.91 maxdd=-34.4% calmar=0.44 worst_m=-14.5% beta=0.45 sh2h=0.98 | 2008=-0% 2020=+35% 2022=+15% covid=-22%
+core + short straddle, band +/-1% 2.0x                 cagr=+13.8% vol=23.0% sharpe=0.69 sortino=0.70 maxdd=-48.6% calmar=0.28 worst_m=-25.3% beta=0.46 sh2h=0.82 | 2008=+1% 2020=+29% 2022=+25% covid=-33%
+core + short 25d strangle, hedge W 0.5x                cagr=+16.8% vol=16.7% sharpe=1.02 sortino=1.07 maxdd=-23.0% calmar=0.73 worst_m=-14.4% beta=0.47 sh2h=1.11 | 2008=-3% 2020=+38% 2022=+6% covid=-12%
+core + short 25d strangle, hedge W 1.0x                cagr=+17.6% vol=17.2% sharpe=1.04 sortino=1.10 maxdd=-27.7% calmar=0.63 worst_m=-15.0% beta=0.51 sh2h=1.14 | 2008=-4% 2020=+39% 2022=+7% covid=-14%
+core + short 25d strangle, hedge W 2.0x                cagr=+19.0% vol=18.4% sharpe=1.05 sortino=1.08 maxdd=-36.8% calmar=0.51 worst_m=-16.9% beta=0.59 sh2h=1.19 | 2008=-7% 2020=+39% 2022=+10% covid=-18%
+core + short straddle W, only IV pct > 50% 0.5x        cagr=+17.3% vol=16.6% sharpe=1.05 sortino=1.10 maxdd=-22.9% calmar=0.76 worst_m=-13.8% beta=0.47 sh2h=1.12 | 2008=-1% 2020=+42% 2022=+3% covid=-12%
+core + short straddle W, only IV pct > 50% 1.0x        cagr=+18.5% vol=16.9% sharpe=1.10 sortino=1.17 maxdd=-26.6% calmar=0.70 worst_m=-13.8% beta=0.51 sh2h=1.17 | 2008=-1% 2020=+46% 2022=+2% covid=-13%
+core + short straddle W, only IV pct > 50% 2.0x        cagr=+21.0% vol=17.9% sharpe=1.17 sortino=1.25 maxdd=-35.0% calmar=0.60 worst_m=-13.8% beta=0.58 sh2h=1.23 | 2008=+0% 2020=+53% 2022=+0% covid=-16%
+core + long straddle, hedge W 0.5x                     cagr=+13.7% vol=16.4% sharpe=0.87 sortino=0.91 maxdd=-22.1% calmar=0.62 worst_m=-13.0% beta=0.39 sh2h=0.95 | 2008=-4% 2020=+33% 2022=+4% covid=-9%
+core + long straddle, hedge W 1.0x                     cagr=+11.4% vol=16.7% sharpe=0.74 sortino=0.78 maxdd=-25.4% calmar=0.45 worst_m=-12.5% beta=0.35 sh2h=0.82 | 2008=-6% 2020=+28% 2022=+4% covid=-8%
+core + long straddle, hedge W 2.0x                     cagr=+6.7% vol=18.0% sharpe=0.46 sortino=0.48 maxdd=-33.7% calmar=0.20 worst_m=-13.8% beta=0.26 sh2h=0.53 | 2008=-10% 2020=+18% 2022=+4% covid=-6%
+core + long straddle W, only IV pct < 30% 0.5x         cagr=+16.0% vol=16.4% sharpe=1.00 sortino=1.03 maxdd=-20.8% calmar=0.77 worst_m=-12.9% beta=0.43 sh2h=1.09 | 2008=-2% 2020=+37% 2022=+4% covid=-11%
+core + long straddle W, only IV pct < 30% 1.0x         cagr=+16.0% vol=16.5% sharpe=0.99 sortino=1.04 maxdd=-20.6% calmar=0.78 worst_m=-12.5% beta=0.42 sh2h=1.10 | 2008=-2% 2020=+37% 2022=+4% covid=-11%
+core + long straddle W, only IV pct < 30% 2.0x         cagr=+15.9% vol=16.9% sharpe=0.97 sortino=1.04 maxdd=-21.4% calmar=0.74 worst_m=-11.8% beta=0.40 sh2h=1.09 | 2008=-2% 2020=+36% 2022=+4% covid=-11%
+
+--- replacing the TLT(200d) leg with the option sleeve ---
+mom 75% + book 3.75x + short straddle, hedge W 1x (no TLT shares) cagr=+17.0% vol=17.6% sharpe=0.99 sortino=1.02 maxdd=-31.4% calmar=0.54 worst_m=-16.4% beta=0.59 sh2h=1.13 | 2008=-11% 2020=+35% 2022=+3% covid=-18%
+mom 75% + book 3.75x + short straddle, band +/-1% 1x (no TLT shares) cagr=+13.8% vol=18.7% sharpe=0.80 sortino=0.81 maxdd=-40.7% calmar=0.34 worst_m=-17.7% beta=0.51 sh2h=0.95 | 2008=-10% 2020=+25% 2022=+16% covid=-26%
+mom 75% + book 3.75x + long straddle, hedge W 1x (no TLT shares) cagr=+10.1% vol=16.8% sharpe=0.67 sortino=0.71 maxdd=-25.4% calmar=0.40 worst_m=-13.7% beta=0.40 sh2h=0.81 | 2008=-15% 2020=+19% 2022=+5% covid=-13%
+DONE

@@ -1698,6 +1698,60 @@ below roughly $250k at 3.75x the book is coarse, below the PM minimum it
 cannot be levered at all. So the practical floor for the levered mix is
 the PM minimum, and the comfortable size is $250k and above.
 
+### Hedged TLT straddles (`results/tlt_straddle*_VOLVUE.csv`)
+
+`dispersion/tlt_straddle.py`, `scripts/run_tlt_straddle.py`. TLT 30-day IV
+from VolVue (median 13.4, range 5-48), monthly ATM straddle or 25-delta
+strangle at the third-Friday cycle, Black-Scholes, marks at entry IV,
+settled at expiry; delta hedge none / weekly / daily / band (hedge the
+losing side fully beyond +/-1-2% from entry, unwind at the entry level);
+1.5% half-spread on premium, capped commissions, 1 bp on hedges. The
+implied-minus-realised gap on TLT over 2007-2026 is only +0.5 vol points.
+
+| sleeve, 100% notional, with cash | CAGR | vol | Sharpe | maxDD | Calmar | worst m | 2008 | 2020 | 2022 | ex-cash per 1x |
+|---|---|---|---|---|---|---|---|---|---|---|
+| short straddle, unhedged | +3.1% | 9.3% | 0.38 | -23.3% | 0.13 | -12.5% | -12% | +12% | -13% | +1.9%/yr |
+| short straddle, hedge weekly | +3.9% | 4.4% | 0.90 | -10.1% | 0.39 | -5.8% | +4% | +7% | -1% | +2.4%/yr |
+| short straddle, hedge daily | +2.0% | 3.4% | 0.59 | -12.5% | 0.16 | -10.2% | +3% | -3% | 0% | +0.4%/yr |
+| short straddle, band +/-1% | +1.0% | 7.5% | 0.17 | -30.1% | 0.03 | -11.9% | +3% | +1% | +12% | -0.4%/yr |
+| short 25d strangle, hedge weekly | +3.1% | 3.2% | 0.96 | -9.6% | 0.32 | -3.8% | -1% | +2% | +5% | +1.5%/yr |
+| short straddle weekly, only IV rank > 50% | +3.9% | 3.3% | 1.18 | -8.4% | 0.47 | -3.9% | +3% | +7% | 0% | +2.3%/yr |
+| short straddle weekly, only IV rank > 70% | +2.8% | 3.0% | 0.93 | -8.4% | 0.33 | -3.9% | +1% | +4% | 0% | +1.2%/yr |
+| short straddle weekly, only TLT > 200d | +2.8% | 3.5% | 0.81 | -10.1% | 0.28 | -3.9% | +3% | +6% | +1% | +1.2%/yr |
+| long straddle, hedge weekly | -2.6% | 4.4% | -0.57 | -47.4% | | -5.2% | -2% | -8% | +2% | -4.1%/yr |
+| long straddle weekly, only IV rank < 30% | +1.6% | 2.9% | 0.56 | -8.6% | 0.18 | -2.4% | +2% | 0% | +2% | 0.0%/yr |
+| short straddle weekly, filled 10% under VolVue IV | +0.1% | 4.4% | 0.03 | -23.3% | 0.00 | -6.5% | 0% | +2% | -6% | -1.5%/yr |
+
+Cycle-P&L correlation of the weekly-hedged short straddle: +0.11 with
+momentum, +0.16 with the book, -0.13 with the TLT trend leg. Inside the
+core (mom 75% + book 3.75x + TLT(200d) 38%):
+
+| addition | w | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| core alone | | +16.0% | 16.5% | 0.99 | 1.02 | -21.7% | 0.74 | -13.8% | -2% | +38% | +4% |
+| short straddle, hedge weekly | 0.5x | +17.3% | 16.8% | 1.04 | 1.13 | -23.3% | 0.74 | -14.6% | -1% | +42% | +3% |
+| short straddle, hedge weekly | 1.0x | +18.5% | 17.4% | 1.07 | 1.16 | -28.2% | 0.65 | -15.5% | 0% | +45% | +1% |
+| short straddle weekly, IV rank > 50% | 0.5x | +17.3% | 16.6% | 1.05 | 1.10 | -22.9% | 0.76 | -13.8% | -1% | +42% | +3% |
+| short straddle weekly, IV rank > 50% | 1.0x | +18.5% | 16.9% | 1.10 | 1.17 | -26.6% | 0.70 | -13.8% | -1% | +46% | +2% |
+| short straddle weekly, IV rank > 50% | 2.0x | +21.0% | 17.9% | 1.17 | 1.25 | -35.0% | 0.60 | -13.8% | 0% | +53% | 0% |
+| short 25d strangle, hedge weekly | 1.0x | +17.6% | 17.2% | 1.04 | 1.10 | -27.7% | 0.63 | -15.0% | -4% | +39% | +7% |
+| short straddle, band +/-1% | 1.0x | +15.2% | 18.5% | 0.87 | 0.91 | -34.4% | 0.44 | -14.5% | 0% | +35% | +15% |
+| long straddle weekly, IV rank < 30% | 1.0x | +16.0% | 16.5% | 0.99 | 1.04 | -20.6% | 0.78 | -12.5% | -2% | +37% | +4% |
+| replace TLT shares with short straddle weekly 1x | | +17.0% | 17.6% | 0.99 | 1.02 | -31.4% | 0.54 | -16.4% | -11% | +35% | +3% |
+
+Short TLT vol is a thin edge: about 2.3% of notional per year when hedged
+weekly, gone if fills are 10% under the VolVue mid, and the band hedge and
+daily hedging both destroy it (the band whipsaws, daily hedging pays the
+realised vol back). Conditioned on IV rank above its 1-year median it is
+the best version (Sharpe 1.18 alone). Added to the core at 0.5-1x it lifts
+the Sharpe from 0.99 to 1.05-1.10 and adds 1-2.5 points of CAGR for 1-5
+points of drawdown; it cannot replace the TLT shares, which are the 2008
+hedge (replacing them costs 9 points in 2008). The long straddle is not a
+hedge (it pays the vol premium and loses in both 2008 and 2020 after
+hedging); only the cheap-vol version is flat. Option margin for a short
+TLT straddle is modest under PM (about 6-8% of notional) and the TLT
+option market is liquid enough for the sizes here.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
