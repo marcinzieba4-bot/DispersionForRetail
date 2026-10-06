@@ -1518,6 +1518,53 @@ tastytrade: 12-16%/yr at Sharpe 0.8 with a 30-38% drawdown from 60-100%
 portfolio-margin account, with 1.5-2.5x the account needed as collateral
 at the peak. 20%/yr is a model number.
 
+### Realistic dip fills, and the retraction of the flat haircut (`results/dip_realistic*.csv`)
+
+`scripts/run_dip_realistic.py`; engine knobs `addon_fill_iv=True` (added
+single-name and model legs are filled at the VolVue IV of the fill day
+while marks stay at entry IV, so a put bought into a selloff is paid for at
+the higher IV and settles at intrinsic) and `addon_spread_mult=2.0`
+(double the spec half-spread on mid-cycle fills). Index legs were already
+realistic (the Cboe index path from the fill day embeds the day's market
+value). The flat haircut in the previous section (dips x0.5, +0.5%/yr of
+extra spread on all option notional, cash x0.5) was too pessimistic on two
+of its three parts: base positions are entered on ordinary third Fridays
+at the spec half-spreads, which the model already charges, and the $1 per
+contract commission is capped at $10 per leg, so it is irrelevant at any
+institutional-size notional; cash can earn the full bill yield in SGOV or
+T-bills held as collateral. What the proper fill model shows:
+
+| sleeve, 1x ex cash | base | adds at entry-IV fills | adds at day-of IV, 2x spread |
+|---|---|---|---|
+| put-wing (corr-hi) | +0.55% / Sharpe 0.35 | +0.77% / 0.43 | +0.69% / 0.39 |
+| call dispersion (corr-lo) | +0.35% / 0.30 | +0.38% / 0.33 | +0.38% / 0.33 |
+| event selling | +0.56% / 0.59 | +0.70% / 0.61 | +0.58% / 0.48 |
+| all dip tranches, per year of 1x | | +0.44% | +0.23% |
+
+Realistic fills take about half of the dip tranche (the earlier guess of
+one half was right for that part), mostly from event selling, where the
+post-event IV crush means the added straddles collect much less. Final
+mixes, full cash yield, realistic fills, tastytrade costs:
+
+| mix | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | worst 12m | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| mom10 100% + book base 5x | +18.5% | 22.2% | 0.89 | 0.89 | -34.7% | 0.53 | -19.2% | -16.5% | 0.66 | -17% | +37% | +6% |
+| mom10 100% + book + adds 5x | +19.6% | 22.8% | 0.91 | 0.89 | -41.1% | 0.48 | -20.0% | -18.3% | 0.65 | -18% | +40% | +10% |
+| mom5 100% + book + adds 5x | +22.1% | 25.8% | 0.92 | 0.90 | -47.3% | 0.47 | -25.1% | -22.3% | 0.66 | -17% | +34% | +11% |
+| mom10 60% + book + adds 4.2x | +14.9% | 15.6% | 0.98 | 0.97 | -32.9% | 0.45 | -16.9% | -15.5% | 0.39 | -10% | +31% | +10% |
+| mom10 30% + book + adds 2.1x | +8.4% | 7.8% | 1.09 | 1.09 | -17.0% | 0.50 | -8.6% | -7.5% | 0.19 | -4% | +15% | +6% |
+| mom10 100% + dips only 20x | +14.3% | 23.7% | 0.69 | 0.68 | -51.1% | 0.28 | -28.5% | -24.6% | 0.55 | -22% | +26% | +11% |
+| mom5 100% + dips only 20x | +16.8% | 26.1% | 0.74 | 0.74 | -52.8% | 0.32 | -28.5% | -21.3% | 0.57 | -21% | +20% | +12% |
+
+With realistic fills the dip adds still add a point of CAGR to the book
+but no longer add Calmar (the fill-day IV cost shows up as drawdown), and
+the dip-only mixes fall apart (Calmar 0.28-0.32): a half-percent-per-year
+edge carried on 20x notional does not survive paying the day's IV. The
+realistic 20% line at tastytrade is 100% 10-name momentum with the base
+regime book at 5x: 18.5%/yr, Sharpe 0.89, maxDD -35%, worst month -19%,
+in a portfolio-margin account with about 60% of equity in margin in a
+normal month and 1.5x the account at the peak.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

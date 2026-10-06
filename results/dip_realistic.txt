@@ -1,0 +1,25 @@
+=== sleeves, 1x, ex cash: base / adds at entry-IV fills (old) / adds at day-of IV fills + 2x spread (realistic) ===
+PW base                            cagr=+0.55% sharpe=0.35 maxdd=-5.8% worst_m=-3.4% | 2008=-0.7% 2020=+3.7% 2022=+0.5%
+PW adds, entry-IV fills            cagr=+0.67% sharpe=0.38 maxdd=-6.5% worst_m=-3.4% | 2008=-1.5% 2020=+3.6% 2022=+1.0%
+PW adds, realistic fills           cagr=+0.69% sharpe=0.39 maxdd=-6.1% worst_m=-2.6% | 2008=-1.1% 2020=+3.6% 2022=+1.0%
+CO base                            cagr=+0.35% sharpe=0.30 maxdd=-4.0% worst_m=-1.6% | 2008=+0.0% 2020=-0.3% 2022=+0.0%
+CO adds, entry-IV fills            cagr=+0.38% sharpe=0.33 maxdd=-4.0% worst_m=-1.6% | 2008=+0.0% 2020=-0.3% 2022=+0.0%
+CO adds, realistic fills           cagr=+0.38% sharpe=0.33 maxdd=-4.0% worst_m=-1.6% | 2008=+0.0% 2020=-0.3% 2022=+0.0%
+EV base                            cagr=+0.56% sharpe=0.59 maxdd=-3.9% worst_m=-1.1% | 2008=+1.2% 2020=+0.7% 2022=+1.2%
+EV adds, entry-IV fills            cagr=+0.60% sharpe=0.57 maxdd=-4.9% worst_m=-1.3% | 2008=+1.7% 2020=+1.0% 2022=+1.4%
+EV adds, realistic fills           cagr=+0.58% sharpe=0.48 maxdd=-5.9% worst_m=-1.7% | 2008=+1.5% 2020=+1.2% 2022=+1.3%
+
+=== dip tranche per cycle (realistic fills), 1x: PW: fired 30, CO: fired 28, EV: fired 82 ===
+all dips per year: entry-IV fills +0.22%  realistic +0.23%  | mean per fire +0.078% -> +0.081%
+
+=== final mixes, full cash yield, realistic dip fills ===
+mom10 100% + dips 20x                              cagr=+14.3% vol=23.7% sharpe=0.69 sortino=0.68 maxdd=-51.1% calmar=0.28 worst_m=-28.5% worst_12m=-24.6% beta=0.55 sh2h=0.91 | 2008=-22% 2020=+26% 2022=+11% covid=-20%
+mom5 100% + dips 20x                               cagr=+16.8% vol=26.1% sharpe=0.74 sortino=0.74 maxdd=-52.8% calmar=0.32 worst_m=-28.5% worst_12m=-21.3% beta=0.57 sh2h=0.85 | 2008=-21% 2020=+20% 2022=+12% covid=-19%
+mom10 70% + dips 20x                               cagr=+11.9% vol=19.6% sharpe=0.68 sortino=0.69 maxdd=-47.8% calmar=0.25 worst_m=-28.5% worst_12m=-25.7% beta=0.36 sh2h=0.94 | 2008=-16% 2020=+22% 2022=+13% covid=-15%
+mom10 100% + book+adds 5x                          cagr=+19.6% vol=22.8% sharpe=0.91 sortino=0.89 maxdd=-41.1% calmar=0.48 worst_m=-20.0% worst_12m=-18.3% beta=0.65 sh2h=1.07 | 2008=-18% 2020=+40% 2022=+10% covid=-20%
+mom10 60% + book+adds 4.2x                         cagr=+14.9% vol=15.6% sharpe=0.98 sortino=0.97 maxdd=-32.9% calmar=0.45 worst_m=-16.9% worst_12m=-15.5% beta=0.39 sh2h=1.17 | 2008=-10% 2020=+31% 2022=+10% covid=-13%
+mom5 100% + book+adds 5x                           cagr=+22.1% vol=25.8% sharpe=0.92 sortino=0.90 maxdd=-47.3% calmar=0.47 worst_m=-25.1% worst_12m=-22.3% beta=0.66 sh2h=0.96 | 2008=-17% 2020=+34% 2022=+11% covid=-19%
+mom10 100% + book base 5x                          cagr=+18.5% vol=22.2% sharpe=0.89 sortino=0.89 maxdd=-34.7% calmar=0.53 worst_m=-19.2% worst_12m=-16.5% beta=0.66 sh2h=1.02 | 2008=-17% 2020=+37% 2022=+6% covid=-20%
+mom10 30% + book+adds 2.1x                         cagr=+8.4% vol=7.8% sharpe=1.09 sortino=1.09 maxdd=-17.0% calmar=0.50 worst_m=-8.6% worst_12m=-7.5% beta=0.19 sh2h=1.32 | 2008=-4% 2020=+15% 2022=+6% covid=-6%
+mom5 30% + book+adds 2.1x                          cagr=+9.2% vol=8.7% sharpe=1.07 sortino=1.06 maxdd=-19.7% calmar=0.47 worst_m=-8.6% worst_12m=-8.2% beta=0.20 sh2h=1.18 | 2008=-3% 2020=+14% 2022=+6% covid=-6%
+DONE

@@ -151,6 +151,24 @@ class Backtest:
             d += sg_ * dl
         return -units * d * S   # sign: cboe leg units are -sign*units (short index position => +units short)
 
+    def _iv_ratio(self, ticker: str, kind: str, t0, d) -> float:
+        """IV on day d / IV on t0 from the VolVue call or put panel (1.0 when unavailable)."""
+        try:
+            if kind == "put":
+                if not hasattr(self, "_put_iv_panel"):
+                    self._put_iv_panel = self.iv.field_panel("iv_put_30")
+                pan = self._put_iv_panel
+            else:
+                pan = self.iv.panel() * (100.0 if self.iv.panel().max().max() < 5 else 1.0)
+            if ticker not in pan.columns:
+                return 1.0
+            s_ = pan[ticker].dropna(); a = s_.loc[:t0]; b = s_.loc[:d]
+            if not len(a) or not len(b) or (d - b.index[-1]).days > 7 or (t0 - a.index[-1]).days > 7:
+                return 1.0
+            return float(b.iloc[-1] / a.iloc[-1])
+        except Exception:
+            return 1.0
+
     def _index_iv(self, iv_s: float, t0) -> float:
         cfg = self.cfg
         iv_leg = iv_s * cfg.iv_mult_index
@@ -475,16 +493,21 @@ class Backtest:
                         if opt:
                             add_u = units0 * frac
                             add_px = np.where(is_put, bs.put_price(S, K, T_rem, ivv, r, qq), bs.call_price(S, K, T_rem, ivv, r, qq))
+                            if cfg.addon_fill_iv:   # fill at the IV of the day, mark at entry IV
+                                ratio = np.array([self._iv_ratio(l.ticker, l.kind, t0, d) for l in opt])
+                                fill_px = np.where(is_put, bs.put_price(S, K, T_rem, ivv * ratio, r, qq), bs.call_price(S, K, T_rem, ivv * ratio, r, qq))
+                            else:
+                                fill_px = add_px
                             buckets = np.array([l.bucket for l in opt])
-                            add_cost += float(np.sum(np.abs(add_u) * add_px * np.array([cfg.costs.single(b_) if not ix else cfg.costs.index() for b_, ix in zip(buckets, is_idx)])))
+                            add_cost += float(np.sum(np.abs(add_u) * fill_px * np.array([cfg.costs.single(b_) if not ix else cfg.costs.index() for b_, ix in zip(buckets, is_idx)]))) * cfg.addon_spread_mult
                             add_cost += sum(config.commission(abs(u_) / 100.0, cfg.costs, bool(ix)) for u_, ix in zip(add_u, is_idx))
-                            cash -= float(np.sum(add_u * add_px)); units = units + add_u          # pay/receive the added legs at mid
+                            cash -= float(np.sum(add_u * fill_px)); units = units + add_u          # pay/receive the added legs at the day's IV
                             mark += float(np.sum(add_u * add_px))
                         if cbo:
                             for l, (c, bi, bt, n) in zip(cbo, list(cbs)):
                                 add_n = n * frac
                                 cbs.append((c, float(c["idx"].loc[d]), float(c["tr"].loc[d]), add_n))
-                                add_cost += abs(add_n) * l.premium / l.S0 * cfg.costs.index() if l.S0 else 0.0
+                                add_cost += abs(add_n) * l.premium / l.S0 * cfg.costs.index() * cfg.addon_spread_mult if l.S0 else 0.0
                             cb_strikes = cb_strikes + cb_strikes[:len(cbo)]; cbo = cbo + [Leg(l.ticker, l.units * frac, l.K, l.iv, l.S0, l.bucket, l.is_index, l.premium, kind="cboe", q=l.q, beta=l.beta) for l in cbo[:len(cbo)]]
                         cash -= add_cost
                         rec.skipped.append(f"ADD{ti+1}@{d.date()}")
