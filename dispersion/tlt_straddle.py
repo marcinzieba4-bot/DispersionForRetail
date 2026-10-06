@@ -9,7 +9,7 @@ from .backtest.engine import third_fridays
 
 def tlt_option_leg(px: pd.Series, iv: pd.Series, rf: pd.Series, side=-1, structure="straddle", delta=25, hedge="W",
                    band=0.01, notional=1e6, half_spread=0.015, hedge_bp=1e-4, mask: pd.Series | None = None,
-                   iv_mult=1.0, start="2007-01-01"):
+                   iv_mult=1.0, start="2007-01-01", vol_path=False):
     """side -1 = short the structure. structure: straddle (ATM) | strangle (delta-bucket wings). hedge: None|'W'|'D'|'band'.
     mask: optional daily bool, cycle skipped when False at entry. Returns daily P&L on `notional` (additive) and diagnostics."""
     days = px.index; cyc = third_fridays(days); cyc = cyc[cyc >= pd.Timestamp(start)]
@@ -31,8 +31,12 @@ def tlt_option_leg(px: pd.Series, iv: pd.Series, rf: pd.Series, side=-1, structu
         cost = prem * half_spread + 2 * config.commission(sh / 100.0, config.REALISTIC_SPY)
         seg = px.loc[a:b]; dates = seg.index; S = seg.to_numpy(dtype=float)
         Trem = np.array([(b - d).days / 365.0 for d in dates])
-        val = side * sh * (bs.call_price(S, Kc, Trem, sig, r) + bs.put_price(S, Kp, Trem, sig, r))    # option value path
-        dl = side * sh * (bs.call_delta(S, Kc, Trem, sig, r) + bs.put_delta(S, Kp, Trem, sig, r))      # position delta (shares)
+        sig_t = sig
+        if vol_path:
+            iv_seg = ivd.loc[a:b].to_numpy(dtype=float); iv_seg = np.where(np.isfinite(iv_seg), iv_seg, sig / iv_mult) * iv_mult
+            sig_t = iv_seg
+        val = side * sh * (bs.call_price(S, Kc, Trem, sig_t, r) + bs.put_price(S, Kp, Trem, sig_t, r))    # option value path
+        dl = side * sh * (bs.call_delta(S, Kc, Trem, sig_t, r) + bs.put_delta(S, Kp, Trem, sig_t, r))      # position delta (shares)
         h = np.zeros(len(S)); hedge_pnl = np.zeros(len(S)); turn = 0.0
         hs = 0.0
         for i in range(1, len(S)):

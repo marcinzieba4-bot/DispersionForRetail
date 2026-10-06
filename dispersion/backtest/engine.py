@@ -414,6 +414,23 @@ class Backtest:
                 single_names = sorted({l.ticker for l in opt if not l.is_index})
                 name_idx = {n: np.array([c == n for c in cols]) for n in single_names}
                 name_px = self.uni.close_adj[single_names].loc[t0:t1].ffill() if single_names else None
+                ivpath = None
+                if cfg.vol_path_marks and hasattr(self.iv, "field_panel"):
+                    # per-leg IV path: entry IV x (panel IV on day / panel IV at entry), call or put panel, NaN -> entry IV
+                    if not hasattr(self, "_call_iv_panel"):
+                        self._call_iv_panel = self.iv.field_panel("iv_call_30")
+                        self._put_iv_panel = self.iv.field_panel("iv_put_30")
+                    cols_iv = []
+                    for l in opt:
+                        pan = self._put_iv_panel if l.kind == "put" else self._call_iv_panel
+                        if l.ticker in pan.columns:
+                            ser = pan[l.ticker].reindex(path.index.union(pan.index)).ffill(limit=7).reindex(path.index)
+                            base_iv = ser.loc[:t0].dropna()
+                            ratio = (ser / float(base_iv.iloc[-1])) if len(base_iv) and float(base_iv.iloc[-1]) > 0 else pd.Series(1.0, index=path.index)
+                        else:
+                            ratio = pd.Series(1.0, index=path.index)
+                        cols_iv.append((l.iv * ratio.fillna(1.0)).clip(lower=0.02))
+                    ivpath = pd.concat(cols_iv, axis=1); ivpath.columns = range(len(opt))
             stock_h: dict[str, float] = {}
             S_name_prev = {n: float(name_px[n].loc[t0]) for n in single_names} if opt and single_names else {}
             if cbo:
@@ -446,10 +463,11 @@ class Backtest:
                 if opt and not dead:
                     S = path.loc[d].to_numpy(dtype=float)
                     S = np.where(np.isfinite(S), S, K)
-                    px = np.where(is_put, bs.put_price(S, K, T_rem, ivv, r, qq), bs.call_price(S, K, T_rem, ivv, r, qq))
+                    iv_d = ivpath.loc[d].to_numpy(dtype=float) if ivpath is not None else ivv
+                    px = np.where(is_put, bs.put_price(S, K, T_rem, iv_d, r, qq), bs.call_price(S, K, T_rem, iv_d, r, qq))
                     mark += float(np.sum(units * px))
                     if d < t1 and k % hedge_every == 0:
-                        dl = np.where(is_put, bs.put_delta(S, K, T_rem, ivv, r, qq), bs.call_delta(S, K, T_rem, ivv, r, qq))
+                        dl = np.where(is_put, bs.put_delta(S, K, T_rem, iv_d, r, qq), bs.call_delta(S, K, T_rem, iv_d, r, qq))
                         dd_leg = units * dl * S
                         scope = cfg.hedge_scope
                         if scope in ("split", "singles"):
@@ -492,8 +510,8 @@ class Backtest:
                         addon_done[ti] = True; add_cost = 0.0
                         if opt:
                             add_u = units0 * frac
-                            add_px = np.where(is_put, bs.put_price(S, K, T_rem, ivv, r, qq), bs.call_price(S, K, T_rem, ivv, r, qq))
-                            if cfg.addon_fill_iv:   # fill at the IV of the day, mark at entry IV
+                            add_px = np.where(is_put, bs.put_price(S, K, T_rem, iv_d, r, qq), bs.call_price(S, K, T_rem, iv_d, r, qq))
+                            if cfg.addon_fill_iv and ivpath is None:   # fill at the IV of the day, mark at entry IV
                                 ratio = np.array([self._iv_ratio(l.ticker, l.kind, t0, d) for l in opt])
                                 fill_px = np.where(is_put, bs.put_price(S, K, T_rem, ivv * ratio, r, qq), bs.call_price(S, K, T_rem, ivv * ratio, r, qq))
                             else:

@@ -1888,6 +1888,59 @@ A realistic live expectation for line A is therefore CAGR 12-14% at Sharpe
 2022), not the 17.9% / 1.08 / -25% of the table. The 20% line (k=1.25)
 is then 15-17% at a 35% drawdown with a margin call in the worst cycle.
 
+### Vol-path marks, vol targeting and a circuit breaker (`results/volpath*.csv`)
+
+`scripts/run_volpath.py`; engine knob `vol_path_marks=True` (every
+single-name and model leg is marked, and delta-hedged, at its entry IV
+times the VolVue call- or put-panel IV of the day over the IV at entry,
+strikes fixed; NaN days fall back to entry IV); `tlt_option_leg(vol_path=True)`
+does the same for the TLT straddle. Index legs were already real Cboe
+prices.
+
+| sleeve, 1x ex cash | entry-IV marks: CAGR / Sharpe / maxDD / worst m | vol-path marks: CAGR / Sharpe / maxDD / worst m |
+|---|---|---|
+| put-wing (corr-hi) | +0.55% / 0.35 / -5.8% / -3.4% | +0.47% / 0.27 / -5.6% / -4.1% |
+| call dispersion (corr-lo) | +0.35% / 0.30 / -4.0% / -1.6% | +0.32% / 0.24 / -3.8% / -1.9% |
+| event selling | +0.56% / 0.59 / -3.9% / -1.1% | +0.56% / 0.56 / -3.5% / -1.3% |
+| TLT short straddle (IV rank > 50%) | +1.93% / 0.68 / -7.2% / -4.0% | +1.82% / 0.63 / -7.9% / -4.8% |
+| **line A (k=1)** | **+17.9% / 1.08 / -24.7% / -13.8%** | **+17.3% / 1.04 / -24.4% / -14.9%** |
+
+The change is small because the book's large short-vol exposure (the
+SPY put) was already marked at real prices, and its single-name legs are
+long options whose marks rise in a selloff; only the small short event
+straddles and the TLT straddle lose a little. The 2020 line goes from
++44% to +41%, the Covid window from -13% to -10%. The margin path is not
+recomputed intraday (requirements are taken at cycle entry), so the
+peak-usage caveat from the critique stands.
+
+Vol targeting (k = target / EWMA-63d realised vol of the book, capped,
+set each cycle) and a drawdown circuit breaker (halve exposure while
+below the peak by x), on the vol-path book:
+
+| rule | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | worst 12m | 2008 | 2020 | 2022 | PM usage med / max | k med / min / max |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| none (line A) | +17.3% | 16.9% | 1.04 | 1.11 | -24.4% | 0.71 | -14.9% | -9.5% | -4% | +41% | +2% | 49 / 105% | 1 / 1 / 1 |
+| vol target 12%, cap 1.5x | +14.1% | 13.3% | 1.07 | 1.14 | -20.5% | 0.69 | -12.9% | -9.4% | -3% | +20% | +3% | 35 / 98% | 0.82 / 0.39 / 1.50 |
+| vol target 15%, cap 1.5x | +15.5% | 14.8% | 1.05 | 1.12 | -23.0% | 0.67 | -14.4% | -10.8% | -3% | +22% | +3% | 39 / 102% | 0.91 / 0.43 / 1.50 |
+| vol target 15%, cap 2x | +15.5% | 14.8% | 1.06 | 1.13 | -23.0% | 0.68 | -14.4% | -10.8% | -3% | +22% | +3% | 39 / 102% | 0.91 / 0.43 / 1.92 |
+| vol target 18%, cap 2x | +16.8% | 16.2% | 1.05 | 1.12 | -25.6% | 0.65 | -15.7% | -12.2% | -4% | +24% | +3% | 42 / 113% | 1.00 / 0.48 / 2.00 |
+| vol target 20%, cap 2.5x | +17.6% | 17.1% | 1.04 | 1.12 | -27.3% | 0.64 | -16.6% | -13.0% | -4% | +25% | +3% | 44 / 120% | 1.04 / 0.50 / 2.22 |
+| breaker: x0.5 below -20% | +17.3% | 16.9% | 1.04 | 1.11 | -24.4% | 0.71 | -14.9% | -9.5% | -4% | +41% | +2% | 49 / 105% | never fired |
+| breaker: x0.5 below -15% | +15.6% | 16.5% | 0.97 | 1.00 | -24.4% | 0.64 | -14.9% | -10.8% | -4% | +31% | +2% | 46 / 105% | 1 / 0.5 / 1 |
+| breaker: x0.5 below -10% | +12.8% | 14.8% | 0.90 | 0.94 | -27.5% | 0.47 | -11.6% | -10.4% | -7% | +26% | +1% | 31 / 105% | 1 / 0.5 / 1 |
+
+Neither helps. Vol targeting keeps the Sharpe (1.04-1.07) but lowers
+the Calmar, because this book's best months come right after vol spikes
+(the put wing and the straddle earn the post-spike decay and momentum
+re-enters on the trend signal), which is exactly when a trailing-vol rule
+has cut exposure in half: 2020 falls from +41% to +20-25%. The
+drawdown breaker never fires at 20% (the daily drawdown touched 24% only
+once, and the month-end path did not reach 20%), and at 15% or 10% it
+halves the recovery and lowers the Sharpe. The book's drawdowns are short
+and V-shaped, which is the one shape these rules penalise. The right
+way to cut this book's drawdown remains a smaller k, which keeps the
+Calmar at 0.7-0.8, or fewer stocks in the momentum sleeve.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

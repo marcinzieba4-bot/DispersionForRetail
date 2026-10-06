@@ -150,6 +150,7 @@ class StrategyConfig:
     cycle_addon: tuple = ()          # dip buying: ((loss_frac, add_frac), ...): when cycle P&L <= -loss_frac x book notional,
                                      # add add_frac x the ORIGINAL position (all legs) at that day's marks, each tranche once
     addon_fill_iv: bool = True       # price the added single/model legs at the VolVue IV of the fill day (marks stay at entry IV)
+    vol_path_marks: bool = False     # mark (and delta-hedge) single-name / model legs at the VolVue IV of each day, strikes fixed
     addon_spread_mult: float = 2.0   # half-spread multiple paid on mid-cycle add fills (stressed quotes)
 
 
