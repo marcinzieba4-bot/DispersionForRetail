@@ -1371,6 +1371,42 @@ the book's gross doubles exactly in its worst moments, so the margin peak
 of a 3x book becomes that of a 6x book in those cycles (about 80% of
 equity under PM x1.5). Size the leverage for the post-add exposure.
 
+### Dip-only: money market, enter the regime book only on its dips (`results/dip_only_VOLVUE.csv`)
+
+`scripts/run_dip_only.py`. The isolated dip tranche is (add-on run) - (base
+run) of each sleeve: the position is bought at the trigger day's marks when
+the sleeve's paper cycle is down the threshold, hedged from there, held to
+expiry, costs included; the rest of the time the account is in money
+market. L = tranche notional / equity when it fires. Per fire, at 1x: the
+put-wing tranche (-1%) fired in 39 of 236 cycles with mean +0.14% of
+notional, median 0, hit 54%, worst -1.8%, best +3.1%; the event tranche
+(-1%) 95 fires, mean +0.03%; all dips together +0.50% of notional per year.
+
+| strategy | L | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | CVaR95 | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| money market only | | +1.6% | 0.5% | | | 0 | | 0 | | +2% | 0% | +2% |
+| PW dip 1.0x at -1% | 5x | +2.9% | 5.2% | 0.57 | 0.21 | -14.6% | 0.20 | -7.3% | -1.1% | -6% | 0% | +8% |
+| PW dips 0.5x at -1% and -2% | 5x | +2.8% | 4.2% | 0.68 | 0.17 | -12.1% | 0.23 | -8.0% | -0.9% | -2% | 0% | +5% |
+| EV dip 1.0x at -1% | 5x | +2.4% | 2.4% | 0.98 | 0.77 | -5.0% | 0.48 | -1.4% | -0.2% | +7% | +12% | +2% |
+| all dips 1.0x (PW -1%, CO -1%, EV -1%) | 1x | +2.1% | 1.2% | 1.71 | 1.11 | -1.7% | 1.28 | -1.1% | -0.1% | +2% | +3% | +3% |
+| all dips 1.0x | 3x | +3.1% | 3.3% | 0.94 | 0.58 | -6.6% | 0.47 | -3.5% | -0.5% | +1% | +7% | +5% |
+| all dips 1.0x | 5x | +4.0% | 5.4% | 0.75 | 0.49 | -11.3% | 0.36 | -5.8% | -0.9% | 0% | +12% | +8% |
+| all dips 1.0x | 10x | +6.2% | 10.8% | 0.61 | 0.41 | -22.3% | 0.28 | -11.6% | -2.0% | -3% | +24% | +14% |
+| all dips, two tranches of 0.5x | 3x | +2.9% | 2.6% | 1.14 | 1.01 | -5.4% | 0.55 | -1.7% | -0.6% | +3% | +5% | +4% |
+| all dips, two tranches of 0.5x | 5x | +3.8% | 4.2% | 0.90 | 0.75 | -9.4% | 0.40 | -2.9% | -1.0% | +3% | +8% | +6% |
+| all dips, two tranches of 0.5x | 10x | +5.7% | 8.3% | 0.71 | 0.59 | -19.0% | 0.30 | -5.8% | -2.2% | +4% | +16% | +10% |
+
+Yearly, all dips two tranches at 5x: 2007 +5.2, 2008 +3.5, 2009 +0.8,
+2010-14 +0.1 to +0.2 (never fired, zero rates), 2015 +14.7, 2016 -2.5,
+2017 +1.0, 2018 +10.1, 2019 +1.8, 2020 +8.1, 2021 +0.1, 2022 +5.7, 2023
++5.1, 2024 +7.4, 2025 +7.0, 2026 +7.2. The dip tranche alone is worth
+about 0.5% of notional per year, so 5x gives 2.2-2.5%/yr over cash with a
+9-11% drawdown: the Sharpe above 1 at 1x is the money market's, not the
+trade's. It fires in about half the cycles, the median fire is zero and
+the mean is carried by a few large recoveries (2015, 2018, 2020, 2025), so
+it is a small, lumpy, crisis-positive sleeve, not a strategy. Fills at
+entry IV flatter it (see the dip-buying caveats above).
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

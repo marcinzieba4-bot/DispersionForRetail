@@ -1,0 +1,40 @@
+=== dip tranche per cycle, % of 1x tranche notional (only cycles where it fired) ===
+PW dip 1.0x at -1%                         fired  39/236 cycles | mean=+0.14% median=+0.00% hit=54% worst=-1.8% best=+3.1% | sum/yr=+0.28%
+PW dip 1.0x at -2%                         fired  32/236 cycles | mean=+0.06% median=+0.00% hit=56% worst=-1.0% best=+2.4% | sum/yr=+0.09%
+PW dips 0.5x at -1% and -2%                fired  39/236 cycles | mean=+0.13% median=+0.00% hit=59% worst=-1.8% best=+2.9% | sum/yr=+0.25%
+PW dips 1.0x at -1% and -2%                fired  35/236 cycles | mean=+0.37% median=+0.00% hit=54% worst=-5.4% best=+7.7% | sum/yr=+0.66%
+CO dip 1.0x at -1%                         fired  27/236 cycles | mean=+0.05% median=+0.00% hit=63% worst=-0.0% best=+0.9% | sum/yr=+0.06%
+EV dip 1.0x at -0.5%                       fired 118/236 cycles | mean=+0.02% median=+0.00% hit=53% worst=-0.5% best=+1.0% | sum/yr=+0.10%
+EV dip 1.0x at -1%                         fired  95/236 cycles | mean=+0.03% median=-0.00% hit=49% worst=-0.3% best=+2.3% | sum/yr=+0.16%
+EV dips 0.5x at -0.5% and -1%              fired 110/236 cycles | mean=+0.03% median=+0.00% hit=55% worst=-0.4% best=+1.5% | sum/yr=+0.16%
+all dips 1.0x (PW -1%, CO -1%, EV -1%)     fired 122/236 cycles | mean=+0.08% median=+0.00% hit=53% worst=-1.2% best=+3.1% | sum/yr=+0.50%
+all dips 2 tranches 0.5x                   fired 134/236 cycles | mean=+0.06% median=+0.00% hit=55% worst=-1.1% best=+2.9% | sum/yr=+0.44%
+
+=== dip-only strategy: money market, enter the tranche at L x equity when it fires, cash yield on all equity ===
+money market only                                cagr=+1.6% vol=0.5% sharpe=2.96 sortino=nan maxdd=+0.0% calmar=nan worst_m=+0.0% cvar=+0.0% beta=0.00 sh2h=4.54 | 2008=+2% 2020=+0% 2022=+2% covid=+0%
+PW dip 1.0x at -1% L=1                           cagr=+1.9% vol=1.2% sharpe=1.58 sortino=0.52 maxdd=-2.3% calmar=0.81 worst_m=-1.4% cvar=-0.2% beta=-0.01 sh2h=2.26 | 2008=+0% 2020=+0% 2022=+3% covid=+0%
+PW dip 1.0x at -1% L=3                           cagr=+2.4% vol=3.2% sharpe=0.77 sortino=0.25 maxdd=-8.6% calmar=0.28 worst_m=-4.3% cvar=-0.7% beta=-0.03 sh2h=1.15 | 2008=-3% 2020=+0% 2022=+5% covid=+0%
+PW dip 1.0x at -1% L=5                           cagr=+2.9% vol=5.2% sharpe=0.57 sortino=0.21 maxdd=-14.6% calmar=0.20 worst_m=-7.3% cvar=-1.1% beta=-0.06 sh2h=0.90 | 2008=-6% 2020=+0% 2022=+8% covid=+0%
+   yearly: 2007=+6.0% 2008=-5.6% 2009=+0.2% 2010=+0.2% 2011=+0.1% 2012=+0.1% 2013=+0.1% 2014=+0.1% 2015=+7.8% 2016=-5.5% 2017=+1.0% 2018=+17.8% 2019=+2.2% 2020=+0.4% 2021=+0.1% 2022=+7.7% 2023=+5.1% 2024=+5.3% 2025=+14.2% 2026=+2.8%
+PW dip 1.0x at -1% L=10                          cagr=+3.9% vol=10.4% sharpe=0.42 sortino=0.15 maxdd=-28.5% calmar=0.14 worst_m=-14.9% cvar=-2.3% beta=-0.11 sh2h=0.70 | 2008=-13% 2020=+0% 2022=+14% covid=+0%
+PW dips 0.5x at -1% and -2% L=1                  cagr=+1.9% vol=1.0% sharpe=1.86 sortino=0.45 maxdd=-2.1% calmar=0.89 worst_m=-1.6% cvar=-0.2% beta=-0.01 sh2h=3.34 | 2008=+1% 2020=+0% 2022=+2% covid=+0%
+PW dips 0.5x at -1% and -2% L=3                  cagr=+2.4% vol=2.6% sharpe=0.92 sortino=0.23 maxdd=-7.0% calmar=0.34 worst_m=-4.8% cvar=-0.6% beta=-0.03 sh2h=1.74 | 2008=-0% 2020=+0% 2022=+4% covid=+0%
+PW dips 0.5x at -1% and -2% L=5                  cagr=+2.8% vol=4.2% sharpe=0.68 sortino=0.17 maxdd=-12.1% calmar=0.23 worst_m=-8.0% cvar=-0.9% beta=-0.05 sh2h=1.27 | 2008=-2% 2020=+0% 2022=+5% covid=+0%
+   yearly: 2007=+5.2% 2008=-1.9% 2009=+0.2% 2010=+0.2% 2011=+0.1% 2012=+0.1% 2013=+0.1% 2014=+0.1% 2015=+14.7% 2016=-2.5% 2017=+1.0% 2018=+9.8% 2019=+2.2% 2020=+0.4% 2021=+0.1% 2022=+4.7% 2023=+5.1% 2024=+5.3% 2025=+9.2% 2026=+2.8%
+PW dips 0.5x at -1% and -2% L=10                 cagr=+3.8% vol=8.3% sharpe=0.49 sortino=0.14 maxdd=-24.1% calmar=0.16 worst_m=-16.2% cvar=-1.9% beta=-0.10 sh2h=0.90 | 2008=-7% 2020=+0% 2022=+8% covid=+0%
+EV dip 1.0x at -1% L=1                           cagr=+1.8% vol=0.7% sharpe=2.50 sortino=2.75 maxdd=-1.1% calmar=1.63 worst_m=-0.3% cvar=-0.0% beta=-0.00 sh2h=3.62 | 2008=+3% 2020=+3% 2022=+2% covid=+2%
+EV dip 1.0x at -1% L=3                           cagr=+2.1% vol=1.5% sharpe=1.37 sortino=1.19 maxdd=-3.1% calmar=0.67 worst_m=-0.8% cvar=-0.1% beta=-0.01 sh2h=1.80 | 2008=+5% 2020=+7% 2022=+2% covid=+5%
+EV dip 1.0x at -1% L=5                           cagr=+2.4% vol=2.4% sharpe=0.98 sortino=0.77 maxdd=-5.0% calmar=0.48 worst_m=-1.4% cvar=-0.2% beta=-0.02 sh2h=1.26 | 2008=+7% 2020=+12% 2022=+2% covid=+9%
+   yearly: 2007=+4.4% 2008=+7.2% 2009=-1.2% 2010=+0.2% 2011=+0.1% 2012=+0.1% 2013=+0.1% 2014=+0.1% 2015=+0.1% 2016=+0.4% 2017=+1.0% 2018=+1.8% 2019=+2.2% 2020=+11.9% 2021=+0.1% 2022=+1.7% 2023=+5.1% 2024=+5.3% 2025=+3.2% 2026=+4.2%
+EV dip 1.0x at -1% L=10                          cagr=+3.1% vol=4.8% sharpe=0.66 sortino=0.55 maxdd=-9.0% calmar=0.35 worst_m=-2.7% cvar=-0.4% beta=-0.03 sh2h=0.84 | 2008=+12% 2020=+24% 2022=+2% covid=+17%
+all dips 1.0x (PW -1%, CO -1%, EV -1%) L=1       cagr=+2.1% vol=1.2% sharpe=1.71 sortino=1.11 maxdd=-1.7% calmar=1.28 worst_m=-1.1% cvar=-0.1% beta=-0.01 sh2h=2.34 | 2008=+2% 2020=+3% 2022=+3% covid=+2%
+all dips 1.0x (PW -1%, CO -1%, EV -1%) L=3       cagr=+3.1% vol=3.3% sharpe=0.94 sortino=0.58 maxdd=-6.6% calmar=0.47 worst_m=-3.5% cvar=-0.5% beta=-0.04 sh2h=1.30 | 2008=+1% 2020=+7% 2022=+5% covid=+5%
+all dips 1.0x (PW -1%, CO -1%, EV -1%) L=5       cagr=+4.0% vol=5.4% sharpe=0.75 sortino=0.49 maxdd=-11.3% calmar=0.36 worst_m=-5.8% cvar=-0.9% beta=-0.07 sh2h=1.07 | 2008=-0% 2020=+12% 2022=+8% covid=+9%
+   yearly: 2007=+6.0% 2008=-0.2% 2009=-1.2% 2010=+0.2% 2011=+0.1% 2012=+0.1% 2013=+0.1% 2014=+0.1% 2015=+7.8% 2016=-5.5% 2017=+1.0% 2018=+20.0% 2019=+2.2% 2020=+11.9% 2021=+0.1% 2022=+7.7% 2023=+5.1% 2024=+5.3% 2025=+13.0% 2026=+8.9%
+all dips 1.0x (PW -1%, CO -1%, EV -1%) L=10      cagr=+6.2% vol=10.8% sharpe=0.61 sortino=0.41 maxdd=-22.3% calmar=0.28 worst_m=-11.6% cvar=-2.0% beta=-0.14 sh2h=0.89 | 2008=-3% 2020=+24% 2022=+14% covid=+17%
+all dips 2 tranches 0.5x L=1                     cagr=+2.1% vol=1.0% sharpe=2.05 sortino=1.59 maxdd=-1.7% calmar=1.22 worst_m=-0.6% cvar=-0.1% beta=-0.01 sh2h=3.20 | 2008=+2% 2020=+2% 2022=+3% covid=+1%
+all dips 2 tranches 0.5x L=3                     cagr=+2.9% vol=2.6% sharpe=1.14 sortino=1.01 maxdd=-5.4% calmar=0.55 worst_m=-1.7% cvar=-0.6% beta=-0.03 sh2h=1.74 | 2008=+3% 2020=+5% 2022=+4% covid=+3%
+all dips 2 tranches 0.5x L=5                     cagr=+3.8% vol=4.2% sharpe=0.90 sortino=0.75 maxdd=-9.4% calmar=0.40 worst_m=-2.9% cvar=-1.0% beta=-0.05 sh2h=1.35 | 2008=+3% 2020=+8% 2022=+6% covid=+5%
+   yearly: 2007=+5.2% 2008=+3.5% 2009=+0.8% 2010=+0.2% 2011=+0.1% 2012=+0.1% 2013=+0.1% 2014=+0.1% 2015=+14.7% 2016=-2.5% 2017=+1.0% 2018=+10.1% 2019=+1.8% 2020=+8.1% 2021=+0.1% 2022=+5.7% 2023=+5.1% 2024=+7.4% 2025=+7.0% 2026=+7.2%
+all dips 2 tranches 0.5x L=10                    cagr=+5.7% vol=8.3% sharpe=0.71 sortino=0.59 maxdd=-19.0% calmar=0.30 worst_m=-5.8% cvar=-2.2% beta=-0.10 sh2h=1.04 | 2008=+4% 2020=+16% 2022=+10% covid=+9%
+DONE
