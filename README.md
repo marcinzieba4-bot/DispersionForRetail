@@ -1752,6 +1752,59 @@ hedging); only the cheap-vol version is flat. Option margin for a short
 TLT straddle is modest under PM (about 6-8% of notional) and the TLT
 option market is liquid enough for the sizes here.
 
+### The combined book (`results/best_combo_VOLVUE.csv`, `best_combo_{A,B}_equity_VOLVUE.csv`)
+
+`scripts/run_best_combo.py`. Four sleeves, all rebalanced to equity each
+third Friday, full cash yield (bills as collateral), realistic costs:
+
+1. **Momentum**: 10 S&P names with the highest 12-1 return, equal weight,
+   only when SPY is above its 200-day average, 15% trailing stop per name
+   (exit next close, cash until the next cycle).
+2. **Regime book**, base version: put-wing dispersion (short SPY 25d put,
+   long single-name 25d puts, split delta hedge weekly) when the 5-day
+   basket implied correlation is above its 2-year 75th percentile (lagged
+   a day); outright-call dispersion (short SPY 30d call, long single 30d
+   calls) when basket correlation is below 0.30 and VIX below 20; event
+   selling (short straddles on names with front-month event IV, book
+   hedge) always; otherwise cash.
+3. **TLT** long, only when above its 200-day average (shares, deep calls
+   or /ZB futures).
+4. **TLT short ATM straddle**, hedged weekly, only when TLT 30-day IV is
+   above its 1-year median.
+
+Weights at k=1: momentum 75% of equity, book 3.75x, TLT 38%, straddle
+75% of equity notional. PM usage = stocks 25%, TLT 12% (4% as futures),
+book at its per-cycle TIMS-style stress x1.5, straddle 7% x1.5.
+
+| k | CAGR | vol | Sharpe | Sortino | maxDD | mDD (month-end) | Calmar | worst m | worst 12m | CVaR95 | beta | 2008 | 2020 | 2022 | PM usage med / p95 / max |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.5 | +9.9% | 8.4% | 1.18 | 1.22 | -12.5% | -9.1% | 0.79 | -6.9% | -4.9% | -4.3% | 0.24 | +1% | +21% | +2% | 26 / 37 / 51% |
+| 0.75 | +13.9% | 12.5% | 1.11 | 1.16 | -18.6% | -13.6% | 0.75 | -10.4% | -7.4% | -6.5% | 0.37 | 0% | +32% | +3% | 39 / 55 / 78% |
+| 1.0 | +17.9% | 16.7% | 1.08 | 1.13 | -24.7% | -17.9% | 0.73 | -13.8% | -10.0% | -8.7% | 0.49 | -1% | +44% | +3% | 51 / 74 / 109% |
+| 1.25 | +21.8% | 20.9% | 1.06 | 1.12 | -30.7% | -22.1% | 0.71 | -17.1% | -12.5% | -10.9% | 0.61 | -2% | +55% | +3% | 64 / 93 / 144% |
+| 1.5 | +25.6% | 25.2% | 1.04 | 1.10 | -36.8% | -26.1% | 0.70 | -20.4% | -15.1% | -13.0% | 0.74 | -3% | +67% | +3% | 76 / 112 / 183% |
+| 2.0 | +32.9% | 33.7% | 1.03 | 1.09 | -48.8% | -33.7% | 0.67 | -26.8% | -20.3% | -17.3% | 0.99 | -5% | +91% | +3% | 100 / 150 / 277% |
+| k=1, no straddle | +16.0% | 16.5% | 0.99 | 1.02 | -21.7% | -17.9% | 0.74 | -13.8% | -8.8% | -8.7% | 0.44 | -2% | +38% | +4% | 45 / 69 / 99% |
+
+Line A (k=1, TLT as futures): CAGR 17.9%, Sharpe 1.08, maxDD -24.7%,
+usage median 49%, above 80% in 10 months, above 100% in one (late 2008,
+106%). Yearly: 2007 +15, 2008 -1, 2009 +13, 2010 +16, 2011 +26, 2012 +24,
+2013 +36, 2014 +5, 2015 0, 2016 +16, 2017 +26, 2018 -3, 2019 +11, 2020
++44, 2021 +5, 2022 +3, 2023 +36, 2024 +26, 2025 +26, 2026 +45. Crises:
+2008 -1% (SPY -36), Aug 2011 +14%, Feb 2018 -7%, Q4 2018 -8%, Covid -13%
+(SPY -23), 2022 +4% (SPY -19), Apr 2025 +2%.
+Line B (k=1.25): CAGR 21.8%, Sharpe 1.06, maxDD -30.7%, usage median 61%,
+above 100% in 12 months (max 139%): the 20% line, needing about 40% of
+the account posted in the worst cycle. Reg-T account (no portfolio
+margin): momentum 45%, book 0.75x, TLT 22% as futures, straddle 45%
+gives 9.1%/yr, Sharpe 1.03, maxDD -13.1%, usage max 71%.
+
+Sharpe and Calmar are flat in k (1.03-1.18 and 0.67-0.79), so the only
+choice is the drawdown: k=1 for a quarter, k=1.25 for 30% with cash on
+call, k=0.75 for under 20%. The straddle adds 2 points of CAGR and 0.09
+of Sharpe at k=1 for 3 points of drawdown. Everything above the Reg-T line
+needs a portfolio-margin account ($250k and up is comfortable).
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

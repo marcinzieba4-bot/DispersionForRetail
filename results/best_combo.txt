@@ -1,0 +1,32 @@
+=== best combo, scaled: mom 75% + book 3.75x + TLT 38% + straddle 75% at k=1 (PM usage: stocks 25%, TLT 12%, book TIMS x1.5, straddle 7% x1.5) ===
+k=0.50                                         cagr=+9.9% vol=8.4% sharpe=1.18 sortino=1.22 maxdd=-12.5% mdd_me=-9.1% calmar=0.79 worst_m=-6.9% worst_12m=-4.9% cvar=-4.3% skew=-0.0 beta=0.24 sh2h=1.28 | 2008=+1% 2020=+21% 2022=+2% covid=-6% | usage med=26% p95=37% max=51%
+k=0.75                                         cagr=+13.9% vol=12.5% sharpe=1.11 sortino=1.16 maxdd=-18.6% mdd_me=-13.6% calmar=0.75 worst_m=-10.4% worst_12m=-7.4% cvar=-6.5% skew=-0.0 beta=0.37 sh2h=1.19 | 2008=-0% 2020=+32% 2022=+3% covid=-9% | usage med=39% p95=55% max=78%
+k=1.00                                         cagr=+17.9% vol=16.7% sharpe=1.08 sortino=1.13 maxdd=-24.7% mdd_me=-17.9% calmar=0.73 worst_m=-13.8% worst_12m=-10.0% cvar=-8.7% skew=-0.0 beta=0.49 sh2h=1.14 | 2008=-1% 2020=+44% 2022=+3% covid=-13% | usage med=51% p95=74% max=109%
+k=1.25                                         cagr=+21.8% vol=20.9% sharpe=1.06 sortino=1.12 maxdd=-30.7% mdd_me=-22.1% calmar=0.71 worst_m=-17.1% worst_12m=-12.5% cvar=-10.9% skew=-0.0 beta=0.61 sh2h=1.12 | 2008=-2% 2020=+55% 2022=+3% covid=-16% | usage med=64% p95=93% max=144%
+k=1.50                                         cagr=+25.6% vol=25.2% sharpe=1.04 sortino=1.10 maxdd=-36.8% mdd_me=-26.1% calmar=0.70 worst_m=-20.4% worst_12m=-15.1% cvar=-13.0% skew=-0.0 beta=0.74 sh2h=1.10 | 2008=-3% 2020=+67% 2022=+3% covid=-19% | usage med=76% p95=112% max=183%
+k=2.00                                         cagr=+32.9% vol=33.7% sharpe=1.03 sortino=1.09 maxdd=-48.8% mdd_me=-33.7% calmar=0.67 worst_m=-26.8% worst_12m=-20.3% cvar=-17.3% skew=+0.0 beta=0.99 sh2h=1.07 | 2008=-5% 2020=+91% 2022=+3% covid=-26% | usage med=100% p95=150% max=277%
+
+--- same, TLT via /ZB futures (4% margin) ---
+k=1.00, TLT futures                            cagr=+17.9% vol=16.7% sharpe=1.08 sortino=1.13 maxdd=-24.7% mdd_me=-17.9% calmar=0.73 worst_m=-13.8% worst_12m=-10.0% cvar=-8.7% skew=-0.0 beta=0.49 sh2h=1.14 | 2008=-1% 2020=+44% 2022=+3% covid=-13% | usage med=49% p95=72% max=106%
+k=1.25, TLT futures                            cagr=+21.8% vol=20.9% sharpe=1.06 sortino=1.12 maxdd=-30.7% mdd_me=-22.1% calmar=0.71 worst_m=-17.1% worst_12m=-12.5% cvar=-10.9% skew=-0.0 beta=0.61 sh2h=1.12 | 2008=-2% 2020=+55% 2022=+3% covid=-16% | usage med=61% p95=90% max=139%
+k=1.50, TLT futures                            cagr=+25.6% vol=25.2% sharpe=1.04 sortino=1.10 maxdd=-36.8% mdd_me=-26.1% calmar=0.70 worst_m=-20.4% worst_12m=-15.1% cvar=-13.0% skew=-0.0 beta=0.74 sh2h=1.10 | 2008=-3% 2020=+67% 2022=+3% covid=-19% | usage med=72% p95=108% max=177%
+
+--- without the straddle (reference) ---
+k=1, no straddle                               cagr=+16.0% vol=16.5% sharpe=0.99 sortino=1.02 maxdd=-21.7% mdd_me=-17.9% calmar=0.74 worst_m=-13.8% worst_12m=-8.8% cvar=-8.7% skew=-0.0 beta=0.44 sh2h=1.07 | 2008=-2% 2020=+38% 2022=+4% covid=-11% | usage med=45% p95=69% max=99%
+
+--- Reg-T account (stocks 50%, book 40% of notional per 1x, TLT shares 50% / futures 4%, straddle 20%) ---
+RegT mom 45% book 0.75x TLT 22% str 45%        cagr=+9.1% vol=8.9% sharpe=1.03 sortino=1.10 maxdd=-13.1% mdd_me=-10.7% calmar=0.70 worst_m=-8.7% worst_12m=-6.7% cvar=-4.8% skew=+0.0 beta=0.28 sh2h=1.09 | 2008=-0% 2020=+18% 2022=-0% covid=-7% | usage med=64% p95=73% max=82%
+RegT mom 45% book 0.75x TLT 22% fut str 45%    cagr=+9.1% vol=8.9% sharpe=1.03 sortino=1.10 maxdd=-13.1% mdd_me=-10.7% calmar=0.70 worst_m=-8.7% worst_12m=-6.7% cvar=-4.8% skew=+0.0 beta=0.28 sh2h=1.09 | 2008=-0% 2020=+18% 2022=-0% covid=-7% | usage med=61% p95=63% max=71%
+RegT mom 60% book 1.00x TLT 30% fut str 60%    cagr=+11.5% vol=11.9% sharpe=0.99 sortino=1.06 maxdd=-17.4% mdd_me=-14.1% calmar=0.66 worst_m=-11.6% worst_12m=-8.9% cvar=-6.4% skew=+0.0 beta=0.38 sh2h=1.03 | 2008=-1% 2020=+25% 2022=-1% covid=-10% | usage med=81% p95=85% max=99%
+RegT mom 50% book 0.75x TLT 25% fut str 25%    cagr=+9.2% vol=9.8% sharpe=0.95 sortino=1.02 maxdd=-13.2% mdd_me=-11.9% calmar=0.70 worst_m=-9.7% worst_12m=-6.4% cvar=-5.4% skew=+0.0 beta=0.29 sh2h=1.01 | 2008=-1% 2020=+18% 2022=-0% covid=-7% | usage med=59% p95=62% max=69%
+
+=== the two headline lines in full ===
+A: survives PM (k=1): mom 75% book 3.75x TLT 38% str 75% cagr=+17.9% vol=16.7% sharpe=1.08 sortino=1.13 maxdd=-24.7% mdd_me=-17.9% calmar=0.73 worst_m=-13.8% worst_12m=-10.0% cvar=-8.7% skew=-0.0 beta=0.49 sh2h=1.14 | 2008=-1% 2020=+44% 2022=+3% covid=-13% | usage med=49% p95=72% max=106%
+   yearly: 2007=+15% 2008=-1% 2009=+13% 2010=+16% 2011=+26% 2012=+24% 2013=+36% 2014=+5% 2015=-0% 2016=+16% 2017=+26% 2018=-3% 2019=+11% 2020=+44% 2021=+5% 2022=+3% 2023=+36% 2024=+26% 2025=+26% 2026=+45%
+   crises: GFC_2008=-1%(spy -36%) Aug2011=+14%(spy -15%) Feb2018_volmageddon=-7%(spy -5%) Q4_2018=-8%(spy -14%) Covid_2020=-13%(spy -23%) Bear_2022=+4%(spy -19%) Apr2025_tariffs=+2%(spy -1%)
+   months with PM usage > 80%: 10, > 100%: 1; VaR95 m=-6.0% pos months=66% dd_days=612
+B: 20% target (k=1.25): mom 94% book 4.7x TLT 47% str 94% cagr=+21.8% vol=20.9% sharpe=1.06 sortino=1.12 maxdd=-30.7% mdd_me=-22.1% calmar=0.71 worst_m=-17.1% worst_12m=-12.5% cvar=-10.9% skew=-0.0 beta=0.61 sh2h=1.12 | 2008=-2% 2020=+55% 2022=+3% covid=-16% | usage med=61% p95=90% max=139%
+   yearly: 2007=+17% 2008=-2% 2009=+16% 2010=+20% 2011=+33% 2012=+30% 2013=+45% 2014=+6% 2015=-0% 2016=+20% 2017=+33% 2018=-5% 2019=+14% 2020=+55% 2021=+5% 2022=+3% 2023=+45% 2024=+32% 2025=+32% 2026=+56%
+   crises: GFC_2008=-1%(spy -36%) Aug2011=+18%(spy -15%) Feb2018_volmageddon=-9%(spy -5%) Q4_2018=-10%(spy -14%) Covid_2020=-16%(spy -23%) Bear_2022=+4%(spy -19%) Apr2025_tariffs=+2%(spy -1%)
+   months with PM usage > 80%: 68, > 100%: 12; VaR95 m=-7.6% pos months=66% dd_days=615
+DONE
