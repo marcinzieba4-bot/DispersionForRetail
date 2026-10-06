@@ -1994,6 +1994,60 @@ variants (top 3, top 4, with or without the own-trend condition) are
 within 0.04 Sharpe of each other, so the choice of 3 is not what drives
 it; the SPY filter and the sector diversification are.
 
+### Critical review of the sector-ETF combo (`results/critique2.txt`)
+
+`scripts/run_critique2.py`, line S (sector top-3 100% + book 3.75x + TLT
+38% + straddle 75%, vol-path marks): CAGR 18.9%, Sharpe 1.26, maxDD
+-25.6%, Calmar 0.74.
+
+| sleeve | alone: CAGR / Sharpe / maxDD | combo without it: CAGR / Sharpe / maxDD / Calmar |
+|---|---|---|
+| sector basket 100% | +10.0% / 0.89 / -21.2% | +9.8% / 0.93 / -19.2% / 0.51 |
+| regime book 3.75x | +6.8% / 0.73 / -22.6% | +13.1% / 1.07 / -20.8% / 0.63 |
+| TLT 38% (200d) | +2.6% / 0.63 / -9.0% | +17.5% / 1.18 / -25.0% / 0.70 |
+| TLT straddle 75% | +3.4% / 1.33 / -6.3% | +17.0% / 1.17 / -20.1% / 0.85 |
+
+Cash yield is 1.9 of the 18.9 points. Sub-periods: 2007-2012 16.5% /
+Sharpe 1.01; 2013-2019 14.4% / 1.21; 2020-2026 25.9% / 1.55; 2007-2022
+17.4% / 1.16; 2023-2026 25.7% / 1.72. Rolling 36-month Sharpe: min 0.44,
+10th percentile 0.83, median 1.26, four months below 0.5 (the 10-stock
+version had six and a 10th percentile of 0.61). Bootstrap (6-month
+blocks): Sharpe 0.96 / 1.27 / 1.60, CAGR 14.0% / 18.8% / 23.8%, maxDD
+-23.9% / -16.6% / -13.0% at 5 / 50 / 95.
+
+| change | CAGR | Sharpe | maxDD | Calmar | worst m |
+|---|---|---|---|---|---|
+| sector basket without the SPY 200d filter | +21.8% | 1.21 | -50.5% | 0.43 | -15.4% |
+| sector top 4 instead of 3 | +18.5% | 1.26 | -28.6% | 0.65 | -14.7% |
+| sector top 3 + own 200d | +18.5% | 1.24 | -25.6% | 0.72 | -14.7% |
+| book unconditional (no correlation regimes) | +11.2% | 0.62 | -55.8% | 0.20 | -24.2% |
+| TLT buy & hold instead of 200d | +18.8% | 1.22 | -25.6% | 0.73 | -14.7% |
+| straddle without IV-rank filter | +18.8% | 1.23 | -25.7% | 0.73 | -14.7% |
+| ES 100% instead of the sector basket | +19.4% | 1.10 | -53.8% | 0.36 | -19.5% |
+| all plain alternatives | +13.9% | 0.68 | -62.5% | 0.22 | -21.8% |
+
+Tails: in SPY's ten worst months the combo averages +0.6%. The combo's
+five worst months and their causes: 2008-11 -14.7% (book -15.5%, TLT
++5.1%), 2020-02 -13.0% (basket -4.4%, book -3.5%), 2010-05 -10.1%
+(basket -7.3%), 2015-08 -8.8% (basket -4.1%), 2018-10 -8.7% (basket
+-5.1%). The worst month is the book's (Nov 2008, with the honest lagged
+signal the put wing was on through the Nov 20 low); the next four are
+the basket's, each a month when SPY was still above its 200d at entry.
+
+What changed versus the 10-stock review: the result is more stable
+(sub-period Sharpes 1.0-1.5 instead of 0.8-1.3, bootstrap 5th percentile
+0.96 instead of 0.80) and less dependent on the equity sleeve's
+particulars (top 3 vs 4, own-trend or not: within 0.04 Sharpe). What did
+not change: the two load-bearing choices are still the SPY trend filter
+(without it the drawdown doubles) and the correlation regimes on the
+book (without them the book is a -56% drawdown), and 2023-2026 is still
+the best stretch. The sector basket removes the survivorship-bias
+concern (ETF prices are complete) and most of the execution concern on
+the equity leg; the remaining unverified assumptions are the single-name
+option fills, intraday margin in a vol spike, and the in-sample origin of
+the correlation thresholds. Realistic live expectation for line S: CAGR
+14-16% at Sharpe 0.9-1.1 with a drawdown near 25-30%.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

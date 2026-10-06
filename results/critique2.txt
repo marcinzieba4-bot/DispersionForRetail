@@ -1,0 +1,45 @@
+line S: cagr=+18.9% sharpe=1.26 maxdd=-25.6% calmar=0.74
+
+=== 1. attribution ===
+sector top3 100%   alone: cagr=+10.0% sharpe=0.89 maxdd=-21.2% | without it: cagr=+9.8% sharpe=0.93 maxdd=-19.2% calmar=0.51
+book 3.75x         alone: cagr=+6.8% sharpe=0.73 maxdd=-22.6% | without it: cagr=+13.1% sharpe=1.07 maxdd=-20.8% calmar=0.63
+TLT 38%            alone: cagr=+2.6% sharpe=0.63 maxdd=-9.0% | without it: cagr=+17.5% sharpe=1.18 maxdd=-25.0% calmar=0.70
+straddle 75%       alone: cagr=+3.4% sharpe=1.33 maxdd=-6.3% | without it: cagr=+17.0% sharpe=1.17 maxdd=-20.1% calmar=0.85
+cash yield: +1.9%/yr (ex-cash cagr +17.0%, sharpe 1.15)
+
+=== 2. sub-periods ===
+2007-2012: cagr=+16.5% vol=16.3% sharpe=1.01 maxdd=-19.2% calmar=0.86
+2013-2019: cagr=+14.4% vol=11.6% sharpe=1.21 maxdd=-17.7% calmar=0.82
+2020-2026: cagr=+25.9% vol=15.6% sharpe=1.55 maxdd=-25.6% calmar=1.01
+2007-2016: cagr=+14.7% vol=14.8% sharpe=1.00 maxdd=-19.2% calmar=0.77
+2017-2026: cagr=+23.3% vol=14.3% sharpe=1.54 maxdd=-25.6% calmar=0.91
+2007-2022: cagr=+17.4% vol=14.8% sharpe=1.16 maxdd=-25.6% calmar=0.68
+2023-2026: cagr=+25.7% vol=13.7% sharpe=1.72 maxdd=-16.1% calmar=1.59
+rolling 36m Sharpe: min=0.44 10th=0.83 median=1.26; months < 0.5: 4 of 201
+
+=== 3. block bootstrap (6m blocks, 2000 draws), 5/50/95 ===
+Sharpe 0.96 / 1.27 / 1.60 | CAGR +14.0% / +18.8% / +23.8% | maxDD -23.9% / -16.6% / -13.0%
+
+=== 4. sensitivity to the in-sample choices ===
+sector basket without the SPY 200d filter    cagr=+21.8% sharpe=1.21 maxdd=-50.5% calmar=0.43 worst_m=-15.4%
+sector top 4 instead of 3                    cagr=+18.5% sharpe=1.26 maxdd=-28.6% calmar=0.65 worst_m=-14.7%
+sector top 3 + own 200d                      cagr=+18.5% sharpe=1.24 maxdd=-25.6% calmar=0.72 worst_m=-14.7%
+book unconditional (no correlation regimes)  cagr=+11.2% sharpe=0.62 maxdd=-55.8% calmar=0.20 worst_m=-24.2%
+TLT buy & hold instead of 200d               cagr=+18.8% sharpe=1.22 maxdd=-25.6% calmar=0.73 worst_m=-14.7%
+straddle without IV-rank filter              cagr=+18.8% sharpe=1.23 maxdd=-25.7% calmar=0.73 worst_m=-14.7%
+ES 100% instead of the sector basket         cagr=+19.4% sharpe=1.10 maxdd=-53.8% calmar=0.36 worst_m=-19.5%
+all plain alternatives                       cagr=+13.9% sharpe=0.68 maxdd=-62.5% calmar=0.22 worst_m=-21.8%
+
+=== 5. tails ===
+SPY worst 10 months: combo mean +0.6% (SPY -10.1%)
+sector basket  worst 10 months: sleeve -5.3% (1x), combo -6.7%
+book           worst 10 months: sleeve -1.6% (1x), combo -4.3%
+TLT            worst 10 months: sleeve -4.5% (1x), combo -0.7%
+straddle       worst 10 months: sleeve -2.0% (1x), combo -2.8%
+combo worst 5 months: 2008-11 -14.7%, 2020-02 -13.0%, 2010-05 -10.1%, 2015-08 -8.8%, 2018-10 -8.7%
+   2008-11: sector top3 100%=+0.0% book 3.75x=-15.5% TLT 38%=+5.1% straddle 75%=-1.4%
+   2020-02: sector top3 100%=-4.4% book 3.75x=-3.5% TLT 38%=+2.0% straddle 75%=-1.4%
+   2010-05: sector top3 100%=-7.3% book 3.75x=-0.5% TLT 38%=-0.7% straddle 75%=+0.2%
+   2015-08: sector top3 100%=-4.1% book 3.75x=-0.3% TLT 38%=-1.2% straddle 75%=-0.3%
+   2018-10: sector top3 100%=-5.1% book 3.75x=-0.1% TLT 38%=+0.0% straddle 75%=+0.0%
+DONE
