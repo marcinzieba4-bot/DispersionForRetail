@@ -1941,6 +1941,59 @@ and V-shaped, which is the one shape these rules penalise. The right
 way to cut this book's drawdown remains a smaller k, which keeps the
 Calmar at 0.7-0.8, or fewer stocks in the momentum sleeve.
 
+### Trend-filtered sector ETFs instead of the 10 stocks (`results/sector_etf*_VOLVUE.csv`)
+
+`scripts/run_sector_etf.py`. Nine SPDR sector ETFs (XLK, XLF, XLV, XLY,
+XLP, XLE, XLI, XLB, XLU; 2004+), fixed notional per third-Friday cycle,
+2 bp per side, 15% trailing stop per ETF (exit next close, cash until the
+next cycle). Baskets: top-3 or top-4 by 12-1 return while SPY is above its
+200d; top-3 among sectors above their own 200d; all sectors above their
+own 200d equal-weight; top-3 with no filter.
+
+| equity sleeve alone, 100% of equity with cash | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | worst 12m | beta | 2008 | 2020 | 2022 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10-stock momentum, trend + trail 15% | +10.6% | 19.4% | 0.63 | 0.60 | -28.8% | 0.37 | -19.1% | -23.3% | 0.63 | -18% | +13% | -3% |
+| ES | +10.9% | 15.4% | 0.76 | 0.67 | -55.2% | 0.20 | -16.5% | -43.4% | 1.00 | -37% | +18% | -18% |
+| sector mom top 3, SPY > 200d, trail 15% | +10.0% | 11.5% | 0.89 | 0.75 | -21.2% | 0.47 | -11.9% | -13.4% | 0.45 | -2% | +15% | +1% |
+| sector mom top 4, SPY > 200d, trail 15% | +9.6% | 11.1% | 0.89 | 0.73 | -20.8% | 0.46 | -11.6% | -12.0% | 0.45 | -3% | +9% | 0% |
+| sector mom top 3, own 200d + SPY > 200d | +9.6% | 11.4% | 0.87 | 0.71 | -21.7% | 0.44 | -11.9% | -13.9% | 0.44 | -2% | +15% | +5% |
+| sector mom top 3, own 200d only | +10.4% | 13.8% | 0.79 | 0.66 | -29.9% | 0.35 | -15.5% | -26.5% | 0.67 | -23% | +20% | +1% |
+| all sectors above own 200d, equal weight | +9.9% | 13.1% | 0.79 | 0.66 | -31.7% | 0.31 | -15.5% | -27.4% | 0.67 | -24% | +13% | -10% |
+| sector mom top 3, no filter | +12.9% | 14.9% | 0.89 | 0.80 | -47.9% | 0.27 | -13.3% | -37.9% | 0.77 | -23% | +41% | +8% |
+
+The sector basket earns what the 10 stocks earn at 60% of the vol and
+half the worst month; the SPY 200d filter is again the ingredient that
+removes 2008. Cycle-P&L correlation with the 10-stock sleeve 0.68, with
+the book -0.06, with TLT -0.23.
+
+Combined book, vol-path marks, k=1 (equity sleeve w + book 3.75x + TLT 38% as futures + straddle 75%; PM: stocks 25%, ETFs 15%, TLT 4%, straddle 10.5%, book at its cycle stress x1.5):
+
+| equity sleeve | w | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | worst 12m | beta | 2008 | 2020 | 2022 | PM med / max |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 10 stocks (line A) | 75% | +17.4% | 16.9% | 1.04 | 1.11 | -24.6% | 0.71 | -14.7% | -9.4% | 0.42 | -5% | +44% | +2% | 39 / 98% |
+| 10 stocks | 100% | +19.5% | 20.9% | 0.97 | 1.02 | -29.2% | 0.67 | -18.1% | -13.8% | 0.58 | -10% | +47% | +1% | 42 / 104% |
+| **sector mom top 3** | **75%** | +16.7% | 12.7% | 1.28 | 1.36 | -22.0% | 0.76 | -14.7% | -6.3% | 0.29 | +7% | +45% | +5% | 35 / 79% |
+| **sector mom top 3** | **100%** | +18.9% | 14.6% | 1.26 | 1.31 | -25.6% | 0.74 | -14.7% | -8.3% | 0.40 | +6% | +49% | +5% | 37 / 79% |
+| sector mom top 4 | 100% | +18.5% | 14.3% | 1.26 | 1.31 | -28.6% | 0.65 | -14.7% | -10.0% | 0.41 | +5% | +41% | +4% | 37 / 79% |
+| sector mom top 3 + own 200d | 100% | +18.5% | 14.5% | 1.24 | 1.28 | -25.6% | 0.72 | -14.7% | -8.3% | 0.39 | +6% | +49% | +9% | 37 / 79% |
+| all sectors above own 200d | 100% | +18.6% | 15.8% | 1.16 | 1.08 | -37.1% | 0.50 | -16.8% | -28.1% | 0.62 | -18% | +47% | -7% | 44 / 79% |
+| ES | 100% | +19.4% | 17.9% | 1.10 | 1.06 | -53.8% | 0.36 | -19.5% | -42.9% | 0.95 | -31% | +49% | -15% | 37 / 85% |
+
+Ladder with sector top 3 at 100%: k=0.75 14.5% / Sharpe 1.30 / maxDD
+-19.2% / PM max 60%; k=1 18.9% / 1.26 / -25.6% / 79%; k=1.25 23.3% / 1.24
+/ -32.0% / 99%; k=1.5 27.6% / 1.22 / -38.4% / 119%. Yearly at k=1: 2007
++13, 2008 +6, 2009 +24, 2010 +18, 2011 +18, 2012 +12, 2013 +42, 2014 +10,
+2015 -3, 2016 +9, 2017 +32, 2018 0, 2019 +19, 2020 +49, 2021 +35, 2022
++5, 2023 +32, 2024 +19, 2025 +12, 2026 +32.
+
+The swap raises the book's Sharpe from 1.04 to 1.26 at the same CAGR and
+Calmar, halves the worst 12 months, turns 2008 positive, cuts the peak
+margin from 98% to 79% so k=1.25 now survives without a cash call, and
+replaces 10 stock tickets and 10 stops with 3 ETFs. The sector-mom
+variants (top 3, top 4, with or without the own-trend condition) are
+within 0.04 Sharpe of each other, so the choice of 3 is not what drives
+it; the SPY filter and the sector diversification are.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

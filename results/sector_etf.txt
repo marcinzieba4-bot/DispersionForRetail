@@ -1,0 +1,46 @@
+=== equity sleeves alone, 100% of equity, with cash ===
+10-stock momentum, trend + trail 15%                 cagr=+10.6% vol=19.4% sharpe=0.63 sortino=0.60 maxdd=-28.8% calmar=0.37 worst_m=-19.1% worst_12m=-23.3% beta=0.63 sh2h=0.72 | 2008=-18% 2020=+13% 2022=-3% covid=-19%
+ES (SPY TR - cash)                                   cagr=+10.9% vol=15.4% sharpe=0.76 sortino=0.67 maxdd=-55.2% calmar=0.20 worst_m=-16.5% worst_12m=-43.4% beta=1.00 sh2h=1.00 | 2008=-37% 2020=+18% 2022=-18% covid=-23%
+sector mom top3, SPY>200d, trail 15%                 cagr=+10.0% vol=11.5% sharpe=0.89 sortino=0.75 maxdd=-21.2% calmar=0.47 worst_m=-11.9% worst_12m=-13.4% beta=0.45 sh2h=1.17 | 2008=-2% 2020=+15% 2022=+1% covid=-15%
+      avg ETFs held 2.2, stops fired 7
+sector mom top4, SPY>200d, trail 15%                 cagr=+9.6% vol=11.1% sharpe=0.89 sortino=0.73 maxdd=-20.8% calmar=0.46 worst_m=-11.6% worst_12m=-12.0% beta=0.45 sh2h=1.13 | 2008=-3% 2020=+9% 2022=-0% covid=-18%
+      avg ETFs held 2.9, stops fired 10
+sector mom top3, own 200d + SPY>200d                 cagr=+9.6% vol=11.4% sharpe=0.87 sortino=0.71 maxdd=-21.7% calmar=0.44 worst_m=-11.9% worst_12m=-13.9% beta=0.44 sh2h=1.10 | 2008=-2% 2020=+15% 2022=+5% covid=-15%
+      avg ETFs held 2.2, stops fired 7
+sector mom top3, own 200d only                       cagr=+10.4% vol=13.8% sharpe=0.79 sortino=0.66 maxdd=-29.9% calmar=0.35 worst_m=-15.5% worst_12m=-26.5% beta=0.67 sh2h=0.90 | 2008=-23% 2020=+20% 2022=+1% covid=-15%
+      avg ETFs held 2.6, stops fired 11
+all sectors above own 200d, eq-wt                    cagr=+9.9% vol=13.1% sharpe=0.79 sortino=0.66 maxdd=-31.7% calmar=0.31 worst_m=-15.5% worst_12m=-27.4% beta=0.67 sh2h=0.87 | 2008=-24% 2020=+13% 2022=-10% covid=-17%
+      avg ETFs held 6.3, stops fired 21
+sector mom top3, no filter                           cagr=+12.9% vol=14.9% sharpe=0.89 sortino=0.80 maxdd=-47.9% calmar=0.27 worst_m=-13.3% worst_12m=-37.9% beta=0.77 sh2h=1.25 | 2008=-23% 2020=+41% 2022=+8% covid=-3%
+      avg ETFs held 2.8, stops fired 17
+
+cycle-P&L correlations:
+              mom10  sec top3  trend basket  book   TLT   STR
+mom10          1.00      0.68          0.47  0.05 -0.24  0.07
+sec top3       0.68      1.00          0.69 -0.06 -0.23  0.14
+trend basket   0.47      0.69          1.00  0.09 -0.23  0.21
+book           0.05     -0.06          0.09  1.00 -0.18  0.17
+TLT           -0.24     -0.23         -0.23 -0.18  1.00 -0.15
+STR            0.07      0.14          0.21  0.17 -0.15  1.00
+
+=== combined book (vol-path marks): equity sleeve 75% + book 3.75x + TLT 38% + straddle 75%, k=1; PM: stocks 25%, ETFs 15%, TLT 4% (futures), straddle 10.5% ===
+10 stocks (line A) 75%                               cagr=+17.4% vol=16.9% sharpe=1.04 sortino=1.11 maxdd=-24.6% calmar=0.71 worst_m=-14.7% worst_12m=-9.4% beta=0.42 sh2h=1.12 | 2008=-5% 2020=+44% 2022=+2% covid=-10% | PM med=39% max=98%
+10 stocks (line A) 100%                              cagr=+19.5% vol=20.9% sharpe=0.97 sortino=1.02 maxdd=-29.2% calmar=0.67 worst_m=-18.1% worst_12m=-13.8% beta=0.58 sh2h=1.03 | 2008=-10% 2020=+47% 2022=+1% covid=-15% | PM med=42% max=104%
+sector mom top3 75%                                  cagr=+16.7% vol=12.7% sharpe=1.28 sortino=1.36 maxdd=-22.0% calmar=0.76 worst_m=-14.7% worst_12m=-6.3% beta=0.29 sh2h=1.56 | 2008=+7% 2020=+45% 2022=+5% covid=-7% | PM med=35% max=79%
+sector mom top3 100%                                 cagr=+18.9% vol=14.6% sharpe=1.26 sortino=1.31 maxdd=-25.6% calmar=0.74 worst_m=-14.7% worst_12m=-8.3% beta=0.40 sh2h=1.54 | 2008=+6% 2020=+49% 2022=+5% covid=-11% | PM med=37% max=79%
+sector mom top4 75%                                  cagr=+16.4% vol=12.6% sharpe=1.27 sortino=1.38 maxdd=-24.2% calmar=0.68 worst_m=-14.7% worst_12m=-7.6% beta=0.29 sh2h=1.50 | 2008=+7% 2020=+39% 2022=+4% covid=-9% | PM med=35% max=79%
+sector mom top4 100%                                 cagr=+18.5% vol=14.3% sharpe=1.26 sortino=1.31 maxdd=-28.6% calmar=0.65 worst_m=-14.7% worst_12m=-10.0% beta=0.41 sh2h=1.49 | 2008=+5% 2020=+41% 2022=+4% covid=-14% | PM med=37% max=79%
+sector mom top3 + own 200d 75%                       cagr=+16.4% vol=12.7% sharpe=1.26 sortino=1.33 maxdd=-22.0% calmar=0.74 worst_m=-14.7% worst_12m=-6.3% beta=0.28 sh2h=1.49 | 2008=+7% 2020=+45% 2022=+8% covid=-7% | PM med=35% max=79%
+sector mom top3 + own 200d 100%                      cagr=+18.5% vol=14.5% sharpe=1.24 sortino=1.28 maxdd=-25.6% calmar=0.72 worst_m=-14.7% worst_12m=-8.3% beta=0.39 sh2h=1.46 | 2008=+6% 2020=+49% 2022=+9% covid=-11% | PM med=37% max=79%
+all sectors above own 200d 75%                       cagr=+16.5% vol=13.5% sharpe=1.20 sortino=1.16 maxdd=-31.1% calmar=0.53 worst_m=-14.7% worst_12m=-22.0% beta=0.45 sh2h=1.30 | 2008=-11% 2020=+43% 2022=-3% covid=-8% | PM med=41% max=79%
+all sectors above own 200d 100%                      cagr=+18.6% vol=15.8% sharpe=1.16 sortino=1.08 maxdd=-37.1% calmar=0.50 worst_m=-16.8% worst_12m=-28.1% beta=0.62 sh2h=1.24 | 2008=-18% 2020=+47% 2022=-7% covid=-12% | PM med=44% max=79%
+ES 75%                                               cagr=+17.3% vol=14.9% sharpe=1.16 sortino=1.16 maxdd=-43.8% calmar=0.40 worst_m=-18.0% worst_12m=-33.0% beta=0.69 sh2h=1.32 | 2008=-21% 2020=+47% 2022=-10% covid=-13% | PM med=35% max=84%
+ES 100%                                              cagr=+19.4% vol=17.9% sharpe=1.10 sortino=1.06 maxdd=-53.8% calmar=0.36 worst_m=-19.5% worst_12m=-42.9% beta=0.95 sh2h=1.26 | 2008=-31% 2020=+49% 2022=-15% covid=-20% | PM med=37% max=85%
+
+=== ladder with the sector basket (top3, SPY>200d, trail 15%) at 100% of equity ===
+sector top3 100%, k=0.75                             cagr=+14.5% vol=10.9% sharpe=1.30 sortino=1.36 maxdd=-19.2% calmar=0.76 worst_m=-11.2% worst_12m=-6.1% beta=0.30 sh2h=1.60 | 2008=+5% 2020=+36% 2022=+4% covid=-8% | PM med=28% max=60%
+sector top3 100%, k=1.0                              cagr=+18.9% vol=14.6% sharpe=1.26 sortino=1.31 maxdd=-25.6% calmar=0.74 worst_m=-14.7% worst_12m=-8.3% beta=0.40 sh2h=1.54 | 2008=+6% 2020=+49% 2022=+5% covid=-11% | PM med=37% max=79%
+   yearly: 2007=+13% 2008=+6% 2009=+24% 2010=+18% 2011=+18% 2012=+12% 2013=+42% 2014=+10% 2015=-3% 2016=+9% 2017=+32% 2018=+0% 2019=+19% 2020=+49% 2021=+35% 2022=+5% 2023=+32% 2024=+19% 2025=+12% 2026=+32%
+sector top3 100%, k=1.25                             cagr=+23.3% vol=18.3% sharpe=1.24 sortino=1.31 maxdd=-32.0% calmar=0.73 worst_m=-18.2% worst_12m=-10.4% beta=0.50 sh2h=1.50 | 2008=+7% 2020=+62% 2022=+6% covid=-13% | PM med=47% max=99%
+sector top3 100%, k=1.5                              cagr=+27.6% vol=22.0% sharpe=1.22 sortino=1.29 maxdd=-38.4% calmar=0.72 worst_m=-21.6% worst_12m=-12.7% beta=0.61 sh2h=1.47 | 2008=+8% 2020=+76% 2022=+7% covid=-17% | PM med=56% max=119%
+DONE
