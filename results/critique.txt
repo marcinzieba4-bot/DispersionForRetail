@@ -1,0 +1,36 @@
+line A: cagr=+17.9% sharpe=1.08 maxdd=-24.7%
+
+=== 1. attribution: each sleeve alone at its weight (with cash), and the combo without it ===
+momentum 75%   alone: cagr=+8.7% sharpe=0.66 maxdd=-21.9% | combo without it: cagr=+10.2% sharpe=1.04 maxdd=-15.9%
+book 3.75x     alone: cagr=+7.3% sharpe=0.84 maxdd=-20.5% | combo without it: cagr=+11.8% sharpe=0.84 maxdd=-20.1%
+TLT 38%        alone: cagr=+2.6% sharpe=0.63 maxdd=-9.0% | combo without it: cagr=+16.5% sharpe=1.00 maxdd=-28.4%
+straddle 75%   alone: cagr=+3.4% sharpe=1.33 maxdd=-6.3% | combo without it: cagr=+16.0% sharpe=0.99 maxdd=-21.7%
+cash yield contribution: +1.9%/yr (ex-cash cagr +16.1%, sharpe 0.99)
+
+=== 2. sub-periods ===
+2007-2012: cagr=+16.4% vol=15.5% sharpe=1.09 maxdd=-18.8% calmar=0.87
+2013-2019: cagr=+12.0% vol=14.6% sharpe=0.83 maxdd=-20.5% calmar=0.59
+2020-2026: cagr=+25.8% vol=19.5% sharpe=1.30 maxdd=-24.7% calmar=1.05
+2007-2016: cagr=+14.8% vol=14.9% sharpe=1.02 maxdd=-18.8% calmar=0.78
+2017-2026: cagr=+21.3% vol=18.5% sharpe=1.14 maxdd=-24.7% calmar=0.86
+2007-2022: cagr=+14.0% vol=15.6% sharpe=0.93 maxdd=-24.7% calmar=0.57
+rolling 36m Sharpe: min=0.33 10th pct=0.61 median=0.96; months with 36m Sharpe < 0.5: 6 of 201
+
+=== 3. block bootstrap of monthly returns (6-month blocks, 2000 draws): 90% intervals ===
+Sharpe 5-50-95%: 0.80 / 1.09 / 1.40 | CAGR: +12.4% / +18.0% / +24.4% | maxDD: -27.5% / -19.5% / -14.8%
+
+=== 4. sensitivity to the in-sample choices (swap one choice for its plain alternative) ===
+momentum without trend filter            cagr=+20.5% sharpe=1.06 maxdd=-45.6% calmar=0.45 worst_m=-16.9%
+TLT buy & hold instead of 200d           cagr=+17.9% sharpe=1.05 maxdd=-24.7% calmar=0.72 worst_m=-14.8%
+straddle without IV-rank filter          cagr=+17.9% sharpe=1.06 maxdd=-25.8% calmar=0.69 worst_m=-15.1%
+book unconditional (no regime masks)     cagr=+9.8% sharpe=0.55 maxdd=-59.6% calmar=0.16 worst_m=-23.0%
+ES 75% instead of momentum               cagr=+17.8% sharpe=1.17 maxdd=-43.2% calmar=0.41 worst_m=-15.1%
+all four plain alternatives              cagr=+12.3% sharpe=0.61 maxdd=-65.9% calmar=0.19 worst_m=-21.5%
+
+=== 5. tail dependence: combo monthly return in SPY's 10 worst months and in the 10 worst months of each sleeve ===
+SPY worst 10 months: combo mean +0.1%, SPY mean -10.1%
+momentum  worst 10 months: sleeve mean -8.3% (1x), combo mean -6.9%
+book      worst 10 months: sleeve mean -1.4% (1x), combo mean -3.8%
+TLT       worst 10 months: sleeve mean -4.5% (1x), combo mean +0.1%
+straddle  worst 10 months: sleeve mean -2.0% (1x), combo mean -1.7%
+DONE

@@ -1805,6 +1805,89 @@ call, k=0.75 for under 20%. The straddle adds 2 points of CAGR and 0.09
 of Sharpe at k=1 for 3 points of drawdown. Everything above the Reg-T line
 needs a portfolio-margin account ($250k and up is comfortable).
 
+### Critical review of the combined book (`results/critique.txt`)
+
+`scripts/run_critique.py`, on line A (k=1: momentum 75%, book 3.75x, TLT
+38%, straddle 75%; CAGR 17.9%, Sharpe 1.08, maxDD -24.7%).
+
+**Attribution** (each sleeve alone at its weight, and the combo without it):
+
+| sleeve | alone: CAGR / Sharpe / maxDD | combo without it: CAGR / Sharpe / maxDD |
+|---|---|---|
+| momentum 75% | +8.7% / 0.66 / -21.9% | +10.2% / 1.04 / -15.9% |
+| regime book 3.75x | +7.3% / 0.84 / -20.5% | +11.8% / 0.84 / -20.1% |
+| TLT 38% (200d) | +2.6% / 0.63 / -9.0% | +16.5% / 1.00 / -28.4% |
+| TLT straddle 75% | +3.4% / 1.33 / -6.3% | +16.0% / 0.99 / -21.7% |
+
+Cash yield is 1.9 of the 17.9 points. Momentum is the return engine and
+the lowest-Sharpe sleeve; the book is most of the complexity for 6 points
+of CAGR and 0.24 of Sharpe; TLT is 1.4 points and 4 points of drawdown;
+the straddle 1.9 points and 0.09 of Sharpe.
+
+**Sub-periods**: 2007-2012 16.4% / Sharpe 1.09; 2013-2019 12.0% / 0.83;
+2020-2026 25.8% / 1.30; 2007-2022 14.0% / 0.93. Rolling 36-month Sharpe:
+min 0.33, 10th percentile 0.61, median 0.96. The last seven years supply
+a third of the headline, and 2007-2022 alone is 14%/yr at Sharpe 0.93.
+
+**Block bootstrap** of the model's monthly returns (6-month blocks, 2000
+draws): Sharpe 0.80 / 1.09 / 1.40 at the 5th / 50th / 95th percentile,
+CAGR 12.4% / 18.0% / 24.4%, maxDD -27.5% / -19.5% / -14.8%. This is
+sampling error only; it does not price model error.
+
+**Sensitivity to the in-sample choices** (swap one for its plain alternative):
+
+| change | CAGR | Sharpe | maxDD | Calmar | worst m |
+|---|---|---|---|---|---|
+| momentum without the 200d trend filter | +20.5% | 1.06 | -45.6% | 0.45 | -16.9% |
+| TLT buy & hold instead of 200d | +17.9% | 1.05 | -24.7% | 0.72 | -14.8% |
+| straddle without the IV-rank filter | +17.9% | 1.06 | -25.8% | 0.69 | -15.1% |
+| book unconditional (no correlation regimes) | +9.8% | 0.55 | -59.6% | 0.16 | -23.0% |
+| ES 75% instead of momentum | +17.8% | 1.17 | -43.2% | 0.41 | -15.1% |
+| all four plain alternatives | +12.3% | 0.61 | -65.9% | 0.19 | -21.5% |
+
+Two choices carry the result: the correlation regime masks on the book
+(without them the book is a -60% drawdown) and the 200d trend filter on
+momentum (without it the drawdown doubles). The trend filter is a
+pre-existing rule, not fitted here. The correlation thresholds were
+chosen on this history after looking at quartile tables; they are stable
+across both halves and across the 0.60-0.85 / 0.25-0.35 grid, which
+limits but does not remove the selection. The TLT and straddle filters
+barely matter, which is reassuring. Replacing momentum with plain ES
+keeps the Sharpe and doubles the drawdown: the momentum sleeve's value is
+its trend filter, not its stock picking.
+
+**Tail dependence**: in SPY's ten worst months the combo averages +0.1%
+(SPY -10.1%). The combo's own worst months are momentum's worst months
+(mean -6.9% when momentum has its ten worst), not the book's.
+
+**What the model does not capture, in order of importance**
+
+1. Marks between rolls are at entry IV. Intra-month drawdowns and margin
+   usage in vol spikes (Oct 2008, Mar 2020) are understated; the model's
+   106% peak usage was likely 150%+ at real marks and real house
+   requirements, which is when brokers raise them. The +44% of 2020
+   assumes the book was not cut in March.
+2. The momentum universe has survivorship bias in the early years (83% of
+   members priced in 2007); 2007-2012 momentum is flattered.
+3. Single-name option prices are Black-Scholes at VolVue 30-day mids with
+   a 5% markup on puts; real quotes on names 20-30 of the list are wider,
+   and the 25-delta put skew is only approximated.
+4. The index put leg is synthesised from RXM + BXMD (a residual long 25d
+   call / short 30d call); it uses real prices but is not exactly one
+   short 25d put.
+5. Operational load: about 60-100 option tickets per month plus weekly
+   hedges on 30 names and the TLT straddle. Each is small, and together
+   they are a job, with slippage from working orders that the spec
+   half-spreads only partly cover.
+6. Search effort: dozens of books were tried in this project and this is
+   the survivor. The in-sample Sharpe of a survivor overstates its live
+   Sharpe even when each piece is economically motivated.
+
+A realistic live expectation for line A is therefore CAGR 12-14% at Sharpe
+0.7-0.9 with a 30% drawdown, with the same sign in crises (flat 2008, flat
+2022), not the 17.9% / 1.08 / -25% of the table. The 20% line (k=1.25)
+is then 15-17% at a 35% drawdown with a margin call in the worst cycle.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
