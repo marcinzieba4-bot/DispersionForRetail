@@ -1319,6 +1319,58 @@ Daily hedging lowers the drawdown (-14%) at a lower Sharpe and a worse 2008.
 The regime book's risk is not inside the cycle, it is which months are on,
 and that is already the signal's job.
 
+### Dip buying inside the regime book (`results/regime_dipbuy*.csv`)
+
+`scripts/run_regime_dipbuy.py`; engine knob `cycle_addon=((loss, add), ...)`:
+when the cycle's P&L reaches -loss x book notional, add `add` x the original
+position (every leg, index and singles) at that day's marks, paying entry
+half-spreads and commissions, re-hedged from there; each tranche fires at
+most once per cycle. The mirror image of the cycle stop. Sleeves at 1x, ex
+cash, fixed notional:
+
+| sleeve variant | CAGR | Sharpe | maxDD | worst m | 2008 | 2020 | 2022 | cycles with an add |
+|---|---|---|---|---|---|---|---|---|
+| put-wing base | +0.55% | 0.35 | -5.8% | -3.4% | -0.7% | +3.7% | +0.5% | 0/59 |
+| put-wing add 0.5x at -1% | +0.67% | 0.38 | -6.5% | -3.4% | -1.5% | +3.6% | +1.0% | 9/59 |
+| put-wing add 1.0x at -1% | +0.79% | 0.39 | -7.2% | -3.4% | -2.2% | +3.6% | +1.6% | 9/59 |
+| put-wing add 1.0x at -2% | +0.63% | 0.39 | -6.4% | -3.0% | -1.3% | +3.6% | +0.5% | 3/59 |
+| put-wing add 0.5x at -1% and 0.5x at -2% | +0.77% | 0.43 | -6.4% | -2.8% | -1.4% | +3.6% | +1.0% | 9/59 |
+| put-wing add 1.0x at -1% and 1.0x at -2% | +1.11% | 0.41 | -8.1% | -5.7% | -2.2% | +3.4% | +1.5% | 9/59 |
+| call dispersion base | +0.35% | 0.30 | -4.0% | -1.6% | 0% | -0.3% | 0% | 0/80 |
+| call dispersion add 1.0x at -1% | +0.41% | 0.35 | -4.0% | -1.6% | 0% | -0.3% | 0% | 2/80 |
+| event selling base | +0.56% | 0.59 | -3.9% | -1.1% | +1.2% | +0.7% | +1.2% | 0/225 |
+| event selling add 0.5x at -0.5% | +0.60% | 0.57 | -4.9% | -1.3% | +1.7% | +1.0% | +1.4% | 19/225 |
+| event selling add 1.0x at -0.5% | +0.64% | 0.53 | -5.8% | -1.5% | +2.2% | +1.4% | +1.5% | 19/225 |
+| event selling add 1.0x at -1% | +0.70% | 0.64 | -4.1% | -1.4% | +2.2% | +2.8% | +1.2% | 7/225 |
+| event selling add 0.5x at -0.5% and 0.5x at -1% | +0.70% | 0.61 | -4.9% | -1.5% | +2.2% | +2.1% | +1.4% | 19/225 |
+
+Combo (30% momentum with 200d trend filter and 15% trailing stop, 70% of equity in the regime book at L x, cash on all equity):
+
+| book | L | CAGR | vol | Sharpe | maxDD | Calmar | worst m | 2nd-half Sharpe | 2008 | 2020 | 2022 | Covid |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| base | 3x | +8.8% | 8.4% | 1.06 | -16.0% | 0.55 | -8.4% | 1.13 | -3% | +13% | +5% | -6% |
+| base | 4x | +9.8% | 9.4% | 1.05 | -19.2% | 0.51 | -11.1% | 1.14 | -3% | +16% | +6% | -6% |
+| put-wing add 0.5x at -1% and -2% | 3x | +9.3% | 8.4% | 1.11 | -16.0% | 0.58 | -7.9% | 1.19 | -5% | +13% | +6% | -6% |
+| put-wing add 1.0x at -1% | 3x | +9.3% | 8.7% | 1.07 | -16.0% | 0.58 | -8.4% | 1.22 | -6% | +13% | +7% | -6% |
+| event add 1.0x at -0.5% | 3x | +9.0% | 8.6% | 1.05 | -19.4% | 0.46 | -9.5% | 1.11 | -1% | +14% | +5% | -5% |
+| all sleeves, two tranches of 0.5x | 3x | +9.7% | 8.6% | 1.13 | -17.9% | 0.54 | -7.9% | 1.22 | -3% | +16% | +6% | -4% |
+| all sleeves, two tranches of 0.5x | 4x | +11.1% | 9.8% | 1.13 | -21.7% | 0.51 | -9.9% | 1.23 | -2% | +20% | +8% | -4% |
+| all sleeves, 1.0x at first threshold | 3x | +9.7% | 8.9% | 1.09 | -19.4% | 0.50 | -9.6% | 1.23 | -4% | +14% | +8% | -5% |
+
+Dip buying is the one intra-cycle rule that helps, and it helps in the
+direction the stop test predicted: the hedged sleeves' mark-to-model losses
+mean-revert by expiry, so adding into them earns the recovery. Two tranches
+of 0.5x at -1% and -2% of book (event selling at -0.5% and -1%) lift the
+combo from 8.8% / Sharpe 1.06 to 9.7% / 1.13 at 3x with a 2-point larger
+drawdown and a slightly better worst month, Calmar 0.55 -> 0.54. Caveats:
+the adds fire in 9 of 59 put-wing cycles and 7-19 of 225 event cycles, so
+the improvement rests on a few dozen events; fills are at entry IV, which
+is optimistic for buying single puts into a selloff (real IV higher) and
+for selling more event straddles after a big move (real IV crushed); and
+the book's gross doubles exactly in its worst moments, so the margin peak
+of a 3x book becomes that of a 6x book in those cycles (about 80% of
+equity under PM x1.5). Size the leverage for the post-add exposure.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,

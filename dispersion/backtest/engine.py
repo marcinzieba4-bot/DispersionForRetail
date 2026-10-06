@@ -408,6 +408,7 @@ class Backtest:
             hedge_sh, S_prev = 0.0, float(self.spy.loc[t0])
             r = float(self.rf.loc[t0])
             dead, over_sh, S0_cyc = False, 0.0, float(self.spy.loc[t0])
+            addon_done = [False] * len(cfg.cycle_addon); units0 = units.copy() if opt else None
             book_n = cfg.book_fraction * cfg.leverage * ((cfg.equity or 1_000_000.0) if cfg.fixed_notional else E)
             idx_notional = sum(abs(l.units) * l.S0 for l in rec.legs if l.is_index)
             for k, d in enumerate(window, start=1):
@@ -465,6 +466,28 @@ class Backtest:
                     cash -= trn * cfg.costs.hedge_bp
                     turnover.loc[d] += trn
                     hedge_sh = target
+                if cfg.cycle_addon and not dead and d < t1:
+                    pnl_c = cash + mark - rec.equity_in
+                    for ti, (thr, frac) in enumerate(cfg.cycle_addon):
+                        if addon_done[ti] or pnl_c > -thr * book_n:
+                            continue
+                        addon_done[ti] = True; add_cost = 0.0
+                        if opt:
+                            add_u = units0 * frac
+                            add_px = np.where(is_put, bs.put_price(S, K, T_rem, ivv, r, qq), bs.call_price(S, K, T_rem, ivv, r, qq))
+                            buckets = np.array([l.bucket for l in opt])
+                            add_cost += float(np.sum(np.abs(add_u) * add_px * np.array([cfg.costs.single(b_) if not ix else cfg.costs.index() for b_, ix in zip(buckets, is_idx)])))
+                            add_cost += sum(config.commission(abs(u_) / 100.0, cfg.costs, bool(ix)) for u_, ix in zip(add_u, is_idx))
+                            cash -= float(np.sum(add_u * add_px)); units = units + add_u          # pay/receive the added legs at mid
+                            mark += float(np.sum(add_u * add_px))
+                        if cbo:
+                            for l, (c, bi, bt, n) in zip(cbo, list(cbs)):
+                                add_n = n * frac
+                                cbs.append((c, float(c["idx"].loc[d]), float(c["tr"].loc[d]), add_n))
+                                add_cost += abs(add_n) * l.premium / l.S0 * cfg.costs.index() if l.S0 else 0.0
+                            cb_strikes = cb_strikes + cb_strikes[:len(cbo)]; cbo = cbo + [Leg(l.ticker, l.units * frac, l.K, l.iv, l.S0, l.bucket, l.is_index, l.premium, kind="cboe", q=l.q, beta=l.beta) for l in cbo[:len(cbo)]]
+                        cash -= add_cost
+                        rec.skipped.append(f"ADD{ti+1}@{d.date()}")
                 if cfg.cycle_stop is not None and not dead and d < t1 and (cash + mark - rec.equity_in) <= -cfg.cycle_stop * book_n:
                     # stop: liquidate the cycle at this close (half-spread on the remaining option value, 1bp on hedges)
                     exit_cost = abs(mark) * cfg.costs.single_30d + (abs(hedge_sh) + abs(over_sh)) * S_spy * cfg.costs.hedge_bp

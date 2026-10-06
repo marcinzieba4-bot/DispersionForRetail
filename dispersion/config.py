@@ -147,6 +147,8 @@ class StrategyConfig:
     overhedge_trigger: float | None = None  # when SPY closes this far below the cycle entry, add an extra SPY short...
     overhedge_size: float = 0.5      # ...of overhedge_size x index-leg notional; removed when SPY closes back above entry
     index_hedge_mult: float = 1.0    # hedge the index leg at this multiple of its model delta (1.25 = 25% overhedged)
+    cycle_addon: tuple = ()          # dip buying: ((loss_frac, add_frac), ...): when cycle P&L <= -loss_frac x book notional,
+                                     # add add_frac x the ORIGINAL position (all legs) at that day's marks, each tranche once
 
 
 REFERENCE = {
