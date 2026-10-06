@@ -1,0 +1,80 @@
+
+=== mom trend+trail15  +  all dips 2 tranches 0.5x ===
+mom trend+trail15 100%, no dips                        cagr=+12.9% vol=22.3% sharpe=0.67 sortino=0.65 maxdd=-32.8% calmar=0.39 worst_m=-24.7% cvar=-13.5% beta=0.64 sh2h=0.66 | 2008=-17% 2020=+8% 2022=-2% covid=-18%
+mom trend+trail15 30% + dips 3x                        cagr=+6.8% vol=7.0% sharpe=0.99 sortino=1.00 maxdd=-9.3% calmar=0.73 worst_m=-7.7% cvar=-4.0% beta=0.16 sh2h=1.05 | 2008=-3% 2020=+8% 2022=+3% covid=-3%
+mom trend+trail15 30% + dips 5x                        cagr=+7.7% vol=7.6% sharpe=1.02 sortino=1.09 maxdd=-10.7% calmar=0.72 worst_m=-7.7% cvar=-4.1% beta=0.14 sh2h=1.12 | 2008=-3% 2020=+11% 2022=+5% covid=-1%
+mom trend+trail15 30% + dips 10x                       cagr=+9.7% vol=10.2% sharpe=0.96 sortino=1.22 maxdd=-16.3% calmar=0.60 worst_m=-7.7% cvar=-4.9% beta=0.09 sh2h=1.15 | 2008=-2% 2020=+19% 2022=+9% covid=+3%
+mom trend+trail15 50% + dips 3x                        cagr=+9.2% vol=11.3% sharpe=0.85 sortino=0.84 maxdd=-15.5% calmar=0.60 worst_m=-12.7% cvar=-6.8% beta=0.29 sh2h=0.88 | 2008=-7% 2020=+10% 2022=+2% covid=-6%
+mom trend+trail15 50% + dips 5x                        cagr=+10.1% vol=11.6% sharpe=0.90 sortino=0.91 maxdd=-15.5% calmar=0.65 worst_m=-12.7% cvar=-6.8% beta=0.27 sh2h=0.94 | 2008=-7% 2020=+13% 2022=+4% covid=-5%
+mom trend+trail15 50% + dips 10x                       cagr=+12.2% vol=13.4% sharpe=0.94 sortino=1.03 maxdd=-19.5% calmar=0.63 worst_m=-12.7% cvar=-7.1% beta=0.22 sh2h=1.03 | 2008=-6% 2020=+21% 2022=+8% covid=-0%
+mom trend+trail15 70% + dips 3x                        cagr=+11.4% vol=15.6% sharpe=0.78 sortino=0.77 maxdd=-21.8% calmar=0.52 worst_m=-17.6% cvar=-9.5% beta=0.42 sh2h=0.79 | 2008=-11% 2020=+11% 2022=+2% covid=-10%
+mom trend+trail15 70% + dips 5x                        cagr=+12.3% vol=15.9% sharpe=0.82 sortino=0.82 maxdd=-21.8% calmar=0.57 worst_m=-17.6% cvar=-9.5% beta=0.40 sh2h=0.85 | 2008=-10% 2020=+15% 2022=+3% covid=-8%
+mom trend+trail15 70% + dips 10x                       cagr=+14.5% vol=17.1% sharpe=0.89 sortino=0.92 maxdd=-23.4% calmar=0.62 worst_m=-17.6% cvar=-9.7% beta=0.35 sh2h=0.94 | 2008=-10% 2020=+23% 2022=+7% covid=-4%
+mom trend+trail15 100% + dips 3x                       cagr=+14.4% vol=22.3% sharpe=0.73 sortino=0.72 maxdd=-30.7% calmar=0.47 worst_m=-24.7% cvar=-13.5% beta=0.61 sh2h=0.73 | 2008=-17% 2020=+13% 2022=+1% covid=-15%
+mom trend+trail15 100% + dips 5x                       cagr=+15.3% vol=22.4% sharpe=0.76 sortino=0.75 maxdd=-30.7% calmar=0.50 worst_m=-24.7% cvar=-13.5% beta=0.59 sh2h=0.77 | 2008=-16% 2020=+16% 2022=+2% covid=-14%
+mom trend+trail15 100% + dips 10x                      cagr=+17.5% vol=23.2% sharpe=0.83 sortino=0.83 maxdd=-30.7% calmar=0.57 worst_m=-24.7% cvar=-13.7% beta=0.54 sh2h=0.86 | 2008=-15% 2020=+25% 2022=+6% covid=-10%
+
+=== mom trend+trail15  +  all dips 1.0x (PW -1%, CO -1%, EV -1%) ===
+mom trend+trail15 100%, no dips                        cagr=+12.9% vol=22.3% sharpe=0.67 sortino=0.65 maxdd=-32.8% calmar=0.39 worst_m=-24.7% cvar=-13.5% beta=0.64 sh2h=0.66 | 2008=-17% 2020=+8% 2022=-2% covid=-18%
+mom trend+trail15 30% + dips 3x                        cagr=+7.0% vol=7.4% sharpe=0.96 sortino=1.02 maxdd=-9.4% calmar=0.75 worst_m=-7.7% cvar=-4.1% beta=0.15 sh2h=1.12 | 2008=-5% 2020=+10% 2022=+4% covid=-1%
+mom trend+trail15 30% + dips 5x                        cagr=+8.0% vol=8.5% sharpe=0.95 sortino=1.11 maxdd=-10.5% calmar=0.76 worst_m=-7.7% cvar=-4.3% beta=0.12 sh2h=1.14 | 2008=-6% 2020=+15% 2022=+7% covid=+3%
+mom trend+trail15 30% + dips 10x                       cagr=+10.2% vol=12.6% sharpe=0.84 sortino=1.24 maxdd=-15.2% calmar=0.67 worst_m=-11.6% cvar=-5.0% beta=0.05 sh2h=1.06 | 2008=-8% 2020=+27% 2022=+12% covid=+11%
+mom trend+trail15 50% + dips 3x                        cagr=+9.4% vol=11.6% sharpe=0.85 sortino=0.86 maxdd=-16.1% calmar=0.59 worst_m=-12.7% cvar=-6.8% beta=0.28 sh2h=0.94 | 2008=-9% 2020=+12% 2022=+3% covid=-4%
+mom trend+trail15 50% + dips 5x                        cagr=+10.4% vol=12.3% sharpe=0.88 sortino=0.92 maxdd=-17.0% calmar=0.61 worst_m=-12.7% cvar=-6.9% beta=0.25 sh2h=1.01 | 2008=-10% 2020=+17% 2022=+6% covid=-1%
+mom trend+trail15 50% + dips 10x                       cagr=+12.7% vol=15.3% sharpe=0.86 sortino=1.06 maxdd=-20.1% calmar=0.63 worst_m=-12.7% cvar=-7.4% beta=0.18 sh2h=1.04 | 2008=-12% 2020=+29% 2022=+12% covid=+6%
+mom trend+trail15 70% + dips 3x                        cagr=+11.6% vol=15.9% sharpe=0.78 sortino=0.78 maxdd=-22.4% calmar=0.52 worst_m=-17.6% cvar=-9.5% beta=0.40 sh2h=0.85 | 2008=-13% 2020=+14% 2022=+3% covid=-8%
+mom trend+trail15 70% + dips 5x                        cagr=+12.6% vol=16.4% sharpe=0.82 sortino=0.83 maxdd=-23.4% calmar=0.54 worst_m=-17.6% cvar=-9.5% beta=0.38 sh2h=0.92 | 2008=-14% 2020=+19% 2022=+5% covid=-5%
+mom trend+trail15 70% + dips 10x                       cagr=+15.0% vol=18.7% sharpe=0.85 sortino=0.94 maxdd=-26.2% calmar=0.57 worst_m=-17.6% cvar=-10.0% beta=0.31 sh2h=1.00 | 2008=-16% 2020=+31% 2022=+11% covid=+2%
+mom trend+trail15 100% + dips 3x                       cagr=+14.6% vol=22.4% sharpe=0.73 sortino=0.72 maxdd=-31.7% calmar=0.46 worst_m=-24.7% cvar=-13.5% beta=0.60 sh2h=0.77 | 2008=-18% 2020=+15% 2022=+2% covid=-13%
+mom trend+trail15 100% + dips 5x                       cagr=+15.6% vol=22.8% sharpe=0.76 sortino=0.76 maxdd=-32.6% calmar=0.48 worst_m=-24.7% cvar=-13.5% beta=0.57 sh2h=0.83 | 2008=-19% 2020=+20% 2022=+4% covid=-11%
+mom trend+trail15 100% + dips 10x                      cagr=+18.1% vol=24.5% sharpe=0.81 sortino=0.85 maxdd=-35.1% calmar=0.52 worst_m=-24.7% cvar=-13.8% beta=0.50 sh2h=0.93 | 2008=-21% 2020=+33% 2022=+10% covid=-4%
+
+=== mom trail15 only  +  all dips 2 tranches 0.5x ===
+mom trail15 only 100%, no dips                         cagr=+14.4% vol=27.0% sharpe=0.64 sortino=0.67 maxdd=-61.6% calmar=0.23 worst_m=-29.6% cvar=-16.7% beta=1.00 sh2h=0.74 | 2008=-51% 2020=+31% 2022=+1% covid=+1%
+mom trail15 only 30% + dips 3x                         cagr=+7.6% vol=8.4% sharpe=0.92 sortino=0.98 maxdd=-22.5% calmar=0.34 worst_m=-8.0% cvar=-5.0% beta=0.27 sh2h=1.09 | 2008=-16% 2020=+15% 2022=+5% covid=+4%
+mom trail15 only 30% + dips 5x                         cagr=+8.4% vol=8.9% sharpe=0.96 sortino=1.07 maxdd=-22.0% calmar=0.38 worst_m=-7.7% cvar=-5.1% beta=0.25 sh2h=1.15 | 2008=-15% 2020=+18% 2022=+6% covid=+5%
+mom trail15 only 30% + dips 10x                        cagr=+10.5% vol=11.2% sharpe=0.95 sortino=1.20 maxdd=-21.2% calmar=0.50 worst_m=-8.8% cvar=-5.6% beta=0.20 sh2h=1.20 | 2008=-14% 2020=+26% 2022=+10% covid=+10%
+mom trail15 only 50% + dips 3x                         cagr=+10.3% vol=13.6% sharpe=0.80 sortino=0.83 maxdd=-35.9% calmar=0.29 worst_m=-14.1% cvar=-8.4% beta=0.47 sh2h=0.93 | 2008=-27% 2020=+21% 2022=+5% covid=+4%
+mom trail15 only 50% + dips 5x                         cagr=+11.2% vol=13.9% sharpe=0.84 sortino=0.90 maxdd=-35.4% calmar=0.32 worst_m=-13.1% cvar=-8.3% beta=0.45 sh2h=0.99 | 2008=-26% 2020=+24% 2022=+6% covid=+5%
+mom trail15 only 50% + dips 10x                        cagr=+13.3% vol=15.4% sharpe=0.90 sortino=1.02 maxdd=-34.6% calmar=0.39 worst_m=-12.7% cvar=-8.7% beta=0.40 sh2h=1.08 | 2008=-25% 2020=+32% 2022=+11% covid=+10%
+mom trail15 only 70% + dips 3x                         cagr=+12.8% vol=19.0% sharpe=0.74 sortino=0.76 maxdd=-47.2% calmar=0.27 worst_m=-20.0% cvar=-11.7% beta=0.67 sh2h=0.85 | 2008=-37% 2020=+27% 2022=+4% covid=+4%
+mom trail15 only 70% + dips 5x                         cagr=+13.7% vol=19.1% sharpe=0.78 sortino=0.81 maxdd=-46.8% calmar=0.29 worst_m=-19.0% cvar=-11.6% beta=0.65 sh2h=0.90 | 2008=-37% 2020=+30% 2022=+6% covid=+5%
+mom trail15 only 70% + dips 10x                        cagr=+15.9% vol=20.1% sharpe=0.84 sortino=0.91 maxdd=-46.0% calmar=0.35 worst_m=-17.6% cvar=-11.8% beta=0.60 sh2h=0.99 | 2008=-36% 2020=+39% 2022=+10% covid=+9%
+mom trail15 only 100% + dips 3x                        cagr=+15.9% vol=27.0% sharpe=0.69 sortino=0.72 maxdd=-61.0% calmar=0.26 worst_m=-28.2% cvar=-16.5% beta=0.97 sh2h=0.80 | 2008=-51% 2020=+36% 2022=+4% covid=+3%
+mom trail15 only 100% + dips 5x                        cagr=+16.9% vol=27.0% sharpe=0.72 sortino=0.75 maxdd=-60.6% calmar=0.28 worst_m=-27.3% cvar=-16.5% beta=0.95 sh2h=0.84 | 2008=-50% 2020=+39% 2022=+5% covid=+5%
+mom trail15 only 100% + dips 10x                       cagr=+19.2% vol=27.7% sharpe=0.78 sortino=0.83 maxdd=-59.9% calmar=0.32 worst_m=-25.0% cvar=-16.4% beta=0.90 sh2h=0.91 | 2008=-49% 2020=+47% 2022=+10% covid=+8%
+
+=== mom trail15 only  +  all dips 1.0x (PW -1%, CO -1%, EV -1%) ===
+mom trail15 only 100%, no dips                         cagr=+14.4% vol=27.0% sharpe=0.64 sortino=0.67 maxdd=-61.6% calmar=0.23 worst_m=-29.6% cvar=-16.7% beta=1.00 sh2h=0.74 | 2008=-51% 2020=+31% 2022=+1% covid=+1%
+mom trail15 only 30% + dips 3x                         cagr=+7.7% vol=8.8% sharpe=0.90 sortino=0.97 maxdd=-24.3% calmar=0.32 worst_m=-9.6% cvar=-5.2% beta=0.26 sh2h=1.16 | 2008=-18% 2020=+17% 2022=+6% covid=+6%
+mom trail15 only 30% + dips 5x                         cagr=+8.7% vol=9.7% sharpe=0.91 sortino=1.04 maxdd=-25.0% calmar=0.35 worst_m=-9.6% cvar=-5.4% beta=0.23 sh2h=1.20 | 2008=-18% 2020=+22% 2022=+8% covid=+9%
+mom trail15 only 30% + dips 10x                        cagr=+11.0% vol=13.5% sharpe=0.84 sortino=1.17 maxdd=-27.2% calmar=0.40 worst_m=-14.6% cvar=-6.1% beta=0.16 sh2h=1.13 | 2008=-20% 2020=+34% 2022=+14% covid=+17%
+mom trail15 only 50% + dips 3x                         cagr=+10.5% vol=13.9% sharpe=0.80 sortino=0.83 maxdd=-37.4% calmar=0.28 worst_m=-15.6% cvar=-8.4% beta=0.46 sh2h=0.99 | 2008=-29% 2020=+24% 2022=+6% covid=+6%
+mom trail15 only 50% + dips 5x                         cagr=+11.5% vol=14.5% sharpe=0.83 sortino=0.89 maxdd=-38.0% calmar=0.30 worst_m=-15.6% cvar=-8.6% beta=0.43 sh2h=1.07 | 2008=-29% 2020=+28% 2022=+9% covid=+9%
+mom trail15 only 50% + dips 10x                        cagr=+13.8% vol=17.2% sharpe=0.84 sortino=1.00 maxdd=-39.4% calmar=0.35 worst_m=-16.6% cvar=-9.2% beta=0.36 sh2h=1.11 | 2008=-31% 2020=+40% 2022=+15% covid=+17%
+mom trail15 only 70% + dips 3x                         cagr=+13.0% vol=19.2% sharpe=0.74 sortino=0.76 maxdd=-48.5% calmar=0.27 worst_m=-21.4% cvar=-11.7% beta=0.66 sh2h=0.91 | 2008=-39% 2020=+30% 2022=+6% covid=+6%
+mom trail15 only 70% + dips 5x                         cagr=+14.0% vol=19.6% sharpe=0.78 sortino=0.81 maxdd=-49.0% calmar=0.29 worst_m=-21.4% cvar=-11.8% beta=0.63 sh2h=0.98 | 2008=-39% 2020=+34% 2022=+8% covid=+9%
+mom trail15 only 70% + dips 10x                        cagr=+16.4% vol=21.7% sharpe=0.82 sortino=0.90 maxdd=-50.1% calmar=0.33 worst_m=-21.4% cvar=-12.3% beta=0.56 sh2h=1.07 | 2008=-41% 2020=+46% 2022=+15% covid=+16%
+mom trail15 only 100% + dips 3x                        cagr=+16.1% vol=27.1% sharpe=0.70 sortino=0.72 maxdd=-62.0% calmar=0.26 worst_m=-29.6% cvar=-16.6% beta=0.96 sh2h=0.84 | 2008=-52% 2020=+38% 2022=+5% covid=+5%
+mom trail15 only 100% + dips 5x                        cagr=+17.2% vol=27.4% sharpe=0.73 sortino=0.75 maxdd=-62.3% calmar=0.28 worst_m=-29.6% cvar=-16.6% beta=0.93 sh2h=0.90 | 2008=-52% 2020=+43% 2022=+8% covid=+8%
+mom trail15 only 100% + dips 10x                       cagr=+19.7% vol=28.9% sharpe=0.78 sortino=0.83 maxdd=-63.2% calmar=0.31 worst_m=-29.6% cvar=-17.0% beta=0.86 sh2h=1.00 | 2008=-53% 2020=+54% 2022=+14% covid=+15%
+
+best by Calmar:
+                  mom                                    dips  w_mom  L_dip   cagr  sharpe  maxdd  calmar  worst_month
+13  mom trend+trail15  all dips 1.0x (PW -1%, CO -1%, EV -1%)    0.3      5  0.080   0.951 -0.105   0.762       -0.077
+12  mom trend+trail15  all dips 1.0x (PW -1%, CO -1%, EV -1%)    0.3      3  0.070   0.962 -0.094   0.749       -0.077
+0   mom trend+trail15                all dips 2 tranches 0.5x    0.3      3  0.068   0.987 -0.093   0.733       -0.077
+1   mom trend+trail15                all dips 2 tranches 0.5x    0.3      5  0.077   1.018 -0.107   0.723       -0.077
+14  mom trend+trail15  all dips 1.0x (PW -1%, CO -1%, EV -1%)    0.3     10  0.102   0.840 -0.152   0.673       -0.116
+4   mom trend+trail15                all dips 2 tranches 0.5x    0.5      5  0.101   0.897 -0.155   0.653       -0.127
+17  mom trend+trail15  all dips 1.0x (PW -1%, CO -1%, EV -1%)    0.5     10  0.127   0.863 -0.201   0.634       -0.127
+5   mom trend+trail15                all dips 2 tranches 0.5x    0.5     10  0.122   0.938 -0.195   0.628       -0.127
+best by Sharpe:
+                  mom                                    dips  w_mom  L_dip   cagr  sharpe  maxdd  calmar  worst_month
+1   mom trend+trail15                all dips 2 tranches 0.5x    0.3      5  0.077   1.018 -0.107   0.723       -0.077
+0   mom trend+trail15                all dips 2 tranches 0.5x    0.3      3  0.068   0.987 -0.093   0.733       -0.077
+2   mom trend+trail15                all dips 2 tranches 0.5x    0.3     10  0.097   0.965 -0.163   0.598       -0.077
+12  mom trend+trail15  all dips 1.0x (PW -1%, CO -1%, EV -1%)    0.3      3  0.070   0.962 -0.094   0.749       -0.077
+25   mom trail15 only                all dips 2 tranches 0.5x    0.3      5  0.084   0.962 -0.220   0.383       -0.077
+26   mom trail15 only                all dips 2 tranches 0.5x    0.3     10  0.105   0.954 -0.212   0.495       -0.088
+DONE

@@ -1407,6 +1407,36 @@ the mean is carried by a few large recoveries (2015, 2018, 2020, 2025), so
 it is a small, lumpy, crisis-positive sleeve, not a strategy. Fills at
 entry IV flatter it (see the dip-buying caveats above).
 
+### Dip tranches + momentum sleeve (`results/dip_momentum_VOLVUE.csv`)
+
+`scripts/run_dip_momentum.py`. Momentum (top-5 12-1, 15% trailing stop,
+with and without the 200d trend filter) at w of equity, the dip tranches at
+L x equity when they fire, money market otherwise, cash yield on all
+equity. Momentum with trend filter + two tranches of 0.5x:
+
+| momentum w | dips L | CAGR | vol | Sharpe | Sortino | maxDD | Calmar | worst m | CVaR95 | beta | 2008 | 2020 | 2022 | Covid |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 100% | 0 | +12.9% | 22.3% | 0.67 | 0.65 | -32.8% | 0.39 | -24.7% | -13.5% | 0.64 | -17% | +8% | -2% | -18% |
+| 30% | 3x | +6.8% | 7.0% | 0.99 | 1.00 | -9.3% | 0.73 | -7.7% | -4.0% | 0.16 | -3% | +8% | +3% | -3% |
+| 30% | 5x | +7.7% | 7.6% | 1.02 | 1.09 | -10.7% | 0.72 | -7.7% | -4.1% | 0.14 | -3% | +11% | +5% | -1% |
+| 30% | 10x | +9.7% | 10.2% | 0.96 | 1.22 | -16.3% | 0.60 | -7.7% | -4.9% | 0.09 | -2% | +19% | +9% | +3% |
+| 50% | 5x | +10.1% | 11.6% | 0.90 | 0.91 | -15.5% | 0.65 | -12.7% | -6.8% | 0.27 | -7% | +13% | +4% | -5% |
+| 50% | 10x | +12.2% | 13.4% | 0.94 | 1.03 | -19.5% | 0.63 | -12.7% | -7.1% | 0.22 | -6% | +21% | +8% | 0% |
+| 70% | 10x | +14.5% | 17.1% | 0.89 | 0.92 | -23.4% | 0.62 | -17.6% | -9.7% | 0.35 | -10% | +23% | +7% | -4% |
+| 100% | 10x | +17.5% | 23.2% | 0.83 | 0.83 | -30.7% | 0.57 | -24.7% | -13.7% | 0.54 | -15% | +25% | +6% | -10% |
+
+Single-tranche 1.0x dips give the same picture (30% / 5x: 8.0%, Sharpe
+0.95, maxDD -10.5%, Calmar 0.76). Without the trend filter the momentum
+sleeve's 2008 (-51%) dominates: 30% / 5x gives 8.4% at Sharpe 0.96 but
+maxDD -22%. The dips are the low-vol, zero-beta, crisis-positive leg
+(2020 +19-27% at 10x), momentum is the return engine; the proportion sets
+the drawdown almost linearly with the momentum weight (30% -> -11%, 50% ->
+-16 to -20%, 70% -> -23%) while the Sharpe stays 0.9-1.0. Compared with the
+full regime-book combo with dip adds (30% momentum, 70% book at 3x: 9.7% /
+Sharpe 1.13 / maxDD -17.9%), this dip-only version earns 2 points less
+for the same Sharpe but a 7-point smaller drawdown at 30% / 5x, because
+the base sleeves of the regime book are not carried between dips.
+
 ### Are the numbers real? A critical check (read this before trading)
 
 Three things were measured rather than assumed (`results/live_*.csv`,
